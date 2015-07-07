@@ -1,0 +1,143 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Captura de solicitudes" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="librerias/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="librerias/grids.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table style="width: 100%">
+
+		<!--Título-->
+		<tr>
+			<td colspan="4" style="text-align: center">
+				<p class="titulo">Solicitud</p>
+			</td>
+		</tr>
+
+		<!--Nombre del solicitante-->
+		<tr>
+			<td style="text-align: right">
+				Nombre:
+			</td>
+			<td colspan="3">
+				<com:TTextBox ID="txtNombre" Width="400px" MaxLength="100" />
+				<com:TRequiredFieldValidator ID="reqNombre" ControlToValidate="txtNombre" ErrorMessage="Escriba el nombre del solicitante." Text="*" />
+			</td>
+		</tr>
+
+		<!--Correo-->
+		<tr>
+			<td style="text-align: right">
+				Correo-e:
+			</td>
+			<td colspan="3">
+				<com:TTextBox ID="txtEMail" MaxLength="100" Width="200px" />
+				<com:TEmailAddressValidator ID="emvMail" ControlToValidate="txtEMail" ErrorMessage="Verifique la dirección de correo electrónico." Text="*" />
+			</td>
+		</tr>
+		
+		<!--Dirección-->
+		<tr>
+			<td style="text-align: right">
+				Dirección:
+			</td>
+			<td colspan="3">&nbsp;</td>
+		</tr>
+
+		<!--Agencia-->
+		<tr>
+			<td style="text-align: right">
+				<com:TActiveImageButton ID="aibtnAgencia" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="Enlaza_Agencia" CausesValidation="false" />
+				Agencia:
+			</td>
+			<td colspan="3">
+				<com:TActiveDropDownList ID="addlAgencia" DataTextField="nombre_ag" DataValueField="id_ag" OnSelectedIndexChanged="addlAgencia_Changed" CausesValidation="false" />
+			</td>
+		</tr>
+
+		<!--Colonia-->
+		<tr>
+			<td style="text-align: right">
+				<com:TActiveImageButton ID="aibtnColonia" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="addlAgencia_Changed" CausesValidation="false" />
+				Colonia:
+			</td>
+			<td colspan="3">
+				<com:TActiveDropDownList ID="addlColonia" DataTextField="nombre_col" DataValueField="id_col" CausesValidation="false" />
+			</td>
+		</tr>
+
+		<!--Calle-->
+		<tr>
+			<td style="text-align: right">
+				Calle y núm:
+			</td>
+			<td colspan="3">
+				<com:TTextBox ID="txtDireccion" Width="400px" MaxLength="200" />
+			</td>
+		</tr>
+
+		<!--Teléfono-->
+		<tr>
+			<td style="text-align: right">
+				Teléfono:
+			</td>
+			<td colspan="3">
+				<com:TTextBox ID="txtTelefono" MaxLength="20" />
+				<com:TRegularExpressionValidator ID="revTelefono" ControlToValidate="txtTelefono" ErrorMessage="Verifique el número telefónico." Text="*" RegularExpression="^(\d{2})?((-)?|( )?)(\(\d{3}\))?(\d?-? ?)*$" />
+			</td>
+		</tr>
+
+		<!--Asunto-->
+		<tr>
+			<td style="text-align: right; vertical-align: top">
+				Asunto:
+			</td>
+			<td colspan="3">
+				<com:TTextBox ID="txtAsunto" TextMode="MultiLine" Width="400px" CssClass="textarea" />
+				<com:TRequiredFieldValidator ID="reqAsunto" ControlToValidate="txtAsunto" ErrorMessage="Escriba el asunto motivo de la solicitud." Text="*" />
+			</td>
+		</tr>
+	
+		<!--Coordinación-->
+		<tr>
+			<td align="right">
+				<com:TActiveImageButton ID="aibtnCoord" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="Enlaza_Coord" CausesValidation="false" />
+				Dirección general:
+			</td>
+			<td colspan="3">
+				<com:TActiveDropDownList ID="addlCoord" DataTextField="coordinacion" DataValueField="id_coordinacion" OnSelectedIndexChanged="addlCoord_Changed" CausesValidation="false" />
+			</td>
+		</tr>
+
+		<!--Área-->
+		<tr>
+			<td align="right">
+				<com:TActiveImageButton ID="aibtnArea" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="addlCoord_Changed" CausesValidation="false" />
+				Área:
+			</td>
+			<td colspan="3">
+				<com:TActiveDropDownList ID="addlArea" DataTextField="area" DataValueField="id_area" CausesValidation="false" />
+			</td>
+		</tr>
+	
+		<!--Anexo-->
+		<tr>
+			<td align="right">
+				Anexo:
+			</td>
+			<td align="left">
+				<com:TFileUpload ID="fulAnexo" OnFileUpload="fulArchivo_Upload" />
+				<com:THyperLink ID="hlAnexo" Target="_blank" />
+			</td>
+		</tr>
+
+		<!--Botón Guardar-->
+		<tr>
+			<td colspan="4" align="center">
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" />
+			</td>
+		</tr>
+	</table>
+	
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
