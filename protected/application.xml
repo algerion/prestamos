@@ -4,7 +4,7 @@
 	<!-- modulos configurados y cargados para todos los servicios -->
 	<modules>
 		<!--module class="System.Util.TParameterModule" ParameterFile="Application.Settings.Parametros" /-->
-		<module class="System.Data.TDataSourceConfig" id="dbac">
+		<module class="System.Data.TDataSourceConfig" id="dbpr">
 			<database ConnectionString="mysql:host=localhost;dbname=prestamos" username="prestamos" password="prestamos" />
 		</module>
 		<module class="System.I18N.TGlobalization" DefaultCharset="utf-8" />
