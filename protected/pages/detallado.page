@@ -1,0 +1,139 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Detalle de la solicitud" %>
+<com:TContent ID="Cabeceras">
+	<com:TStyleSheet ID="stylsht" />
+</com:TContent>
+<com:TContent ID="Main">
+	<input type="hidden" name="MAX_FILE_SIZE" value="1048576" />
+	<com:TTable ID="tblPrincipal" Style="width:100%">
+
+		<!--Título-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TLabel ID="lblTitulo" CssClass="titulo" Text="Detalle de la solicitud" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Solicitante-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TLabel ID="lblSolicitante" CssClass="titulo" Text="Solicitante" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TTable ID="tblSolicitante" Width="100%" />
+			</com:TTableCell>
+		</com:TTableRow>
+		
+		<!--Solicitud-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<br />
+				<com:TLabel ID="lblSolicitud" CssClass="titulo" Text="Datos de la solicitud" />
+				<br /><br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TTable ID="tblSolicitud" Width="100%" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+		
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:THyperLink ID="hlAnexo" Target="_blank" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+		
+		<!--Respuesta-->
+		<com:TTableRow CssClass="ocultresp">
+			<com:TTableCell ColumnSpan="2" HorizontalAlign="Center">
+				<com:TLabel ID="lblRespuesta" Text="Respuesta a la solicitud:" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow CssClass="ocultresp">
+			<com:TTableCell ColumnSpan="2" HorizontalAlign="Center">
+				<com:TTextBox ID="txtRespuesta" TextMode="MultiLine" Width="400px" MaxLength="500" CssClass="textarea" />
+				<com:TRequiredFieldValidator ID="reqRespuesta" ControlToValidate="txtRespuesta" ErrorMessage="Escriba la respuesta a la solicitud." Text="*" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Fecha de respuesta-->
+		<com:TTableRow CssClass="ocultresp" Style="display:none">
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblRespondido" Text="Fecha de la respuesta:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TDatePicker ID="datRespondido" DateFormat="dd-MMMM-yyyy" Culture="es" ReadOnly="true" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow CssClass="ocultresp" Style="display:none">
+			<com:TTableCell ColumnSpan="2">
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Estatus de la solicitud-->
+		<com:TTableRow CssClass="ocultresp">
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblEstatus" Text="Estatus de la solicitud: " />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlStatus" DataTextField="status" DataValueField="id_status" OnCallback="addlStatus_Callback" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Motivo del rechazo-->
+		<com:TTableRow CssClass="ocultresp">
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblMotivo" Text="Motivo del rechazo: " />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlMotivo" Enabled="false" DataTextField="motivo" DataValueField="id_motivo" OnCallback="addlMotivo_Callback" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Especificar motivo del rechazo-->
+		<com:TTableRow CssClass="ocultresp">
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblEspecifique" Text="Especifique el motivo del rechazo: " />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtEspecifique" Enabled="false" Width="300px" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Botón Guardar-->
+		<com:TTableRow CssClass="ocultresp">
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Botones de habilitación-->
+		<com:TTableRow CssClass="oculthab">
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TLabel Text="¿Desea activar esta solicitud?" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<com:TTableRow CssClass="oculthab">
+			<com:TTableCell ColumnSpan="4" HorizontalAlign="Center">
+				<com:TButton ID="btnSi" Text="Sí" OnClick="btnSi_Click" />
+				&nbsp;&nbsp;&nbsp;
+				<com:TButton ID="btnNo" Text="No" OnClick="btnNo_Click" />
+				<br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+		
+	</com:TTable>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>

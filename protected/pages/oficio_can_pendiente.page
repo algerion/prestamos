@@ -1,0 +1,38 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Oficios de canalización pendientes" %>
+<com:TContent ID="Cabeceras">
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="librerias/grids.css" />
+	<com:TClientScript ID="cscrHover" ScriptUrl="librerias/grids.js" />
+</com:TContent>
+<com:TContent ID="Main">
+	<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+	
+		<!--Título-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Center">
+				<com:TLabel ID="lblTitulo" CssClass="titulo" Text="Oficios de canalización pendientes" />
+				<br /><br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Solicitudes para oficio-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2">
+				<com:TActivePanel ID="apnlConsulta">
+					<com:TDataGrid ID="dgConsulta" HeaderStyle.Font.Size="8pt" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanged="dgConsulta_PageIndexChanged" HeaderStyle.BackColor="Blue" HeaderStyle.ForeColor="White" ItemStyle.CssClass="filapar" AlternatingItemStyle.CssClass="filaimpar" PageSize="20" SelectedItemStyle.BackColor="#99FF66">
+						<prop:EmptyTemplate>
+							<com:TLiteral Text="No se encontraron solicitudes" />
+						</prop:EmptyTemplate>
+						<com:THyperLinkColumn DataTextField="folio" HeaderText="Folio" DataNavigateUrlField="url" DataNavigateUrlFormatString="index.php?page=oficio_can&%s" Target="ofic_can" />
+						<com:THyperLinkColumn DataTextField="nombre" HeaderText="Nombre" DataNavigateUrlField="url" DataNavigateUrlFormatString="index.php?page=oficio_can&%s" Target="ofic_can" />
+						<com:THyperLinkColumn DataTextField="turnada" HeaderText="Fecha de turnado" DataNavigateUrlField="url" DataNavigateUrlFormatString="index.php?page=oficio_can&%s" Target="ofic_can" />
+						<com:THyperLinkColumn DataTextField="asunto" HeaderText="Asunto" DataNavigateUrlField="url" DataNavigateUrlFormatString="index.php?page=oficio_can&%s" Target="ofic_can" />
+						<com:THyperLinkColumn DataTextField="fuente" HeaderText="Vía de recepción" DataNavigateUrlField="url" DataNavigateUrlFormatString="index.php?page=oficio_can&%s" Target="ofic_can" />
+						<com:THyperLinkColumn DataTextField="area" HeaderText="Coord. - Área" DataNavigateUrlField="url" DataNavigateUrlFormatString="index.php?page=oficio_can&%s" Target="ofic_can" />
+					</com:TDataGrid>
+				</com:TActivePanel>
+			</com:TTableCell>
+		</com:TTableRow>
+
+	</com:TTable>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>

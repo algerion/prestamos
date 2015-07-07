@@ -1,0 +1,108 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Administración de usuarios" %>
+<com:TContent ID="Main">
+	<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+		<!--Título-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2">
+				<com:TLabel ID="lblTitulo" CssClass="titulo" Text="ADMINISTRACIÓN DE USUARIOS" />
+				<br /><br /><br /><br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+		
+		<!--Lista de usuarios-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right" Width="150px">
+				<com:TActiveLabel ID="alblUsuarios" Text="Usuarios:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TDropDownList ID="addlUsuarios" DataTextField="usuario" DataValueField="id_usuario"
+						OnSelectedIndexChanged="addlUsuarios_Callback" CausesValidation="false" AutoPostBack="True" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Nuevo usuario-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblUsuario" Text="Usuario:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtUsuario" CausesValidation="false" MaxLength="200" />
+				<com:TRequiredFieldValidator ID="reqUsuario" ControlToValidate="atxtUsuario" ErrorMessage="Introduzca el identificador del usuario." Text="*" />
+				<com:TRegularExpressionValidator ID="regUsuario" ControlToValidate="atxtUsuario" RegularExpression="^[A-Za-z][\w]*$" ErrorMessage="El identificador del usuario sólo puede contener letras, números y guiones bajos y debe empezar con una letra." Text="*" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Tratamiento-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblTratamiento" Text="Título:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtTratamiento" Width="100px" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Nombre completo-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblNombre" Text="Nombre completo:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtNombre" Width="400px" CausesValidation="false" />
+				<com:TRequiredFieldValidator ID="reqNombre" ControlToValidate="atxtNombre" ErrorMessage="Introduzca el nombre completo del usuario." Text="*" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Correo electrónico-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblCorreo" Text="Correo electrónico:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtCorreo" Width="400px" CausesValidation="false" />
+				<com:TRegularExpressionValidator ID="regCorreo" ControlToValidate="atxtCorreo" RegularExpression="^[\w-\.]{3,}@([\w-]{2,}\.)*([\w-]{2,}\.)[\w-]{2,4}$" ErrorMessage="Escriba una dirección de correo electrónico válida." Text="*" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Coordinación-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right" Width="150px">
+				<com:TLabel ID="lblCoord" Text="Coordinación:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlCoord" DataTextField="nombre_coordinacion" DataValueField="id_coordinacion" OnSelectedIndexChanged="addlCoord_Changed" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Área-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblArea" Text="Área:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlArea" DataTextField="nombre_area" DataValueField="id_area" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Permisos-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2" HorizontalAlign="Center">
+				<br /><br />
+				<com:TActiveLabel ID="alblPermisos" Text="Activar permiso para entrar en las páginas" />
+				<com:TActivePanel ID="apnlPermisos">
+					<com:TActiveCheckBoxList ID="cblPermisos" DataTextField="Title" DataValueField="IdPag" CausesValidation="false" />
+				</com:TActivePanel>
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Aceptar-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2">
+				<br /><br /><br />
+				<com:TButton ID="btnAceptar" Text="Aceptar" OnClick="btnAceptar_Clicked" />
+				<br /><br /><br /><br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+	</com:TTable>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>

@@ -1,0 +1,47 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Consulta de solicitudes" %>
+<com:TContent ID="Cabeceras">
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="librerias/grids.css" />
+	<com:TClientScript ID="cscrHover" ScriptUrl="librerias/grids.js" />
+	<com:TClientScript ID="cscrRecargaGrid">
+		function recarga_grid()
+		{
+			var request = <%= $this->cbRecargaGrid->ActiveControl->Javascript %>;
+			request.dispatch();
+		}
+	</com:TClientScript>
+</com:TContent>
+<com:TContent ID="Main">
+	<com:TCallback ID="cbRecargaGrid" OnCallback="cbRecargaGrid_Callback" ActiveControl.CausesValidation="false" />
+	<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+
+		<!--Título-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Center" ColumnSpan="2">
+				<com:TLabel ID="lblTitulo" CssClass="titulo" Text="Consulta de solicitudes" />
+				<br /><br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Listado de solicitudes pendientes-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2">
+				<com:TActivePanel ID="apnlPendientes">
+					<com:TDataGrid ID="dgPendientes" HeaderStyle.Font.Size="8pt" AutoGenerateColumns="false" AllowPaging="true" OnPageIndexChanged="dgPendientes_PageIndexChanged" HeaderStyle.BackColor="Blue" HeaderStyle.ForeColor="White" ItemStyle.CssClass="filapar" AlternatingItemStyle.CssClass="filaimpar" PageSize="5" SelectedItemStyle.BackColor="#99FF66"
+					OnItemDataBound="dgPendientes_DataBound">
+						<prop:EmptyTemplate>
+							<com:TLiteral Text="No se encontraron solicitudes" />
+						</prop:EmptyTemplate>
+						<com:THyperLinkColumn DataTextField="folio" HeaderText="Folio" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+						<com:THyperLinkColumn DataTextField="nombre" HeaderText="Nombre" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+						<com:THyperLinkColumn DataTextField="asunto" HeaderText="Asunto" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+						<com:THyperLinkColumn DataTextField="area" HeaderText="Coord. - Área" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+						<com:THyperLinkColumn DataTextField="turnada" HeaderText="Fecha de notificación" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+						<com:THyperLinkColumn DataTextField="plazo" HeaderText="Plazo" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+						<com:THyperLinkColumn DataTextField="respuestas" HeaderText="Respuestas" DataNavigateUrlField="url" DataNavigateUrlFormatString="%s" Target="editasol" />
+					</com:TDataGrid>
+				</com:TActivePanel>
+			</com:TTableCell>
+		</com:TTableRow>
+	</com:TTable>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>

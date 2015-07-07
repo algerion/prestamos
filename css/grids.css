@@ -1,0 +1,39 @@
+.encab
+{
+	background-color:blue;
+	color:white;
+}
+
+.filaimpar
+{
+	font-size:10px;
+	font-family:Arial;
+	font-stretch:normal;
+	font-weight:normal;
+	text-decoration:none;
+	text-transform:none;
+	text-shadow:none;
+	background-color:whitesmoke;
+}
+
+.filapar
+{
+	font-size:10px;
+	font-family:Arial;
+	font-stretch:normal;
+	font-weight:normal;
+	text-decoration:none;
+	text-transform:none;
+	text-shadow:none;
+	background-color:lightgray;
+}
+
+.acuerdos
+{
+	background-color:#FF6600;
+}
+
+.filaimpar:hover, .filapar:hover
+{
+	background-color: lightgreen;
+}

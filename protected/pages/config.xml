@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <authorization>
+    <allow pages="asunto" users="*" />
+    <allow pages="Home, cambiado, Usuarios.cambiapass" users="@" />
+	<allow pages="solicitudes, asunto" roles="solc" />
+	<allow pages="acuerdos" roles="acue" />
+	<allow pages="quejas_medios" roles="medc" />
+	<allow pages="observador" roles="opob" />
+	<allow pages="modulo" roles="modu, audp" />
+	<allow pages="bandeja" roles="mail" />
+	<allow pages="pendientes" roles="cons, resp, edit" />
+	<allow pages="lista_turnos" roles="audi" />
+	<allow pages="num_turnos" roles="ntrn" />
+	<allow pages="num_turnos_admin" roles="ntra" />
+	<allow pages="porcentajes" roles="porc" />
+	<allow pages="turnar" roles="turn" />
+	<allow pages="jefes" roles="jefe" />
+	<allow pages="areas" roles="area" />
+	<allow pages="programas" roles="prog" />
+	<allow pages="coord_prog" roles="asoc" />
+	<allow pages="calles" roles="call" />
+	<allow pages="logos" roles="logo" />
+	<allow pages="oficio_can_pendiente" roles="canl" />
+	<allow pages="reportes" roles="repo" />
+	<allow pages="concentrados" roles="conc" />
+	<allow pages="usrs" roles="eusr, nusr" />
+	<allow pages="asigna_areas" roles="pare" />
+	<allow pages="cuenta_mail" roles="ctam" />
+	<allow pages="restpass" roles="rpas" />
+    <deny users="*" />
+    <allow pages="Clases.folios, Clases.acceso, Clases.consultas, Clases.consultas_oficios, Clases.subconsultas" users="@" />
+  </authorization>
+</configuration>

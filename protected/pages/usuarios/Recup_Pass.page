@@ -1,0 +1,40 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Recuperar contraseña" %>
+<com:TContent ID="Main">
+	<com:TPanel Height="340px" >
+		<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+			<com:TTableRow>
+				<com:TTableCell ColumnSpan="2" Height="60px" VerticalAlign="Top">
+					<com:TLabel ID="lblTitulo" CssClass="titulo" Text="RECUPERACIÓN DE CONTRASEÑA" />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow>
+				<com:TTableCell HorizontalAlign="Center" ColumnSpan="2" Height="60px" VerticalAlign="Top">
+					<com:TLabel ID="lblInstrucciones"
+							Text="Escriba su nombre de usuario en el recuadro correspondiente. Enseguida,
+							pulse el botón 'Enviar contraseña', con lo que una nueva contraseña será
+							generada y se enviará por correo electrónico a la cuenta que usted creó al
+							momento de dar de alta su usuario." />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow Height="60px" VerticalAlign="Top">
+				<com:TTableCell HorizontalAlign="Right" Width="50%">
+					<com:TLabel ID="lblUsuario" Text="Escriba su nombre de usuario:" />
+				</com:TTableCell>
+				<com:TTableCell HorizontalAlign="Left">
+					<com:TTextBox ID="txtUsuario" CausesValidation="false" />
+					<com:TRequiredFieldValidator ID="reqUsuario" ControlToValidate="txtUsuario"
+							ErrorMessage="Introduzca su nombre de usuario." Text="*" />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow Height="60px" VerticalAlign="Top">
+				<com:TTableCell ColumnSpan="2">
+					<com:TButton ID="btnEnviar" Text="Enviar contraseña" OnClick="btnEnviar_Clicked" />
+					&nbsp;&nbsp;&nbsp;&nbsp;
+					<com:TButton ID="btnCancelar" Text="Cancelar" OnClick="btnCancelar_Clicked"
+							CausesValidation="false" />
+				</com:TTableCell>
+			</com:TTableRow>
+		</com:TTable>
+		<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" AutoUpdate="false" />
+	</com:TPanel>
+</com:TContent>

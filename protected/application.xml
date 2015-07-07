@@ -1,39 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<application id="prestamos" mode="Debug">
-  <!-- alias definitions and namespace usings
-  <paths>
-    <alias id="myalias" path="./lib" />
-    <using namespace="Application.common.*" />
-  </paths>
-  -->
-
-  <!-- configurations for modules -->
-  <modules>
-    <!-- Remove this comment mark to enable caching
-    <module id="cache" class="System.Caching.TDbCache" />
-    -->
-
-    <!-- Remove this comment mark to enable PATH url format
-    <module id="request" class="THttpRequest" UrlFormat="Path" />
-    -->
-
-    <!-- Remove this comment mark to enable logging
-    <module id="log" class="System.Util.TLogRouter">
-      <route class="TBrowserLogRoute" Categories="System" />
-    </module>
-    -->
-  </modules>
-
-  <!-- configuration for available services -->
-  <services>
-    <service id="page" class="TPageService" DefaultPage="Home" />
-  </services>
-
-  <!-- application parameters
-  <parameters>
-    <parameter id="param1" value="value1" />
-    <parameter id="param2" value="value2" />
-  </parameters>
-  -->
+<application id="sigesi" mode="Debug">
+	<!-- modulos configurados y cargados para todos los servicios -->
+	<modules>
+		<!--module class="System.Util.TParameterModule" ParameterFile="Application.Settings.Parametros" /-->
+		<module class="System.Data.TDataSourceConfig" id="dbac">
+			<database ConnectionString="mysql:host=localhost;dbname=sigesi" username="gestioninfo" password="transparenciainfo" />
+		</module>
+		<module class="System.I18N.TGlobalization" DefaultCharset="utf-8" />
+		<!-- module id="session" class="THttpSession" SessionName="SSID"
+			CookieMode="Allow" UseCustomStorage="false" AutoStart="true" GCProbability="1"
+			UseTransparentSessionID="true" TimeOut="3600" / --> <!-- SavePath="temp" -->
+		<module id="auth"
+			class="System.Security.TAuthManager"
+			UserManager="users"
+			AllowAutoLogin="true"
+			LoginPage="Usuarios.Login" />
+ 		<module id="users"
+			class="System.Security.TDbUserManager"
+			UserClass="Application.Pages.Usuarios.Usuario" ConnectionID="dbac" />
+	</modules>
+	<parameters>
+		<parameter id="mailserver" value="192.168.1.9" />
+		<parameter id="sistema" value="Atención ciudadana" />
+		<parameter id="" value="Atención ciudadana" />
+	</parameters>
+	<services>
+		<service id="pdfs" class="Application.pdfs.pdfs" />
+	</services>
 </application>

@@ -1,0 +1,140 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Datos de titulares de área" %>
+<com:TContent ID="Main">
+	<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+		<!--TÃ­tulo-->
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2" Style="text-align:center;">
+				<com:TLabel ID="lblTitulo" CssClass="titulo" Text="Datos de titulares de área" />
+				<br /><br /><br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Coordinación-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right" Width="150px">
+				<com:TLabel ID="lblCoord" Text="Coordinación:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlCoord" DataTextField="nombre_coordinacion" DataValueField="id_coordinacion" OnSelectedIndexChanged="addlCoord_Changed" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Ãrea-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblArea" Text="Área:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlArea" DataTextField="nombre_area" DataValueField="id_area" OnSelectedIndexChanged="addlArea_Changed" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Tratamiento-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblTratamiento" Text="Título:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtTratamiento" Width="400px" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Jefe del Ã¡rea-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblTitular" Text="Titular del Área:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtTitular" Width="400px" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Puesto-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblPuesto" Text="Nombre del puesto:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtPuesto" Width="400px" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Oficina-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblOficina" Text="Oficina:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveDropDownList ID="addlOficina" DataTextField="oficina" DataValueField="id_oficina" 
+						OnSelectedIndexChanged="addlOficina_Changed" CausesValidation="false" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--Oficina-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblOfic" Text="Oficina:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtOficina" Width="400px" OnTextChanged="atxtOficina_Changed" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<!--DirecciÃ³n-->
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblDireccion" Text="Dirección:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TActiveTextBox ID="atxtDireccion" Width="400px" OnTextChanged="atxtDireccion_Changed" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell>
+				<br />
+			</com:TTableCell>
+		</com:TTableRow>
+
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2">
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" />
+			</com:TTableCell>
+		</com:TTableRow>
+	</com:TTable>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false"></com:TValidationSummary>
+</com:TContent>

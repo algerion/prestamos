@@ -1,0 +1,43 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Cambiar password del usuario" %>
+<com:TContent ID="Main">
+	<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+		<com:TTableRow>
+			<com:TTableCell ColumnSpan="2" Height="60px" VerticalAlign="Top">
+				<com:TLabel ID="lblTitulo" CssClass="titulo" Text="CAMBIAR PASSWORD DEL USUARIO" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblOldAcceso" Style="text-align:right; width:150px" Text="Escriba el password actual:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TTextBox ID="txtOldAcceso" TextMode="Password" PersistPassword="false" />
+				<com:TRequiredFieldValidator ID="reqOldAcceso" ControlToValidate="txtOldAcceso" ErrorMessage="Introduzca el password actual." Text="*" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblAcceso" Style="text-align:right; width:150px" Text="Escriba el nuevo password:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TTextBox ID="txtAcceso" TextMode="Password" PersistPassword="false" />
+				<com:TRequiredFieldValidator ID="reqAcceso" ControlToValidate="txtAcceso" ErrorMessage="Introduzca el nuevo password del usuario." Text="*" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow>
+			<com:TTableCell HorizontalAlign="Right">
+				<com:TLabel ID="lblCompara" Style="text-align:right; width:150px" Text="Vuelva a escribir el nuevo password:" />
+			</com:TTableCell>
+			<com:TTableCell HorizontalAlign="Left">
+				<com:TTextBox ID="txtCompara" TextMode="Password" PersistPassword="false" />
+				<com:TCompareValidator ID="cmpAcceso" ControlToValidate="txtAcceso" ControlToCompare="txtCompara" ErrorMessage="El nuevo password introducido no coincide entre las casillas." Text="*" />
+			</com:TTableCell>
+		</com:TTableRow>
+		<com:TTableRow VerticalAlign="Top" Height="60px">
+			<com:TTableCell ColumnSpan="2">
+				<com:TButton ID="btnAcceso" Text="Aceptar" OnClick="btnAceptar_Clicked" />
+			</com:TTableCell>
+		</com:TTableRow>
+	</com:TTable>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" AutoUpdate="false" />
+</com:TContent>

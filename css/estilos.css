@@ -1,0 +1,55 @@
+body
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+td
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	padding: 3px 3px;
+}
+
+form
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+}
+
+input
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	border : 1px solid #000000;
+}
+
+textarea
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	border : 1px solid #000000;
+}
+
+select
+{
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	border : 1px solid #000000;
+}
+
+a
+{
+	text-decoration:none;
+}
+
+.titulo {
+	border-top: 1px solid #026830;
+	border-bottom: 1px solid #026830;
+}
+
+.titulo, .titulo2 {
+	font-size: 13px;
+	color: #0033bb;
+	font-weight: bold;
+}

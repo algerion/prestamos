@@ -1,8 +1,33 @@
-<html>
-<head>
-  <title>Welcome to PRADO</title>
-</head>
-<body>
-<h1>Welcome to PRADO!</h1>
-</body>
-</html>
+<%@ MasterClass="Application.layouts.MainLayout" Title="Vinculación Ciudadana" %>
+<com:TContent ID="Cabeceras">
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="librerias/grids.css" />
+	<com:TClientScript ID="cscrHover" ScriptUrl="librerias/grids.js" />
+</com:TContent>
+<com:TContent ID="Main">
+	<table width="100%">
+		<tr>
+			<td align="center" class="titulo">Asuntos atendidos por secretaría</td>
+		</tr>
+		<tr>
+			<td><br /></td>
+		</tr>
+		<tr>
+			<td align="center">
+				<com:TDataGrid ID="dgCoord" HeaderStyle.Font.Size="8pt" AutoGenerateColumns="false" 
+						HeaderStyle.BackColor="Blue" HeaderStyle.ForeColor="White"
+						ItemStyle.CssClass="filapar" AlternatingItemStyle.CssClass="filaimpar"
+						SelectedItemStyle.BackColor="#99FF66">
+					<prop:EmptyTemplate>
+						<com:TLiteral Text="No se encontraron solicitudes" />
+					</prop:EmptyTemplate>
+					<com:TBoundColumn DataField="nombre_coordinacion" HeaderText="Secretaría" />
+					<com:TBoundColumn DataField="status" HeaderText="Status" />
+					<com:TBoundColumn DataField="total" HeaderText="Total" />
+				</com:TDataGrid>
+			</td>
+		</tr>
+		<tr>
+			<td><br /></td>
+		</tr>
+	</table>
+</com:TContent>

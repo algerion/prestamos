@@ -1,0 +1,59 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Acceso restringido" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscrHash" ScriptUrl="../compartidos/js/hashea.js" />
+	<com:TClientScript ID="cscrMD5" ScriptUrl="../compartidos/js/md5.js" />
+</com:TContent>
+<com:TContent ID="Main">
+	<com:TPanel Height="340px" >
+		<com:TTable ID="tblPrincipal" Style="text-align:center; width:100%">
+
+			<com:TTableRow>
+				<com:TTableCell ColumnSpan="2" Height="100px" VerticalAlign="Top">
+					<com:TLabel ID="lblTitulo" CssClass="titulo" Text="ACCESO RESTRINGIDO" />
+				</com:TTableCell>
+			</com:TTableRow>
+
+			<com:TTableRow>
+				<com:TTableCell HorizontalAlign="Right" Width="50%">
+					<com:TLabel ID="lblUsuario" Style="text-align:right; width:150px" Text="Usuario:" />
+				</com:TTableCell>
+				<com:TTableCell HorizontalAlign="Left">
+					<com:TTextBox ID="txtUsuario" CausesValidation="false" />
+					<com:TRequiredFieldValidator ID="reqUsuario" ControlToValidate="txtUsuario"
+							ErrorMessage="Introduzca el nombre del usuario." Text="*" />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow Height="40px" VerticalAlign="Top">
+				<com:TTableCell HorizontalAlign="Right">
+					<com:TLabel ID="lblAcceso" Style="text-align:right; width:150px" Text="Contraseña:" />
+				</com:TTableCell>
+				<com:TTableCell HorizontalAlign="Left">
+					<com:TTextBox ID="txtAcceso" TextMode="Password" PersistPassword="false"
+							CausesValidation="false" />
+					<com:TRequiredFieldValidator ID="reqAcceso" ControlToValidate="txtAcceso"
+							ErrorMessage="Introduzca el password del usuario." Text="*" />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow Height="60px" VerticalAlign="Top">
+				<com:TTableCell ColumnSpan="2">
+					<br />
+					<com:TButton ID="btnAcceso" Text="Ingresar" Attributes.onclick="javascript:hashea();"
+							OnClick="btnAceptar_Clicked" />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow>
+				<com:TTableCell ColumnSpan="2">
+					<com:THyperLink Text="¿Olvidó su contraseña?"
+							NavigateUrl="index.php?page=usuarios.recup_pass" />
+				</com:TTableCell>
+			</com:TTableRow>
+			<com:TTableRow>
+				<com:TTableCell ColumnSpan="2">
+					<com:THiddenField ID="hidAleatorio" />
+					<com:THiddenField ID="hidHMAC" />
+				</com:TTableCell>
+			</com:TTableRow>
+		</com:TTable>
+		<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" AutoUpdate="false" />
+	</com:TPanel>
+</com:TContent>
