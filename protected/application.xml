@@ -5,7 +5,7 @@
 	<modules>
 		<!--module class="System.Util.TParameterModule" ParameterFile="Application.Settings.Parametros" /-->
 		<module class="System.Data.TDataSourceConfig" id="dbac">
-			<database ConnectionString="mysql:host=localhost;dbname=sigesi" username="gestioninfo" password="transparenciainfo" />
+			<database ConnectionString="mysql:host=localhost;dbname=prestamos" username="prestamos" password="prestamos" />
 		</module>
 		<module class="System.I18N.TGlobalization" DefaultCharset="utf-8" />
 		<!-- module id="session" class="THttpSession" SessionName="SSID"
