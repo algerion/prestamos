@@ -1,143 +1,122 @@
 <%@ MasterClass="Application.layouts.MainLayout" Title="Captura de solicitudes" %>
 <com:TContent ID="Cabeceras">
-	<com:TClientScript ID="cscr" ScriptUrl="librerias/comun.js" />
-	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="librerias/grids.css" />
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
 </com:TContent>
 <com:TContent ID="Main">
 	<!--Datos del solicitante-->
-	<table style="width: 100%">
+	<table style="width: 100%" border="0">
 
 		<!--Título-->
 		<tr>
-			<td colspan="4" style="text-align: center">
-				<p class="titulo">Solicitud</p>
-			</td>
-		</tr>
-
-		<!--Nombre del solicitante-->
-		<tr>
-			<td style="text-align: right">
-				Nombre:
-			</td>
-			<td colspan="3">
-				<com:TTextBox ID="txtNombre" Width="400px" MaxLength="100" />
-				<com:TRequiredFieldValidator ID="reqNombre" ControlToValidate="txtNombre" ErrorMessage="Escriba el nombre del solicitante." Text="*" />
-			</td>
-		</tr>
-
-		<!--Correo-->
-		<tr>
-			<td style="text-align: right">
-				Correo-e:
-			</td>
-			<td colspan="3">
-				<com:TTextBox ID="txtEMail" MaxLength="100" Width="200px" />
-				<com:TEmailAddressValidator ID="emvMail" ControlToValidate="txtEMail" ErrorMessage="Verifique la dirección de correo electrónico." Text="*" />
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">Solicitudes</p>
 			</td>
 		</tr>
 		
-		<!--Dirección-->
 		<tr>
-			<td style="text-align: right">
-				Dirección:
-			</td>
-			<td colspan="3">&nbsp;</td>
-		</tr>
+			<td>
+				<table border="0">
+					<tr>
+						<td>Titular:</td>
+						<td colspan="4"><com:TTextBox ID="txtTitular" /></td>
+					</tr>
 
-		<!--Agencia-->
-		<tr>
-			<td style="text-align: right">
-				<com:TActiveImageButton ID="aibtnAgencia" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="Enlaza_Agencia" CausesValidation="false" />
-				Agencia:
+					<tr>
+						<td>Folio:</td>
+						<td><com:TTextBox ID="txtFolio" /></td>
+						<td>Fecha:</td>
+						<td><com:TTextBox ID="txtFecha" /></td>
+						<td>Estatus</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<com:TPanel GroupingText="Titular">
+								<table border="1">
+									<tr>
+										<td>No. Único</td>
+										<td><com:TTextBox ID="txtNoUnicoTit" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreTit" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Dirección</td>
+										<td colspan="4"><com:TTextBox ID="txtDireccion" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Categoria</td>
+										<td colspan="2"><com:TTextBox ID="txtCategoria" /></td>
+										<td>Unidad Presupuestal</td>
+										<td><com:TTextBox ID="txtUnidadPresupuestal" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Sindicato</td>
+										<td colspan="2"><com:TTextBox ID="txtSindicato" /></td>
+										<td>Antigüedad</td>
+										<td><com:TTextBox ID="txtAntiguedad" Width="400px" /></td>
+									</tr>
+								</table>
+							</com:TPanel>
+						</td>
+					</tr>
+				</table>
 			</td>
-			<td colspan="3">
-				<com:TActiveDropDownList ID="addlAgencia" DataTextField="nombre_ag" DataValueField="id_ag" OnSelectedIndexChanged="addlAgencia_Changed" CausesValidation="false" />
-			</td>
-		</tr>
-
-		<!--Colonia-->
-		<tr>
-			<td style="text-align: right">
-				<com:TActiveImageButton ID="aibtnColonia" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="addlAgencia_Changed" CausesValidation="false" />
-				Colonia:
-			</td>
-			<td colspan="3">
-				<com:TActiveDropDownList ID="addlColonia" DataTextField="nombre_col" DataValueField="id_col" CausesValidation="false" />
-			</td>
-		</tr>
-
-		<!--Calle-->
-		<tr>
-			<td style="text-align: right">
-				Calle y núm:
-			</td>
-			<td colspan="3">
-				<com:TTextBox ID="txtDireccion" Width="400px" MaxLength="200" />
-			</td>
-		</tr>
-
-		<!--Teléfono-->
-		<tr>
-			<td style="text-align: right">
-				Teléfono:
-			</td>
-			<td colspan="3">
-				<com:TTextBox ID="txtTelefono" MaxLength="20" />
-				<com:TRegularExpressionValidator ID="revTelefono" ControlToValidate="txtTelefono" ErrorMessage="Verifique el número telefónico." Text="*" RegularExpression="^(\d{2})?((-)?|( )?)(\(\d{3}\))?(\d?-? ?)*$" />
-			</td>
-		</tr>
-
-		<!--Asunto-->
-		<tr>
-			<td style="text-align: right; vertical-align: top">
-				Asunto:
-			</td>
-			<td colspan="3">
-				<com:TTextBox ID="txtAsunto" TextMode="MultiLine" Width="400px" CssClass="textarea" />
-				<com:TRequiredFieldValidator ID="reqAsunto" ControlToValidate="txtAsunto" ErrorMessage="Escriba el asunto motivo de la solicitud." Text="*" />
-			</td>
-		</tr>
-	
-		<!--Coordinación-->
-		<tr>
-			<td align="right">
-				<com:TActiveImageButton ID="aibtnCoord" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="Enlaza_Coord" CausesValidation="false" />
-				Dirección general:
-			</td>
-			<td colspan="3">
-				<com:TActiveDropDownList ID="addlCoord" DataTextField="coordinacion" DataValueField="id_coordinacion" OnSelectedIndexChanged="addlCoord_Changed" CausesValidation="false" />
-			</td>
-		</tr>
-
-		<!--Área-->
-		<tr>
-			<td align="right">
-				<com:TActiveImageButton ID="aibtnArea" ImageUrl="images/refresh.png" Height="16" BorderWidth="0" OnClick="addlCoord_Changed" CausesValidation="false" />
-				Área:
-			</td>
-			<td colspan="3">
-				<com:TActiveDropDownList ID="addlArea" DataTextField="area" DataValueField="id_area" CausesValidation="false" />
-			</td>
-		</tr>
-	
-		<!--Anexo-->
-		<tr>
-			<td align="right">
-				Anexo:
-			</td>
-			<td align="left">
-				<com:TFileUpload ID="fulAnexo" OnFileUpload="fulArchivo_Upload" />
-				<com:THyperLink ID="hlAnexo" Target="_blank" />
+			<td>
+				<table>
+					<tr>
+						<td>Importe:</td>
+						<td><com:TTextBox ID="txtImporte" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Plazo:</td>
+						<td><com:TTextBox ID="txtPlazo"  width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Tasa:</td>
+						<td><com:TTextBox ID="txtTasa" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Interes:</td>
+						<td><com:TTextBox ID="txtInteres" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Saldo anterior:</td>
+						<td><com:TTextBox ID="txtSaldoAnterior" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Descuentos:</td>
+						<td><com:TTextBox ID="txtDescuentos" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Imp. Descuentos:</td>
+						<td><com:TTextBox ID="txtImpDescuentos" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Imp. Prestamos:</td>
+						<td><com:TTextBox ID="txtImpPrestamos" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Seguro:</td>
+						<td><com:TTextBox ID="txtSeguro" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Diferencia:</td>
+						<td><com:TTextBox ID="txtDiferencia" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Imp. Cheque:</td>
+						<td><com:TTextBox ID="txtImpCheque" width="80px" /></td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 
 		<!--Botón Guardar-->
 		<tr>
-			<td colspan="4" align="center">
+			<td colspan="2" align="center">
 				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" />
 			</td>
 		</tr>
 	</table>
-	
 	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
 </com:TContent>
