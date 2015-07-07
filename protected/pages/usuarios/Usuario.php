@@ -37,7 +37,7 @@ class Usuario extends TDbUser
         {
             $user = new Usuario($this->Manager);
             $user->Name = $row[$this->id_usuario];  // asigna el nombre de usuario
-			$consulta = "SELECT " . $this->permiso . " FROM " . $this->roles . " r JOIN " . 
+			/*$consulta = "SELECT " . $this->permiso . " FROM " . $this->roles . " r JOIN " . 
 					$this->lista . " l ON r." . $this->id_permiso . " = l." . $this->id_permiso . 
 					" WHERE " . $this->id_usuario . " = :id_usuario";
 			$command = $this->getDbConnection()->createCommand($consulta);
@@ -46,7 +46,7 @@ class Usuario extends TDbUser
 			foreach($command->query()->readAll() as $rol)
 				$roles[] = $rol[$this->permiso]; 
 			$user->Roles = $roles; // asigna los roles
-			
+			*/
 			//file_put_contents("temp/usr.txt", $rol, FILE_APPEND);
 			
             $user->IsGuest = false;   // el usuario no es un invitado
