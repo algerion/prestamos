@@ -33,7 +33,7 @@
 					<tr>
 						<td colspan="5">
 							<com:TPanel GroupingText="Titular">
-								<table border="1">
+								<table border="0">
 									<tr>
 										<td>No. Único</td>
 										<td><com:TTextBox ID="txtNoUnicoTit" Width="80px" /></td>
@@ -59,6 +59,66 @@
 							</com:TPanel>
 						</td>
 					</tr>
+					<tr>
+						<td colspan="5">
+							<com:TPanel GroupingText="Aval 1">
+								<table border="0">
+									<tr>
+										<td>No. Único</td>
+										<td><com:TTextBox ID="txtNoUnicoTit2" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreTit2" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Dirección</td>
+										<td colspan="4"><com:TTextBox ID="txtDireccion2" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Categoria</td>
+										<td colspan="2"><com:TTextBox ID="txtCategoria2" /></td>
+										<td>Unidad Presupuestal</td>
+										<td><com:TTextBox ID="txtUnidadPresupuestal2" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Sindicato</td>
+										<td colspan="2"><com:TTextBox ID="txtSindicato2" /></td>
+										<td>Antigüedad</td>
+										<td><com:TTextBox ID="txtAntiguedad2" Width="400px" /></td>
+									</tr>
+								</table>
+							</com:TPanel>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<com:TPanel GroupingText="Aval 2">
+								<table border="0">
+									<tr>
+										<td>No. Único</td>
+										<td><com:TTextBox ID="txtNoUnicoTit3" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreTit3" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Dirección</td>
+										<td colspan="4"><com:TTextBox ID="txtDireccion3" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Categoria</td>
+										<td colspan="2"><com:TTextBox ID="txtCategoria3" /></td>
+										<td>Unidad Presupuestal</td>
+										<td><com:TTextBox ID="txtUnidadPresupuestal3" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Sindicato</td>
+										<td colspan="2"><com:TTextBox ID="txtSindicato3" /></td>
+										<td>Antigüedad</td>
+										<td><com:TTextBox ID="txtAntiguedad3" Width="400px" /></td>
+									</tr>
+								</table>
+							</com:TPanel>
+						</td>
+					</tr>
+					<td>Fecha Firma Avales</td>
+										<td><com:TTextBox ID="txtFechaFirmaAvales" Width="100px" /></td>
 				</table>
 			</td>
 			<td>
