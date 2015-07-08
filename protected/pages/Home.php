@@ -7,7 +7,7 @@ class Home extends TPage
 	public function onLoad($param)
 	{
 		parent::onLoad($param);
-		$this->dbConexion = Conexion::getConexion($this->Application, "dbac");
+		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
 	}
 }
