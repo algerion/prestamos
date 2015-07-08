@@ -46,12 +46,12 @@
 						<td>Abonos Realizados</td>
 										<td><com:TTextBox ID="txtAbonosRealizados4" Width="100px" /></td>				
 						<tr>
-						<td>Total de Movimientos</td>
-						<td><com:TTextBox ID="txtTotalDeMovimiento2" Width="150px" /></td>
-						<td><com:TTextBox ID="txtTotalDeMovimiento3" Width="150px" /></td>
+						<td colspan="3" align="center">Total de Movimientos</td>
+						<td><com:TTextBox ID="txtTotalDeMovimiento2" Width="100px" /></td>
+						<td><com:TTextBox ID="txtTotalDeMovimiento3" Width="100px" /></td>
 						</tr>
 						<tr>
-						<td>Saldo</td>
+						<td colspan="3" align="center">Saldo</td>
 						<td><com:TTextBox ID="txtSaldo4" Width="50px" /></td>
 						
 		<!--Botón Agregar-->
