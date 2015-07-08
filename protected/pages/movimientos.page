@@ -1,0 +1,65 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Captura de solicitudes" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">MOVIMIENTOS</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="Subtítulo">HISTORIAL DE MOVIMIENTOS POR CONTRATO</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0">
+					<tr>
+						<td>Contrato</td>
+										<td><com:TTextBox ID="txtContrato2" Width="100px" /></td>
+						<td>Prestamo</td>
+										<td><com:TTextBox ID="txtPrestamo2" Width="100px" /></td>
+						<td>Interes</td>
+										<td><com:TTextBox ID="txtInteres2" Width="100px" /></td>				
+						</tr>
+						<tr>
+						<td>Nombre</td>
+										<td><com:TTextBox ID="txtNombre3" Width="200px" /></td>
+						<td>Importe De Cheque</td>
+										<td><com:TTextBox ID="txtImporteDeCheque3" Width="100px" /></td>
+						<td>Fecha De Cheque</td>
+										<td><com:TTextBox ID="txtFechaDeCheque3" Width="100px" /></td>				
+						</tr>
+						<tr>
+						<td>Sindicato</td>
+										<td><com:TTextBox ID="txtSindicato4" Width="150px" /></td>
+						<td>Descuento Quincenal</td>
+										<td><com:TTextBox ID="txtDescuentoQuincenal4" Width="100px" /></td>
+						<td>Abonos Realizados</td>
+										<td><com:TTextBox ID="txtAbonosRealizados4" Width="100px" /></td>				
+						<tr>
+						<td>Total de Movimientos</td>
+						<td><com:TTextBox ID="txtTotalDeMovimiento2" Width="150px" /></td>
+						<td><com:TTextBox ID="txtTotalDeMovimiento3" Width="150px" /></td>
+						</tr>
+						<tr>
+						<td>Saldo</td>
+						<td><com:TTextBox ID="txtSaldo4" Width="50px" /></td>
+						
+		<!--Botón Agregar-->
+		<tr>
+			<td colspan="6" align="center">
+				<com:TButton ID="btnAgregar" Text="Agregar" OnClick="btnAgregar_Click" IsDefaultButton="true" />
+			</td>
+		</tr>
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
