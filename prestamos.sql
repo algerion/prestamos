@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 08-07-2015 a las 19:39:48
+-- Tiempo de generación: 09-07-2015 a las 21:11:24
 -- Versión del servidor: 5.5.34
 -- Versión de PHP: 5.3.27
 
@@ -25,6 +25,24 @@ USE `prestamos`;
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `empleados`
+--
+
+DROP TABLE IF EXISTS `empleados`;
+CREATE TABLE IF NOT EXISTS `empleados` (
+  `numero` int(11) NOT NULL,
+  `nombre` varchar(20) NOT NULL,
+  `paterno` varchar(15) NOT NULL,
+  `materno` varchar(15) NOT NULL,
+  `ura` varchar(15) NOT NULL,
+  `ur` varchar(7) NOT NULL,
+  `pr` varchar(1) NOT NULL,
+  PRIMARY KEY (`numero`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `movimientos`
 --
 
@@ -41,11 +59,6 @@ CREATE TABLE IF NOT EXISTS `movimientos` (
   PRIMARY KEY (`id_movimiento`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
---
--- Truncar tablas antes de insertar `movimientos`
---
-
-TRUNCATE TABLE `movimientos`;
 --
 -- Volcado de datos para la tabla `movimientos`
 --
@@ -68,11 +81,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   PRIMARY KEY (`id_usuario`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
---
--- Truncar tablas antes de insertar `usuarios`
---
-
-TRUNCATE TABLE `usuarios`;
 --
 -- Volcado de datos para la tabla `usuarios`
 --
