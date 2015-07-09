@@ -1,0 +1,11 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Vinculación Ciudadana" %>
+<com:TContent ID="Main">
+	<table width="100%">
+		<tr>
+			<td align="center" class="titulo">Asuntos atendidos por secretaría</td>
+		</tr>
+		<tr>
+			<td><br /></td>
+		</tr>
+	</table>
+</com:TContent>
