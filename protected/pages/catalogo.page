@@ -1,0 +1,47 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Captura de solicitudes" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">Catalogo De Empleados</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0">
+					<tr>
+						<td>Clave de empleado</td>
+						<td><com:TTextBox ID="ddlclaveempleado" Width="150px" /></td>
+						<td>Estatus</td>
+						<td><com:TTextBox ID="ddlEstatus9" Width="150px" /></td>				
+					</tr>
+					<tr>
+						<td>Apellido paterno</td>
+						<td><com:TTextBox ID="ddlApellidoPaterno" Width="150px" /></td>
+						<td>Apellido materno</td>
+						<td><com:TTextBox ID="ddlApellidoMaterno" Width="150px" /></td>
+						<td>Nombre</td>
+						<td><com:TTextBox ID="ddlNombre9" Width="150px" /></td>				
+					</tr>
+						<td>Fecha de ingreso</td>
+						<td><com:TTextBox ID="ddlFechadeingreso9" Width="50px" /></td>
+						<td>Sindiato</td>
+						<td><com:TTextBox ID="ddlSindicato9" Width="80px" /></td>
+						<td>Categoria</td>
+						<td><com:TTextBox ID="Categoria"" Width="50px" /></td>
+					
+				</table>
+			</td>
+		</tr>
+		
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
