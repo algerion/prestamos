@@ -1,0 +1,716 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+	<title>Estructura de archivo DBF </title>
+	
+	<meta http-equiv="Content-Type" content="text/html; charset=windows-1252" /> 
+	<meta name="author" content="WhiteTown" />
+	<meta name="keywords" content="El, archivo, DBF,, contiene, una, tabla, que, est&#225;, formada, por, el, encabezado, del, registro, y, datos, de, los, mismos., , El, encabezado, del, registro,, define, la, estructura, del, archivo, y, contiene, cualquier, informaci&#243;n, relacionada, con, la, tabla., El, encabezado, del, registro, inicia, en, la, posici&#243;n, cero., Los, registros, de, datos, son, seguidos, del, encabezado,, en, bytes, consecutivos,, los, cuales, contienen, el, texto, actual, de, los, campos., , , Nota, importante" />
+	<meta name="description" content="  El archivo DBF, contiene una tabla que est&#225; formada por el encabezado del registro y datos de los mismos.  El encabezado del registro, define la estructura del archivo y contiene cualquier informaci&#243;n relacionada con la tabla. El encabezado del registro inicia en la posici&#243;n cero. Los registros de datos son seguidos del encabezado, en bytes consecutivos, los cuales contienen el texto actual de los campos.    Nota importante" />
+
+	
+<style type="text/css">
+
+* {
+ font-family:		Arial, Verdana, Helvetica, sans-serif;
+// font-size:			14px;
+}
+
+body
+{ 
+ margin:0px auto;
+ padding:0px;
+ background-color:#ffffff;
+}
+
+   
+.shadow {
+    background: white; /* Öâåò ôîíà */
+    box-shadow: 0 0 10px rgba(0,0,0,0.5); /* Ïàðàìåòðû òåíè */
+    padding: 0px;
+   }
+   
+form {
+    margin: 0px;
+    padding: 0px;
+}
+
+a {
+	-moz-outline:none;
+}
+
+.amenu {
+	 font-size:			12px;
+}
+
+img {border:0}
+a img {border:0}
+
+h1
+{ 
+ font-size:			24px;
+ margin-bottom: 4px;
+ margin-top: 4px;
+}
+
+h2
+{ 
+ font-size:			18px;
+ margin-bottom: 4px;
+ margin-top: 4px;
+}
+
+h3
+{ 
+ font-size:			16px;
+ margin-bottom: 4px;
+ margin-top: 4px;
+}
+
+h4
+{ 
+ font-size:			14px;
+ -font-weight : bold; 
+}
+
+h5
+{ 
+ font-size:			12px;
+ margin-bottom: 2px;
+ margin-top: 2px;
+}
+
+
+.sf
+{ 
+ font-size:		10px;
+}
+
+.q
+{ 
+ font-weight : bold; 
+// color: red;
+}
+.an
+{ 
+ font-weight : bold; 
+ color: blue;
+}
+
+.boldrow
+{ 
+ font-weight : bold; 
+}
+
+a
+{
+ text-decoration:	none;
+}
+//a:active  { TEXT-DECORATION: underline; }
+a:hover   { TEXT-DECORATION: underline; }
+
+.menu
+{ 
+ text-decoration:	none;
+}
+.menuactive1
+{ 
+ text-decoration:	bold;
+}
+
+.inside
+{ 
+ text-decoration:	none;
+
+ 1background-color:	#D0E0FF;
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+
+
+.title1
+{ 
+ text-decoration:	none;
+ background-color:	#5098EC;
+ font-weight : bold; 
+}
+
+.blockerror
+{ 
+ text-decoration:	none;
+ border-width:		1px;
+ border-collapse:   collapse;
+ border-spacing:    0;
+}
+
+.titleerror
+{ 
+ text-decoration:	none;
+ background-color:	#FC3838;
+ font-weight : bold; 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#FC3838;
+}
+
+.contenterror
+{ 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#FC3838;
+}
+
+.blockgreen
+{ 
+ text-decoration:	none;
+ border-width:		1px;
+ border-collapse:   collapse;
+ border-spacing:    0;
+}
+
+.titlegreen
+{ 
+ text-decoration:	none;
+ background-color:	#38FC38;
+ font-weight : bold; 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#38FC38;
+}
+
+.contentgreen
+{ 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#38FC38;
+ font-size:			12px;
+}
+
+#round2 {
+border: 1px solid #eeeeee;
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px; 
+border-radius: 10px;
+}
+
+#round3 {
+-moz-border-radius: 5px;
+-webkit-border-radius: 5px; 
+border-radius: 5px;
+}
+
+
+.blockmenu
+{ 
+ text-decoration:	none;
+ border-width:		1px;
+ border-collapse:   collapse;
+ border-spacing:    0;
+ font-size:			12px;
+}
+
+.block
+{ 
+ text-decoration:	none;
+ border-width:		1px;
+ border-collapse:   collapse;
+ border-spacing:    0;
+ font-size:			14px;
+}
+
+.title
+{ 
+ text-decoration:	none;
+ background-color:	#D0D8FC;
+ font-weight : bold; 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+
+.title_m
+{ 
+ text-decoration:	none;
+ background-color:	#2580F2;
+ font-color:	white;
+ font-weight : bold; 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#2580F2;
+}
+
+.content
+{ 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+
+.contentmenu
+{ 
+ border-width:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+ font-size:			12px;
+}
+
+
+.pl
+{ 
+ border-width:		1px;
+ border-top-width:		0px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+.pr
+{ 
+ border-width:		1px;
+ border-top-width:		0px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+.pc
+{ 
+ border-width:		0px;
+ border-right-width:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+.pt
+{ 
+ border-height:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+
+.bb
+{ 
+ border-width:		0px;
+ border-bottom-width:		1px;
+ border-style:		solid;
+ border-color:		#D0D8FC;
+}
+.pnone
+{ 
+ border-width:		5px;
+ border-color:		white;
+}
+
+.ptitle
+{ 
+ font-weight : bold; 
+ color: red;
+}
+
+.bigfont {
+ font-size:			14px;
+}
+
+
+
+#menu {
+	background: #D0D8FC;
+	float: left;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	font-size:			20px;
+}
+#menu li {
+	float: left;
+	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+#menu a {
+	background: #D0D8FC ;
+	color: #000;
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 4px 12px;
+	text-decoration: none;
+	font-weight:normal;
+}
+#menu a:hover {
+	background: #1550F2 ;
+	color: #fff;
+	padding-bottom: 4px;
+}
+
+#menu li a.cur {
+	background: #2580F2 ;
+	color: #fff;
+	padding-bottom: 4px;
+}
+
+#menulang {
+	background: #D0D8FC;
+	float: right;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	font-size:			20px;
+}
+#menulang li {
+	float: left;
+	font: 67.5% "Lucida Sans Unicode", "Bitstream Vera Sans", "Trebuchet Unicode MS", "Lucida Grande", Verdana, Helvetica, sans-serif;
+	margin: 0;
+	padding: 0;
+}
+#menulang a {
+	background: #D0D8FC ;
+	color: #000;
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 4px 4px;
+	text-decoration: none;
+	font-weight:normal;
+}
+#menulang a:hover {
+	background: #1550F2 ;
+	color: #fff;
+	padding-bottom: 4px;
+}
+
+#menulang li a.cur {
+	background: #2580F2 ;
+	color: #fff;
+	padding-bottom: 4px;
+}
+
+</style>
+
+<script language="javascript" type="text/javascript">
+function open_window(link,w,h) //opens new window
+{
+	var win = "width="+w+",height="+h+",menubar=no,location=no,resizable=yes,scrollbars=yes";
+	wishWin = window.open(link,'wishWin',win);
+}
+
+function trover(q) {q.style.backgroundColor='#E0E0FF'; q.style.cursor='hand'}
+function trout(q)  {q.style.backgroundColor = '#FFFFFF';}
+
+</script>
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-7795372-1");
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+	
+
+</head>
+<body bgcolor="white">
+	
+
+
+
+
+<table border="0" cellpadding="2" cellspacing="5" width="100%" height="160" background="/images/top.png" style="background-repeat:no-repeat;" >
+
+<tr valign="top" align="right">
+<td>
+<h5>Save Ukraine!<br>
+	<a href='https://secure.payproglobal.com/orderpage.aspx?products=149936'>
+	<img src='/images/ukraine.png' border='0' width='88' height='60'>
+	</a><br>
+</h5>
+</td>
+</tr>
+
+</table>
+<img src="/images/1.png" width="1" height="2" border="0" alt="">
+<table width="100%" border="0" cellpadding="0" cellspacing="0"><tr><td>
+<nobr>
+<ul id="menu">
+	<li><a href="/es/" >Portada</a></li><li><a href="/es/products/" >Productos</a></li><li><a href="/es/download/" >Descargar</a></li><li><a href="/es/order/" >Orden</a></li><li><a href="/es/support/" >Soporte</a></li><li><a href="/es/misc/" class="cur" >Miscelaneo</a></li>
+   <!--li><a class="cur" href="/test/">Test</a></li-->
+</ul>
+</nobr>
+</td><td align="right" width="200"><nobr>
+
+<ul id="menulang">
+	<li><a href="/misc/dbf/" >EN</a></li><li><a href="/de/misc/dbf/" >DE</a></li><li><a href="/ru/misc/dbf/" >RU</a></li><li><a href="/es/misc/dbf/" class="cur" ><b1>ES</b1></a></li><li><a href="/fr/misc/dbf/" >FR</a></li><li><a href="/it/misc/dbf/" >IT</a></li></ul>
+
+</nobr></td></tr></table>
+
+
+
+	<table border="0" cellpadding="2" cellspacing="5" cols="3" width="100%" height="600" bgcolor="" bordercolor="" bordercolorlight="" bordercolordark="" background="" title="">
+
+	<tr height="1">
+		<td width="225"></td>
+		<td></td>
+		<td width="225"></td>
+	</tr>
+
+	
+	<tr valign="top">
+		<td width="225">
+
+
+<table width="100%" border="0" cellpadding="4" cellspacing="0" class="block"><tr class="title"><td>Ligas Relacionadas</td></tr><tr><td class="content"><a href="/es/misc/service/">Servicios</a><br><a href="/es/misc/reseller/">Oportunidades  a distribuidores</a><br><a href="/es/misc/affiliate/">Afiliados</a><br><a href="/es/misc/press/">Publicaciones</a><br><a href="/es/misc/pr/">Notas de prensa</a><br></td></tr><tr><td class="content"><a href="/es/misc/ng/">Gu&#237;as de Norton</a><br><a href="/es/misc/acvt/">Convertidor de archivos</a><br><a href="/es/misc/zcom/">Z.COM</a><br><a href="/es/misc/rb/">Bot&#243;n Rojo</a><br><a href="/es/misc/hr/">Tabla de tarifas por hora</a><br><a href="/es/misc/sentence/">Los comandos</a><br><a href="/es/misc/utilities/">Utilities</a><br><a href="/es/misc/dbf-format/">El Formato DBF</a><br><span><b>Estructura del formato DBF </b></span><br></td></tr></table><p>
+	
+</td>
+		<td><h1>Estructura de archivo DBF </h1> 
+El archivo DBF, contiene una tabla que est&#225; formada por el encabezado del registro y datos de los mismos.<br> 
+El encabezado del registro, define la estructura del archivo y contiene cualquier informaci&#243;n relacionada con la tabla. El encabezado del registro inicia en la posici&#243;n cero. Los registros de datos son seguidos del encabezado, en bytes consecutivos, los cuales contienen el texto actual de los campos.<p> 
+ 
+Nota importante. El registro de los datos de la tabla, inician en la posici&#243;n indicada en bytes del 8 al 9 del encabezado del registro.El registro de los datos, del archivo de datos se inicia en la posici&#243;n indicada en bytes, esto es de la posici&#243;n 8 a la 9 del encabezado. Los registros de datos comienzan con una bandera de eliminaci&#243;n, de tama&#241;o de un byte. Si este byte es un espacio en ASCII (0x20), el registro no se elimina. Si el primer byte es un asterisco (0x2A), se elimina el registro. Los datos de los campos nombrados en los campos subregistro, son seguidos de la bandera de eliminaci&#243;n..<p> 
+ 
+La longitud de un registro, es en bytes y esta se define al sumar la longitud de los campos del registro. Los tipos enteros en una tabla son almacenados con el primer byte menos significativo.<p> 
+ 
+ 
+<h4>Encabezado de la estructura de la tabla de registro </h4> 
+ 
+<table width="100%" cellspacing="0" cellpadding="3" border="0" class="block"> 
+<tr class="title"> 
+	<td width="20%"><b>Desplazamiento de Bytes</b></td> 
+	<td><b>Descripci&#243;n</b></td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">0</td> 
+	<td class="pr">Tipo de archivo:
+	<ul> 
+	<li>0x02   FoxBASE
+	<li>0x03   FoxBASE+/Dbase III plus, sin campos memo 
+	<li>0x30   Visual FoxPro
+	<li>0x31   Visual FoxPro, autoincremento habilitado 
+	<li>0x43   dBASE IV SQL archivos tabla, sin campos memo 
+	<li>0x63   dBASE IV SQL archivos de sistema, sin campos memo 
+	<li>0x83   FoxBASE+/dBASE III PLUS, con campos memo 
+	<li>0x8B   dBASE IV con campos memo 
+	<li>0xCB   dBASE IV SQLarchivos tabla, con campos memo 
+	<li>0xF5   FoxPro 2.x (o anterior) con campos memo 
+	<li>0xFB   FoxBASE
+	</ul> 
+	</td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">1 - 3</td> 
+	<td class="pr">Ultima actualizaci&#243;n  (YYMMDD)</td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">4 – 7</td> 
+	<td class="pr"> N&#250;mero de registros en el archivo  </td> 
+ 
+<tr> 
+	<td class="pl">8 – 9</td> 
+	<td class="pr"> Posici&#243;n del primer registros de datos  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">10 – 11</td> 
+	<td class="pr"> Longitud de un registros de datos, incluyendo la bandera de eliminaci&#243;n  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">12 – 27</td> 
+	<td class="pr"> Reservado </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">28</td> 
+	<td class="pr"> Tabla de banderas:
+	<ul> 
+	<li>0x01 el archivo tiene una estructura .cdx
+	<li>0x02 el archivo tiene archivo con campos Memo 
+	<li>0x04 el archivo es una base de datos (.dbc) 
+	</ul> 
+	Este byte puede contener la suma de cualquiera de los valores antes mencionados. Por ejemplo, el valor 0x03 indica que el archivo DBF tiene una estructura.cdx y tiene campos Memo.</td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">29</td> 
+	<td class="pr">C&#243;digo marca de p&#225;gina  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">30 – 31</td> 
+	<td class="pr"> Reservado, contiene 0x00  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">32 – n</td> 
+	<td class="pr">Campos subregistro<br> 
+El numero de campos determina el numero de campos subregistro. Un campo subregistro existe para cada campo de la tabla.</td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">n+1</td> 
+	<td class="pr">Finalizador del encabezado del registro (0x0D) </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">n+2 to n+264</td> 
+	<td class="pr"> Un rango de 263 bytes, contienen el v&#237;nculo de retroceso, el cual es la ruta de acceso relativa a la base de datos asociada (. dbc). Si el primer byte es 0x00, el archivo no est&#225; asociado a una base de datos. Por lo tanto, los archivos de base de datos siempre contienen 0x00. </td> 
+</tr> 
+</table> 
+ 
+<h4>Estructura de campos subregistro</h4> 
+ 
+ 
+<table width="100%" cellspacing="0" cellpadding="3" border="1" class="block"> 
+ 
+<tr  class="title"> 
+	<td width="20%"><b>Desplazamiento de Bytes</b></td> 
+	<td><b>Descripci&#243;n</b></td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">0 – 10  </td> 
+	<td class="pr">El nombre del campo es como m&#225;ximo de 10 caracteres. Si es menos de 10, se rellena con caracteres nulos (0x00). </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">11 </td> 
+	<td class="pr">Tipo de campo:
+	<ul> 
+	<li>C   –   Car&#225;cter 
+	<li>N   –   Num&#233;rico
+	<li>F   –   Flotante 
+	<li>D   –   Fecha 
+	<li>L   –   L&#243;gico 
+	<li>M   – 	Memo
+	<li>G   – 	General
+	<li>C   –   Car&#225;cter (binario) 
+	<li>M   –   Memo (binario)
+	<li>B   –   Doble 
+	<li>I   –   Entero 
+	<li>Y   –   Monetario 
+	<li>T   –   Fecha-Hora 
+	<li>P   –   Imagen 
+	</ul> 
+	</td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">12 – 15 </td> 
+	<td class="pr">Desplazamiento de campo en el registro </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">16 </td> 
+	<td class="pr">Longitud del campo (en bytes)  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">17 </td> 
+	<td class="pr">Numero de decimales  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">18 </td> 
+	<td class="pr">Campo de Banderas:
+	<ul> 
+	<li>0x01   Columna de Sistema (invisible para el usuario) 
+	<li>0x02   Columna que puede almacenar valores nulo 
+	<li>0x04   Columna Binaria (solo para CHAR y MEMO) 
+	<li>0x06   Cuando un campo es NULO y binario (Entero, Monetario y campos del tipo Car&#225;cter o Memo) 
+	<li>0x0C   Columna de autoincremento  
+	</ul> 
+	</td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">19 - 22 </td> 
+	<td class="pr">Siguiente valor de autoincremento  </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">23 </td> 
+	<td class="pr">Siguiente paso, valor de autoincremento </td> 
+</tr> 
+ 
+<tr> 
+	<td class="pl">24 – 31 </td> 
+	<td class="pr">Reservado</td> 
+</tr> 
+ 
+</table> 
+
+
+
+</td>
+		<td width="225">
+	
+
+
+
+	<div class="fb-like" data-href="http://www.whitetown.com" data-width="150" data-show-faces="true" data-send="false"></div>
+
+	<p>
+	<!-- Place this tag where you want the +1 button to render -->
+	<g:plusone></g:plusone>
+
+	<!-- Place this render call where appropriate -->
+	<script type="text/javascript">
+	  (function() {
+    	var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	    po.src = 'https://apis.google.com/js/plusone.js';
+    	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  		})();
+	</script>
+</td>
+	</tr>
+	
+	</table>
+
+	<table border="0" cellpadding="2" cellspacing="5" cols="1" width="100%" height="50">
+
+<tr valign="middle">
+<td rowspan="2" width="200">
+
+</td>
+
+<td align="center">
+
+</td>
+<td rowspan="2" align="right" width="200">
+
+</td>
+</tr>
+
+<tr valign="middle" align="center">
+
+<td>
+Copyright &copy; WhiteTown Software, 1996-2015 | 
+<a href="/es/privacy/">Politicas de privacidad </a> | 
+<a href="/es/map/">Mapa del sitio </a>
+</td>
+</tr>
+
+</table>
+
+	<!--?
+	echo "lang = $lang | ".
+		 "page = $page | ".
+		 "id   = $id | ".
+		 "action = $action | act = $act<br>\n";
+	?-->
+
+</body>
+</html>

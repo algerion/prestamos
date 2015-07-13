@@ -1,0 +1,2399 @@
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+<META NAME="Generator" CONTENT="Microsoft Word 97">
+<TITLE>Muchos son los que hemos tenido problemas con los ficheros DBF, con los ficheros de los campos Memo (FPT) y muchas también las consultas las que se han planteado hacia ellos</TITLE>
+<META NAME="Template" CONTENT="C:\Archivos de programa\Microsoft Office\Office\html.dot">
+</HEAD>
+<BODY LINK="#0000ff" VLINK="#800080">
+
+<B><FONT SIZE=6><P>La Cabecera de los .DBF</P>
+</B></FONT><FONT SIZE=2><P>&nbsp;</P>
+<I><P>Por Luis Mart&iacute;nez</P>
+</I><P>&nbsp;</P>
+<P>Muchos son los que hemos tenido problemas con los ficheros DBF, con los ficheros de los campos Memo (FPT) y muchas tambi&eacute;n las consultas las que se han planteado hacia ellos. Tales motivos me han llevado a hacer este art&iacute;culo. En &eacute;l veremos la estructura de los mismos y que informaci&oacute;n es la que se graba, as&iacute; como la forma de recuperar un DBF con campos memo. Entremos en materia.</P>
+<P>La estructura de ficheros m&aacute;s importante que tiene FoxPro es el fichero .DBF que es el que contiene los datos. </P>
+<P>Este fichero lo componen dos partes claramente diferenciadas: <B>La cabecera y los registros de datos.</P>
+</FONT><I>
+<P>La cabecera del .DBF</P>
+</B></I><FONT SIZE=2><P>De la misma forma que los ficheros DBF se componen de cabecera y registros de datos, la cabecera tambi&eacute;n se compone de dos partes. Empecemos por la primera...</P>
+<B><I><U><P>Primera parte de la cabecera.</P>
+</B></I></U><P>La primera parte tiene 32 bytes de longitud. La estructura tiene la siguiente forma:</P>
+<B><I><P>&nbsp;<IMG SRC="uno.gif" WIDTH=385 HEIGHT=208></P>
+<P>El identificador del tipo de fichero</B></I> puede ser de dos tipos: </P>
+<P>- Si se tiene un campo memo definido en el primer byte aparecer&aacute; F5h.</P>
+<P>- Si no contiene ning&uacute;n campo memo ser&aacute; 03h.</P>
+<P>- Si el valor contenido en este primer byte es distinto, FoxPro nos devolver&aacute;:</P>
+<P>&#9;</FONT><FONT FACE="Arial" SIZE=2>Not a database file</P>
+</FONT><B><I><FONT SIZE=2><P>La &uacute;ltima fecha de modificaci&oacute;n</B></I> se guardar&aacute; en hexadecimal ocupando los bytes 2,3 y 4 correspondiente al a&ntilde;o, mes y d&iacute;a, respectivamente.</P>
+<B><I><P>El n&uacute;mero de registros</B></I> de la base de datos incluye el n&uacute;mero de los registros de la tabla. Los bytes utilizados -del 5 al 8- est&aacute;n dispuestos en orden inverso de tal manera que el byte menos significativo es el primero de la izquierda. Por ejemplo:</P>
+<P>&#9;0B 2A 01 00</P>
+<P>correspode al n&uacute;mero 00/01/2A/0B en hexadecimal. Puede ser que si usamos la funci&oacute;n RECCOUNT() para contar el n&uacute;mero de registros que contiene el fichero, el n&uacute;mero que nos d&eacute; no coincida con este n&uacute;mero exacto y es que contabiliza tambi&eacute;n aquellos registros marcados para ser borrados. S&oacute;lo cuando se haya realizado el correspondiente borrado f&iacute;sico(PACK) el resultado de la funci&oacute;n RECCOUNT() ser&aacute; correcto.</P>
+<B><I><P>La direcci&oacute;n donde comienza</B></I> el primer registro de <B><I>datos</B></I> ocupan los bytes 9 y 10. Al igual que el anterior, los bytes est&aacute;n en orden inverso siendo 42(byte 9) 1B(byte 10) igual a la direcci&oacute;n 1B42 en hexadecimal.</P>
+<P>A partir de la direcci&oacute;n indicada por dichos bytes comenzar&aacute; los registros de datos.</P>
+<B><I><P>La longitud de un registro</B></I> es la suma de las longitudes de cada uno de los campos. Este ocupa 2 bytes.</P>
+<P>El byte 29, <B><I>Flag de componente de indexaci&oacute;n(&iacute;ndices)</B></I> nos indicar&aacute; la presencia de un componente de &iacute;ndice estructural. Si por alguna causa el fichero de &iacute;ndices es borrado por medio de un comando DOS como por ejemplo DEL o ERASE, FoxPro nos enviar&iacute;a el siguiente mensaje:</P>
+<P>&#9;</FONT><FONT FACE="Arial" SIZE=2>STRUCTURAL CDX FILE NOT FOUND</P>
+</FONT><FONT SIZE=2><P>Para que esto no suceda la siguiente vez que queramos abrir el fichero deberemos ejecutar la siguiente orden para borrar el flag que indica que es un fichero con &iacute;ndices(indexado):</P>
+<P>&#9;DELETE TAG ALL</P>
+<P>Por &uacute;ltimo, el byte 30 indica<B><I> el n&uacute;mero de p&aacute;gina</B></I> con el que ha sido creado el DBF. El n&uacute;mero total de valores de c&oacute;digos de p&aacute;gina que puede soportar son 19, sin embargo los valores m&aacute;s comunes que este byte contiene son los se&ntilde;alados en la figura 1</P>
+<P>El programa que se encarga de poner el valor del c&oacute;digo de p&aacute;gina en la cabecera del fichero DBF se encuentra en el directorio domicilio de FoxPro y se llama <I>CPZERO.PRG.</I> En &eacute;l se puede encontrar informaci&oacute;n adicional.</P>
+<P>Los bytes sobrantes, que no son usados por FoxPro, suelen rellenarse con el car&aacute;cter 0 o nulo.</P>
+<B><I><U><P>Segunda parte de la cabecera.</P>
+</B></I></U><P>La segunda parte de la cabecera depende del n&uacute;mero de campos del que se componga el registro. Por cada uno de los campos utiliza 32 bytes organizados de la siguiente manera</P>
+<P>se&ntilde;alada a continuaci&oacute;n:</P>
+<P>&nbsp;<IMG SRC="dos.gif" WIDTH=440 HEIGHT=151></P>
+</FONT><P><IMG SRC="tres.gif" WIDTH=345 HEIGHT=197></P>
+<FONT SIZE=2><P>&nbsp;</P>
+<P>El <B><I>nombre del campo</B></I> en FoxPro est&aacute; limitado a 10 caracteres, el &uacute;ltimo car&aacute;cter (el m&aacute;s a la derecha ) debe ser nulo (0). Si el nombre del campo es infereior a 10 caracteres el primer car&aacute;cter de la derecha ser&aacute; 0 o nulo.</P>
+<P>Pueden existir, en principio, 5 <B><I>tipos de campos</B></I> definidos en el byte 12 con un car&aacute;cter ASCII de la siguiente forma:</P></FONT>
+<TABLE BORDER CELLSPACING=3 CELLPADDING=4 WIDTH=326>
+<TR><TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="9%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="51%" VALIGN="TOP" COLSPAN=3>
+<B><I><P ALIGN="CENTER">Valores de Tipos de Campos</B></I></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<B><FONT SIZE=2><P ALIGN="CENTER">Tipo </B></FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<B><FONT SIZE=2><P ALIGN="CENTER">Car&aacute;cter ASCII</B></FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<B><FONT SIZE=2><P ALIGN="CENTER">Valor</P>
+<P ALIGN="CENTER">Decimal</B></FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<B><FONT SIZE=2><P ALIGN="CENTER">Valor Hexadecimal</B></FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>Character (Car&aacute;cter)</FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">C</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">67</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">43</FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>Date (fecha)</FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">D</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">68</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">44</FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>Logical (l&oacute;gico)</FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">L</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">76</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>Memo</FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">M</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">77</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4D</FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>Numeric (Num&eacute;rico)</FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">N</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">78</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4E</FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>Foat (coma flotante)</FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">F</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">70</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">46</FONT></TD>
+</TR>
+<TR><TD WIDTH="28%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>General </FONT></TD>
+<TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">G</FONT></TD>
+<TD WIDTH="21%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">71</FONT></TD>
+<TD WIDTH="31%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">47</FONT></TD>
+</TR>
+</TABLE>
+
+<FONT SIZE=2><P>La <B><I>direcci&oacute;n donde comienza el campo</B></I> (bytes 13 y 14) nos indica la posici&oacute;n de comienzo del campo relativo al principio del registro.</P>
+<P>La <B><I>longitud de los campos </B></I>depende del tipo de dato que vayamos a definir. Para los campos de caracteres utiliza los bytes 17 y 18 para insertar el tama&ntilde;o, eso s&iacute;, en formato invertido. Para los campos tipo <I>Fecha</I>, <I>Memo, General y</I> <I>L&oacute;gico</I> s&oacute;lo necesita el primer byte para definir sus tama&ntilde;os:</P>
+<P>8 para el campo Fecha.</P>
+<P>10 para el campo Memo.</P>
+<P>10 para el campo General.</P>
+<P>1 para el campo L&oacute;gico.</P>
+<P>Por &uacute;ltimo, para los campos num&eacute;ricos el primer byte especifica el total de n&uacute;mero de d&iacute;gitos, y el segundo el n&uacute;mero de posiciones decimales.</P>
+<P>Los bytes restantes no son utilizados, y su valor suele ser rellenado a nulo (0).</P>
+</FONT><B><P>¿C&oacute;mo controlar el final de la definici&oacute;n de los campos?</P>
+</B><FONT SIZE=2><P>FoxPro no es capaz de controlar el n&uacute;mero de definiciones de campos que se han realizado en la cabecera. Hay tres formas/maneras de determinar cuando hemos leido todos los campos:</P>
+<P>&#9;1.- La suma de todos los tama&ntilde;os. El &uacute;ltimo campo ha sido le&iacute;do cuando el total es igual a la longitud contada en la cabecera menos 1 para el flag de borrado.</P>
+<P>&#9;2.- Buscar el car&aacute;cter 0Dh (13 decimal) como el primer car&aacute;cter despu&eacute;s de de la definici&oacute;n de un campo. Esto separa la cabecera del principio de los datos. Tendremos que tener en cuenta el byte extra cuando determinemos la longitud de una cabecera del DBF. </P>
+<P>&#9;3.- Por &uacute;ltimo, contar el total de bytes y comparar con el valor del comienzo de los datos del fichero contenidos en los bytes 9 y 10 de la primera parte de la cabecera. </P>
+</FONT><B><P>Datos de la base de datos.</P>
+</B><FONT SIZE=2><P>Los datos comienzan inmediatamente despu&eacute;s del byte de terminaci&oacute;n de la cabecera. El primer byte de cada registro est&aacute; en el flag de borrado. Si el flag de borrado contiene 20h, el registro es activo. Si por el contrario su valor es 2Ah, significa que ese registro ha sido marcado para ser borrado.</P>
+<P>El siguiente byte es el primer byte del primer campo. No existen sepaciones entre los campos, no es necesario. La secci&oacute;n de definici&oacute;n del registro de cada campo ya especifica la longitud y la posici&oacute;n.</P>
+<P>Los campos de tipo <B><I>car&aacute;cter</B></I> son f&aacute;ciles de leer. Cada byte, es a&ntilde;adido de izquierda a derecha, a&ntilde;adiendo un car&aacute;cter. Determinar el contenido de un campo, es s&oacute;lo cuesti&oacute;n de convertir el valor hexadecimal en su correspondiente valor ASCII.</P>
+<P>Los campos de tipo <B><I>fecha</B></I> tambi&eacute;n son f&aacute;ciles de interpretar. Cada campo ocupa 8 bytes. Los cuatro primeros son los relativos al a&ntilde;o, los dos siguientes al mes y los dos &uacute;ltimos al d&iacute;a. Los bytes son d&iacute;gitos ASCII del 30 al 39 hex que se corresponden con el 0 al 9 decimal. Al 1 de Enero de 1995 le corresponder&iacute;an los siguientes valores:</P>
+<P>&#9;A A A A M M D D -------- Formato</P>
+<P>&#9;31 39 39 35 30 31 30 31 -------- Valor Hex.</P>
+<P>&#9;1 9 9 5 0 1 0 1 -------- Valor Dec.&#9;</P>
+<P>Los campos de tipo<B><I> l&oacute;gico</B></I> usan los caracteres ASCII F y T, que traducidos a valores hexadecimales se corresponden con el 46h para el valor l&oacute;gico falso(F) y 54h para el valor verdadero(T).</P>
+<P>Los campos <B><I>memo</B></I>, como coment&aacute;bamos antes, usan 10 bytes en cada registro. Si el campo resulta estar vac&iacute;o, este se rellena con el car&aacute;cter 20h (espacion en blanco). Si el campo memo no est&aacute; vac&iacute;o, los caracteres ASCII definen su posici&oacute;n (en bloques de 64 bytes) en el fichero .FPT. Por ejemplo, si tenemos los 10 bytes con los siguientes valores:</P>
+<P>20 20 20 20 20 20 20 20 31 35 (Valores hex.) traducido a decimal 15</P>
+<P>Los datos del campo memo comienzan despu&eacute;s del d&eacute;cimo quinto bloque de 64 bytes del fichero FPT.</P>
+<P>los campos <B><I>num&eacute;ricos</B></I> en FoxPro son interpretados como n&uacute;meros ASCII individuales. Define el n&uacute;mero de d&iacute;gitos por la estructura de la base de datos.</P>
+<P>Supongamos que definimos un campo num&eacute;rico de seis caracteres con tres decimales. El n&uacute;mero 22,324 estar&iacute;a de la siguiente manera:</P>
+<P>32 32 2C 33 32 34 Hex.</P>
+<P>2 2 , 3 2 4 Dec.</P>
+<P>La coma decimal corresponde con el valor hexadecimal 2Ch. Si el n&uacute;mero no ocupase las seis posiciones se toman los siguientes criterios: </P>
+<P>&#9;- Si el espacio es por la izquierda se rellenar&aacute; con un espacio en blanco (20h).</P>
+<P>&#9;- Si el espacio no utilizado es por la derecha se pondr&aacute; un cero (30h).</P>
+<P>Despu&eacute;s del &uacute;ltimo registro, FoxPro a&ntilde;ade un car&aacute;cter de final de fichero (1Ah). Este byte se crea cuando se determina la longitud del fichero DBF. Tener en cuenta que es diferente al car&aacute;cter de final de cabecera (0Dh). </P>
+</FONT><B><I><P>Veamos un ejemplo.</P>
+</B></I><FONT SIZE=2><P>Supongamos que tenemos un tabla llamada PERSONAL.DBF la cual tiene la siguiente estructura:</P>
+</FONT><P><IMG SRC="Image31.gif" WIDTH=188 HEIGHT=97></P>
+<FONT SIZE=2><P>Esta tabla contiene dos registros de datos los cuales que se muestran en la columna de al lado:</P>
+</FONT><P><IMG SRC="Image32.gif" WIDTH=184 HEIGHT=187></P>
+<FONT SIZE=2><P>Esto no es m&aacute;s que el enunciado de nuestro problema ya que lo que deseamos saber es qu&eacute; contiene PERSONAL.DBF. Para eso es necesario hacer un volcado hexadecimal del fichero en la pantalla. (Cualquier programa de utilidades permite hacer esta operaci&oacute;n. Por ejemplo las Pctools o Utilidades Norton).</P>
+<P>Examinemos el contenido de la tabla PERSONAL.DBF:</P></FONT>
+<TABLE BORDER CELLSPACING=1 CELLPADDING=4 WIDTH=578>
+<TR><TD WIDTH="25%" VALIGN="TOP" COLSPAN=2>
+<P ALIGN="CENTER"><B><I><FONT SIZE=2>Desplazamiento</B></I></FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP" COLSPAN=6>
+<B><I><FONT SIZE=2><P ALIGN="CENTER">C&oacute;digo Hexadecimal</B></I></FONT></TD>
+<TD WIDTH="8%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="6%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0000(0000)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">03</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">5E</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">0C</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">17</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">02</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">E1</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">49</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0016(0010)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">03</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0032(0020)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">4E</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4F</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4D</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">42</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">52</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">43</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">01</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0048(0030)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">14</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0064(0040)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">41</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">50</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">45</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">49</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">44</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4F</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">53</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">43</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">15</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0080(0050)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">1E</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0096(0060)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">45</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">44</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">41</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">44</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4E</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">33</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0112(0070)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">03</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0128(0080)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">53</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4F</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">54</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">52</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">36</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0144(0090)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">01</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0160(00A0)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">46</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">45</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">43</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">48</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">43</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">44</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">37</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0176(00B0)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">08</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0192(00C0)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">46</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4F</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">54</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">54</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">45</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">46</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">3F</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0208(00D0)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">0A</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0224(00E0)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">0D</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">4C</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">75</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">69</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">73</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0240(00F0)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4D</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">61</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">72</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">74</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">69</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">6E</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">65</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">7A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">50</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0256(0100)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">65</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">72</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">65</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">7A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0272(0110)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">35</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">54</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">39</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">36</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">39</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">37</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0288(0120)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">33</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">33</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">33</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">34</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">34</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">50</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">65</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">70</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">65</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0304(0130)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">52</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0320(0140)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">75</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">62</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">69</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">6F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">4D</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">6F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">72</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">61</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">6C</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">65</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">73</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0336(0150)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">35</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">30</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0352(0160)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">46</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">39</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">36</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">30</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">30</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">34</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">31</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">39</FONT></TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">39</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0368(0170)</FONT></TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">33</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">39</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">32</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P ALIGN="CENTER">1A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">D6</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">0B</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P ALIGN="CENTER">43</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="17%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="9%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+</TR>
+</TABLE>
+
+<FONT SIZE=2><P>Para verlo m&aacute;s detalladamente dividiremos el volcado hexadecimal del fichero PERSONAL.DBF en tres partes:</P>
+<P>1.- Cabecera general de la tabla.</P>
+<P>2.- Cabecera de los datos de tabla.</P>
+<P>3.- Los datos de la tabla.</P>
+<B><I><P>1.-</B></I> La cabecera general de la tabla ocupa 32 bytes, con el siguiente significado:</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P>Œ</FONT><FONT SIZE=2> El primer byte (03h) indica que el DBF no tiene campos memo.</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P></FONT><FONT SIZE=2> Los bytes del 2 al 4 indican la fecha: 5E(94), 0C(12) y 17(23). El formato fecha resultante ser&iacute;a 23/12/94. Quiere esto decir que la fecha la guarda en orden inverso (AAMMDD).</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P>Ž</FONT><FONT SIZE=2> Los cuatro siguientes bytes indican el n&uacute;mero de registro que contiene el fichero. En nuestro caso 2, siendo el byte m&aacute;s significativo el situado m&aacute;s a la derecha de los 4 bytes. </P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P></FONT><FONT SIZE=2> Los bytes 9 y 10 indican la posici&oacute;n de comienzo de los datos (posici&oacute;n 00E1).</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P></FONT><FONT SIZE=2> Los dos siguientes bytes indican la longitud del registro.</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P>‘</FONT><FONT SIZE=2> Los bytes del del 13 al 28 y del 30 al 32, no se usan como ya hab&iacute;amos comentado. </P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P>’</FONT><FONT SIZE=2> Por &uacute;ltimo el byte 29 es el flag de &iacute;ndices estructurales.</P>
+<B><I><P>2.-</B></I> La cabecera de los datos determina su valor por el n&uacute;mero de campos que contenga el registro. Si bien, la definici&oacute;n de cada campo ocupa 32 bytes y comienza justo en el byte siguiente al del final de la definici&oacute;n de la cabecera general. Estudiemos su contenido:</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P>Œ</FONT><FONT SIZE=2> Los 11 primeros bytes corresponden al nombre del campo. En nuestro caso los valores hexadecimales 4E 4F 4D 42 52 45(ver tabla tercera l&iacute;nea) es equivalente a los caracteres ascii N O M B R E. Ya que el campo no ocupa los 10 caracteres, estos, se rellenan a nulos (0).</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P></FONT><FONT SIZE=2> El siguiente byte nos indicar&aacute; el tipo de dato que representa 43h = C de car&aacute;cter. </P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P>Ž</FONT><FONT SIZE=2> Los bytes 13 y 14 contendr&aacute;n la direcci&oacute;n de comienzo del campo desde el principio del registro.</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P></FONT><FONT SIZE=2> Si el campo es n&uacute;merico el byte 17 indicar&aacute; el tama&ntilde;o del campo, la longitud de los campos decimales se insertar&aacute;n en el byte 18. Si por el contrario el campo no es num&eacute;rico, la longitud del campo vendr&aacute; reflejada en los bytes 17 y 18.</P>
+</FONT><FONT FACE="Wingdings" SIZE=2><P></FONT><FONT SIZE=2> Los dem&aacute;s bytes, hasta completar los 32 bytes de la definici&oacute;n, no son usados(su valor suele ser nulo). </P>
+<P>Una vez definidas las cabeceras, tanto la general como la correspondiente a los campos, ya s&oacute;lo nos queda ver como estan los datos de la tabla.</P>
+<B><I><P>3.-</B></I> los datos de la tabla son insertados dentro del fichero secuencialmente. EL comienzo de los datos va precedido del car&aacute;cter hexadecimal 0Dh que sirve de separaci&oacute;n entre el final de la definici&oacute;n de los campos con el principio de los datos.</P>
+<P>A continuaci&oacute;n, tenemos un byte(el flag de borrado) el cual nos indicar&aacute; si el registro esta activo o bien esta marcado para ser borrado, los valores que tendr&aacute; dicho flag ser&aacute;n 20h y 2Ah respectivamente. En nuestro ejemplo ambos registros est&aacute;n activos. Seguidamente van los datos correspondientes al registro. </P>
+<P>Este mismo proceso se repite tantas veces como registros de datos hallamos introducido hasta que nos encontremos con car&aacute;cter 1Ah que nos indicar&aacute; el final del fichero.</P>
+</FONT><B><I><P>Ficheros con campos Memo.</P>
+</B></I><FONT SIZE=2><P>En el ejemplo anterior no hemos considerado que un fichero contenga campos de tipo Memo. Los ficheros con campos Memo s&oacute;lo cambian en el primer byte del fichero cuyo valor ser&iacute;a F5h, indicando que el fichero DBF contiene campos Memo.</P>
+<P>Este campo memo crea un fichero .FPT en el que ir&aacute; el contenido el contenido de los datos. Este fichero es independiente del DBF al que va asociado, quiere esto decir que si marcase y borrase un registro de la tabla DBF que contubiera un campo Memo, este, no se borrar&iacute;a del fichero .FPT.</P>
+<P>Existen tres formas principales de actualizar o modificar un .FPT:</P>
+<P>&#9;- Cuando se modifica la estructura del DBF.</P>
+<P>&#9;- Cuando copiamos la tabla con COPY TO</P>
+<P>&#9;- Cuando ‘empaquetamos’ el fichero memo con PACK o PACK MEMO</P>
+<P>El fichero memo se divide en dos partes claramente diferenciables:</P>
+<P>&#9;- La cabecera.</P>
+<P>&#9;- Los datos.</P>
+</FONT><B><I><P>La cabecera.</P>
+</B></I><FONT SIZE=2><P>El fichero memo comienza con 512 bytes de cabecera. Sin embargo, s&oacute;lo utiliza los ocho primeros bytes con la siguiente distribuci&oacute;n:</P></FONT>
+<TABLE BORDER CELLSPACING=2 CELLPADDING=4 WIDTH=392 ALIGN="LEFT" HSPACE=9>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<P><FONT SIZE=2>N&uacute;mero byte</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">Descripci&oacute;n/contenido</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">1-4</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Indica el n&uacute;mero de bloques de datos en el fichero memo o la posici&oacute;n del siguiente bloque libre.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">5-8</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Indica la longitud del bloque de datos.</FONT></TD>
+</TR>
+</TABLE>
+
+<B><I><P>Datos Memo.</P>
+</B></I><FONT SIZE=2><P>FoxPro s&oacute;lo usa por defecto bloques de datos de 64 bytes, pudiendo as&iacute; usar los campos memo m&aacute;s eficientemente para entradas peque&ntilde;as. Es posible cambiar el tama&ntilde;o de los bloques pero en este ejemplo asumiremos el tama&ntilde;o por defecto por simplicidad.</P>
+<P>Hemos modificado la estructura de la tabla, a&ntilde;adiendo un campo m&aacute;s llamado <I>observac</I> que se ser&aacute; de tipo memo en el que apuntaremos las observaciones de cada registro de la tabla PERSONAL.DBF. La estructura quedar&aacute; pues, de la siguiente manera:</P>
+</FONT><P><IMG SRC="Image33.gif" WIDTH=186 HEIGHT=117></P>
+<FONT SIZE=2><P>El fichero, en este caso, es un registro con el siguiente contenido:</P>
+</FONT><P><IMG SRC="Image34.gif" WIDTH=180 HEIGHT=106></P>
+<FONT SIZE=2><P>El volcado hexadecimal del fichero DBF ser&aacute; el siguiente:</P></FONT>
+<P ALIGN="CENTER"><CENTER><TABLE BORDER CELLSPACING=1 CELLPADDING=4 WIDTH=576>
+<TR><TD WIDTH="26%" VALIGN="TOP" COLSPAN=2>
+<P><B><I><FONT SIZE=2>Desplazamiento</B></I></FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="6%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="22%" VALIGN="TOP" COLSPAN=6>
+<B><I><FONT SIZE=2><P>C&oacute;digo Hexadecimal</B></I></FONT></TD>
+<TD WIDTH="8%" VALIGN="TOP" COLSPAN=3>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="2%" VALIGN="TOP">
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<P>&nbsp;</TD>
+<TD WIDTH="3%" VALIGN="TOP">
+<P>&nbsp;</TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0000(0000)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>F5</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>5E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>0C</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>17</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>01</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>01</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>01</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>53</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0016(0010)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>03</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0032(0020)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>4E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4D</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>42</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>52</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>43</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>01</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0048(0030)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>14</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0064(0040)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>50</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>4C</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>4C</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>49</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>44</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>4F</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>53</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>43</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>15</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0080(0050)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>1E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0096(0060)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>44</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>41</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>44</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>33</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0112(0070)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>03</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0128(0080)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>53</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4C</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>54</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>52</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>4F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4C</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>36</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0144(0090)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>01</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0160(00A0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>46</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>43</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>48</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>4E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>43</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>44</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>37</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0176(00B0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>08</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0192(00C0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>46</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4C</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4F</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>54</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>4E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>54</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>46</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>3F</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0208(00D0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>0A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0224(00E0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>4F</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>42</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>53</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>45</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>52</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>56</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>41</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>43</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4D</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>49</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0240(00F0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>0A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0256(0100)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>0D</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>4C</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>75</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>69</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>73</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0272(0110)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>4D</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>61</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>72</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>74</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>69</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>6E</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>65</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>7A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>50</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0288(0120)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>65</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>72</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>65</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>7A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0304(0130)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>35</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>54</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>39</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>36</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>39</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>37</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0320(0140)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>33</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>32</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>33</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>32</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>33</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>31</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0336(0150)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>20</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>1A</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0352(0160)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0368(0170)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0384(0180)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0400(0190)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0416(01A0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0432(01B0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0448(01C0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0464(01D0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0480(01E0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+<TR><TD WIDTH="16%" VALIGN="TOP">
+<FONT SIZE=2><P>0496(01F0)</FONT></TD>
+<TD WIDTH="18%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="7%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP">
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="3%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="5%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=3>
+<FONT SIZE=2><P>00</FONT></TD>
+<TD WIDTH="4%" VALIGN="TOP" COLSPAN=2>
+<FONT SIZE=2><P>00</FONT></TD>
+</TR>
+</TABLE>
+</CENTER></P>
+
+<FONT SIZE=2><P ALIGN="CENTER">&nbsp;</P>
+<P>El Volcado del fichero FPT asociado al campo memo <I>observac</I> antes de insertar valor alguno al campo, es el siguiente: </P>
+</FONT><P><IMG SRC="cuatro.gif" WIDTH=528 HEIGHT=542></P>
+<P>Los 4 primeros bytes indican que el n&uacute;mero de bloques que contiene el fichero ( 00 00 00 08 ) en decimal 8 bloques. los cuatro bytes siguientes indican el tama&ntilde;o de cada bloque (00 00 00 40) en decimal 64 bytes cada bloque.</P>
+<P>Estos 512 bytes coforman el fichero FPT en el caso de que est&eacute; vac&iacute;o. Estos 512 bytes equivalen a la cabecera. </P>
+<P>Si por el contrario hemos insertado informaci&oacute;n dentro del campo memo el contenido del fichero FPT variar&aacute;, a&ntilde;adiendo en la cabecera los bloques que ocupen el contenido de cada campo memo en cada registro del DBF principal.</P>
+<FONT SIZE=2><P>Imaginemos  que hemos insertado informaci&oacute;n en el campo memo correspondiente al primer registro de PERSONA.DBF</P>
+<P>El contenido del campo memo es este:</P>
+</FONT><P><IMG SRC="Image35.gif" WIDTH=381 HEIGHT=32></P>
+<FONT SIZE=2><P>El volcado hexadecimal del DBF no variar&aacute; al expuesto anteriormente pero el correspondiente al campo  memo (FPT) sufrir&aacute; las siguientes modificaciones:</P>
+</FONT><P><IMG SRC="cinco.gif" WIDTH=531 HEIGHT=536></P>
+<FONT SIZE=2><P>Estos 512 bytes corresponden a la cabecera. El contenido de los cuarto primeros bytes ha variado con respecto al anterior (00 00 00 0A) ya que el fichero necesita de dos bloques m&aacute;s para almacenar el contenido del campo memo. Los cuatro siguientes no es necesario modificarlos (cada bloque de 64 bytes). Ahora veremos el volcado de los datos del campo memo:</P>
+<B><I><P>&nbsp;<IMG SRC="seis.gif" WIDTH=521 HEIGHT=170></P>
+</B></I><P>Los cuatro primeros bytes (00 00 00 01) indican el comienzo de un nuevo campo memo. Los 4 bytes siguientes indican la longitud del campo memo en cuesti&oacute;n (00 00 00 55) 85 bytes en decimal. Si bien, el siguiente campo memo no comenzar&aacute; inmediatamente en el siguiente byte ya que esta estructura obliga a utilizar como medida m&iacute;mina bloques de 64 bytes, es decir, para este campo necesito 2 bloques. Si tuvi&eacute;ramos m&aacute;s registros introducidos, el siguiente tendr&iacute;a la marca de principio de campo memo (00 00 00 01) a partir del byte 128, cuya casilla correspondiente est&aacute; marcada con un X. </P>
+<P>La informaci&oacute;n que pueda haber desde el final de un campo memo hasta el principio del siguiente no es tomada en cuenta. </P>
+<P>Estas son, en definitiva las cosas a tener en cuenta a la hora de interpretar el contenido de una tabla con o sin campos memo y de las diferencias que ello conlleva.</P>
+<B><I><P>Desde FoxPro.</P>
+</B></I><P>Existe una serie de funciones las cuales guardan una cierta relaci&oacute;n con lo comentado en este art&iacute;culo y que pueden ser &uacute;tiles en alg&uacute;n momento. Estas son:</P></FONT>
+<TABLE BORDER CELLSPACING=2 CELLPADDING=4 WIDTH=496 ALIGN="LEFT" HSPACE=9>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<P ALIGN="CENTER"><FONT SIZE=2>Funci&oacute;n</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P ALIGN="CENTER">Descripci&oacute;n/Comentario</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>HEADER ()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el n&uacute;mero de bytes de la cabecera del archivo especificado.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>RECSIZE()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el tama&ntilde;o del registro de un tabla.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>RECCOUNT()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el n&uacute;mero de registros de una tabla.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>RECNO()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el n&uacute;mero del registro actual.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>FSIZE()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el tama&ntilde;o en bytes del fichero.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>FCOUNT()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el n&uacute;mero de campos de la tabla.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>DBF()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el nombre de una tabla a partir de un n&uacute;mero de &aacute;rea o alias.</FONT></TD>
+</TR>
+<TR><TD WIDTH="20%" VALIGN="TOP">
+<FONT SIZE=2><P>FIELD()</FONT></TD>
+<TD WIDTH="80%" VALIGN="TOP">
+<FONT SIZE=2><P>Devuelve el nombre de un campo, a partir de su n&uacute;mero en la definici&oacute;n de la tabla. </FONT></TD>
+</TR>
+</TABLE>
+
+<FONT SIZE=2><P>Para terminar, comentar que al modificar la estructura de un DBF que contiene uno o m&aacute;s campos Memo, el fichero FPT correspondiente a ese campo pasa a tener la extensi&oacute;n TBK. Tambi&eacute;n deciros que si en la estructura de la tabla conviven tanto campos generales como campos Memo, el contenido de estos se gurard&aacute; en el mismo fichero FPT y con la misma estructura. S&oacute;lo cambiar&aacute;n los 4 primeros bytes de comienzo de nuevo campo:</P>
+<P>-Si el campo es Memo, los cuatro bytes contienen 00 00 00 01.</P>
+<P>-Si el campo es General, los cuatro bytes contienen 00 00 00 02.</P>
+<P>¿C&oacute;mo recuperar un Fichero .DBF con campos Memo?</P>
+<P>Existen momentos en los que, trabajando con una tabla, se produce un corte de suministro el&eacute;ctrico. Cuando este se restablece volvemos al lugar exacto, dentro de la aplicaci&oacute;n, donde nos hab&iacute;amos quedado. En ese momento puede haber pasado muchas cosas:</P>
+<P>A- Que el fichero se restablezca con normalidad.</P>
+<P>B- Que el fichero se restablezca con normalidad pero no se halla actualizado alguno de sus campos. Si hemos modificado un campo memo y en el momento del corte de electricidad el fichero se encontraba abierto, las modificaciones realizadas no se reflejar&aacute;n.</P>
+<P>C- Que el fichero DBF ocupe 0 bytes.</P>
+<P>Las soluciones posibles que podr&iacute;amos adoptar ser&iacute;an est&aacute;s:</P>
+<P>- Incorporar a nuestro sistema una unidad de alimentaci&oacute;n ininterrumpida que permita cerrar los ficheros evitando posibles problemas.</P>
+<P>- En el caso B, en el que tenemos un campo Memo (asociado a un fichero FPT) la soluci&oacute;n es algo m&aacute;s compleja. </P>
+<P>&#9;- Si el DBF existe pero el FPT no puede ser le&iacute;do es porque en la cabecera del FPT donde se indica el n&uacute;mero de bloques que tiene el fichero es incorrecto. Para solucionarlo se debe cambiar ese valor y poner en su lugar el resultado de la siguiente operaci&oacute;n en hexadecimal:</P>
+<P>&#9;Tama&ntilde;o del archivo(en bytes) / tama&ntilde;o_bytes por bloque + 1</P>
+<P>&#9;- Si tanto el DBF como el FPT pueden ser le&iacute;dos pero las modificaciones hechas en el campo memo no son reflejadas, no es porque no se halla grabado en el fichero FPT sino porque la cabecera de cada campo memo no ha podido modificar su nueva longitud. Esta informaci&oacute;n se puede recuperar tan s&oacute;lo modificando el tama&ntilde;o del campo desde alguna de las utilidades mencionadas en el art&iacute;culo.</P>
+<P>- Si nos encontramos que el DBF ocupa 0 bytes (caso C) no queda m&aacute;s remedio que mirar en el directorio si existe alg&uacute;n fichero .BAK para poder recuperar aunque s&oacute;lo fuera su estructura.</P>
+<P>Todas estas soluciones no son 100% libres de error(¡ojal&aacute;!), por ello es imprescindible tener siempre una copia de seguridad actualizada para que en el caso de ‘cat&aacute;strofe’, &eacute;sta sea lo m&aacute;s peque&ntilde;a posible.</P>
+</FONT><B><I><FONT FACE="Arial" SIZE=1><P>Luis Mart&iacute;nez es Diplomado en Inform&aacute;tica.</P></B></I></FONT></BODY>
+ </font></p>
+    <table WIDTH="100%">
+      <tr>
+        <td ALIGN="MIDDLE" VALIGN="TOP"><font FACE="ARIAL" SIZE="1"><b><br>
+        © 1999 <i>FoxPress.</i> All rights reserved.</b></font></td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+</table>
+</HTML>

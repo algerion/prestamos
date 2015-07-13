@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+  <title>PHP: dBase - Manual </title>
+
+ <link rel="shortcut icon" href="http://php.net/favicon.ico">
+ <link rel="search" type="application/opensearchdescription+xml" href="http://php.net/phpnetimprovedsearch.src" title="Add PHP.net search">
+ <link rel="alternate" type="application/atom+xml" href="http://php.net/releases/feed.php" title="PHP Release feed">
+ <link rel="alternate" type="application/atom+xml" href="http://php.net/feed.atom" title="PHP: Hypertext Preprocessor">
+
+ <link rel="canonical" href="http://php.net/manual/es/book.dbase.php">
+ <link rel="shorturl" href="http://php.net/dbase">
+ <link rel="alternate" href="http://php.net/dbase" hreflang="x-default">
+
+ <link rel="contents" href="http://php.net/manual/es/index.php">
+ <link rel="index" href="http://php.net/manual/es/refs.database.vendors.php">
+ <link rel="prev" href="http://php.net/manual/es/function.dbplus-xunlockrel.php">
+ <link rel="next" href="http://php.net/manual/es/intro.dbase.php">
+
+ <link rel="alternate" href="http://php.net/manual/en/book.dbase.php" hreflang="en">
+ <link rel="alternate" href="http://php.net/manual/pt_BR/book.dbase.php" hreflang="pt_BR">
+ <link rel="alternate" href="http://php.net/manual/zh/book.dbase.php" hreflang="zh">
+ <link rel="alternate" href="http://php.net/manual/fr/book.dbase.php" hreflang="fr">
+ <link rel="alternate" href="http://php.net/manual/de/book.dbase.php" hreflang="de">
+ <link rel="alternate" href="http://php.net/manual/ja/book.dbase.php" hreflang="ja">
+ <link rel="alternate" href="http://php.net/manual/kr/book.dbase.php" hreflang="kr">
+ <link rel="alternate" href="http://php.net/manual/ro/book.dbase.php" hreflang="ro">
+ <link rel="alternate" href="http://php.net/manual/ru/book.dbase.php" hreflang="ru">
+ <link rel="alternate" href="http://php.net/manual/es/book.dbase.php" hreflang="es">
+ <link rel="alternate" href="http://php.net/manual/tr/book.dbase.php" hreflang="tr">
+
+<link rel="stylesheet" type="text/css" href="http://php.net/cached.php?t=1421837618&amp;f=/fonts/Fira/fira.css" media="screen">
+<link rel="stylesheet" type="text/css" href="http://php.net/cached.php?t=1421837618&amp;f=/fonts/Font-Awesome/css/fontello.css" media="screen">
+<link rel="stylesheet" type="text/css" href="http://php.net/cached.php?t=1429291204&amp;f=/styles/theme-base.css" media="screen">
+<link rel="stylesheet" type="text/css" href="http://php.net/cached.php?t=1429259403&amp;f=/styles/theme-medium.css" media="screen">
+
+ <!--[if lte IE 7]>
+ <link rel="stylesheet" type="text/css" href="http://php.net/styles/workarounds.ie7.css" media="screen">
+ <![endif]-->
+
+ <!--[if lte IE 8]>
+ <script type="text/javascript">
+  window.brokenIE = true;
+ </script>
+ <![endif]-->
+
+ <!--[if lte IE 9]>
+ <link rel="stylesheet" type="text/css" href="http://php.net/styles/workarounds.ie9.css" media="screen">
+ <![endif]-->
+
+ <!--[if IE]>
+ <script type="text/javascript" src="http://php.net/js/ext/html5.js"></script>
+ <![endif]-->
+
+ <base href="http://php.net/manual/es/book.dbase.php">
+
+</head>
+<body class="docs ">
+
+<nav id="head-nav" class="navbar navbar-fixed-top">
+  <div class="navbar-inner clearfix">
+    <a href="/" class="brand"><img src="/images/logo.php" width="48" height="24" alt="php"></a>
+    <div id="mainmenu-toggle-overlay"></div>
+    <input type="checkbox" id="mainmenu-toggle">
+    <ul class="nav">
+      <li class=""><a href="/downloads">Downloads</a></li>
+      <li class="active"><a href="/docs.php">Documentation</a></li>
+      <li class=""><a href="/get-involved" >Get Involved</a></li>
+      <li class=""><a href="/support">Help</a></li>
+    </ul>
+    <form class="navbar-search" id="topsearch" action="/search.php">
+      <input type="hidden" name="show" value="quickref">
+      <input type="search" name="pattern" class="search-query" placeholder="Search" accesskey="s">
+    </form>
+  </div>
+  <div id="flash-message"></div>
+</nav>
+<div class="headsup"><a href='/index.php#id2015-07-10-4'>PHP 7.0.0 Beta 1 Released</a></div>
+<nav id="trick"><div><dl>
+<dt><a href='/manual/en/getting-started.php'>Getting Started</a></dt>
+	<dd><a href='/manual/en/introduction.php'>Introduction</a></dd>
+	<dd><a href='/manual/en/tutorial.php'>A simple tutorial</a></dd>
+<dt><a href='/manual/en/langref.php'>Language Reference</a></dt>
+	<dd><a href='/manual/en/language.basic-syntax.php'>Basic syntax</a></dd>
+	<dd><a href='/manual/en/language.types.php'>Types</a></dd>
+	<dd><a href='/manual/en/language.variables.php'>Variables</a></dd>
+	<dd><a href='/manual/en/language.constants.php'>Constants</a></dd>
+	<dd><a href='/manual/en/language.expressions.php'>Expressions</a></dd>
+	<dd><a href='/manual/en/language.operators.php'>Operators</a></dd>
+	<dd><a href='/manual/en/language.control-structures.php'>Control Structures</a></dd>
+	<dd><a href='/manual/en/language.functions.php'>Functions</a></dd>
+	<dd><a href='/manual/en/language.oop5.php'>Classes and Objects</a></dd>
+	<dd><a href='/manual/en/language.namespaces.php'>Namespaces</a></dd>
+	<dd><a href='/manual/en/language.exceptions.php'>Exceptions</a></dd>
+	<dd><a href='/manual/en/language.generators.php'>Generators</a></dd>
+	<dd><a href='/manual/en/language.references.php'>References Explained</a></dd>
+	<dd><a href='/manual/en/reserved.variables.php'>Predefined Variables</a></dd>
+	<dd><a href='/manual/en/reserved.exceptions.php'>Predefined Exceptions</a></dd>
+	<dd><a href='/manual/en/reserved.interfaces.php'>Predefined Interfaces and Classes</a></dd>
+	<dd><a href='/manual/en/context.php'>Context options and parameters</a></dd>
+	<dd><a href='/manual/en/wrappers.php'>Supported Protocols and Wrappers</a></dd>
+</dl>
+<dl>
+<dt><a href='/manual/en/security.php'>Security</a></dt>
+	<dd><a href='/manual/en/security.intro.php'>Introduction</a></dd>
+	<dd><a href='/manual/en/security.general.php'>General considerations</a></dd>
+	<dd><a href='/manual/en/security.cgi-bin.php'>Installed as CGI binary</a></dd>
+	<dd><a href='/manual/en/security.apache.php'>Installed as an Apache module</a></dd>
+	<dd><a href='/manual/en/security.filesystem.php'>Filesystem Security</a></dd>
+	<dd><a href='/manual/en/security.database.php'>Database Security</a></dd>
+	<dd><a href='/manual/en/security.errors.php'>Error Reporting</a></dd>
+	<dd><a href='/manual/en/security.globals.php'>Using Register Globals</a></dd>
+	<dd><a href='/manual/en/security.variables.php'>User Submitted Data</a></dd>
+	<dd><a href='/manual/en/security.magicquotes.php'>Magic Quotes</a></dd>
+	<dd><a href='/manual/en/security.hiding.php'>Hiding PHP</a></dd>
+	<dd><a href='/manual/en/security.current.php'>Keeping Current</a></dd>
+<dt><a href='/manual/en/features.php'>Features</a></dt>
+	<dd><a href='/manual/en/features.http-auth.php'>HTTP authentication with PHP</a></dd>
+	<dd><a href='/manual/en/features.cookies.php'>Cookies</a></dd>
+	<dd><a href='/manual/en/features.sessions.php'>Sessions</a></dd>
+	<dd><a href='/manual/en/features.xforms.php'>Dealing with XForms</a></dd>
+	<dd><a href='/manual/en/features.file-upload.php'>Handling file uploads</a></dd>
+	<dd><a href='/manual/en/features.remote-files.php'>Using remote files</a></dd>
+	<dd><a href='/manual/en/features.connection-handling.php'>Connection handling</a></dd>
+	<dd><a href='/manual/en/features.persistent-connections.php'>Persistent Database Connections</a></dd>
+	<dd><a href='/manual/en/features.safe-mode.php'>Safe Mode</a></dd>
+	<dd><a href='/manual/en/features.commandline.php'>Command line usage</a></dd>
+	<dd><a href='/manual/en/features.gc.php'>Garbage Collection</a></dd>
+	<dd><a href='/manual/en/features.dtrace.php'>DTrace Dynamic Tracing</a></dd>
+</dl>
+<dl>
+<dt><a href='/manual/en/funcref.php'>Function Reference</a></dt>
+	<dd><a href='/manual/en/refs.basic.php.php'>Affecting PHP's Behaviour</a></dd>
+	<dd><a href='/manual/en/refs.utilspec.audio.php'>Audio Formats Manipulation</a></dd>
+	<dd><a href='/manual/en/refs.remote.auth.php'>Authentication Services</a></dd>
+	<dd><a href='/manual/en/refs.utilspec.cmdline.php'>Command Line Specific Extensions</a></dd>
+	<dd><a href='/manual/en/refs.compression.php'>Compression and Archive Extensions</a></dd>
+	<dd><a href='/manual/en/refs.creditcard.php'>Credit Card Processing</a></dd>
+	<dd><a href='/manual/en/refs.crypto.php'>Cryptography Extensions</a></dd>
+	<dd><a href='/manual/en/refs.database.php'>Database Extensions</a></dd>
+	<dd><a href='/manual/en/refs.calendar.php'>Date and Time Related Extensions</a></dd>
+	<dd><a href='/manual/en/refs.fileprocess.file.php'>File System Related Extensions</a></dd>
+	<dd><a href='/manual/en/refs.international.php'>Human Language and Character Encoding Support</a></dd>
+	<dd><a href='/manual/en/refs.utilspec.image.php'>Image Processing and Generation</a></dd>
+	<dd><a href='/manual/en/refs.remote.mail.php'>Mail Related Extensions</a></dd>
+	<dd><a href='/manual/en/refs.math.php'>Mathematical Extensions</a></dd>
+	<dd><a href='/manual/en/refs.utilspec.nontext.php'>Non-Text MIME Output</a></dd>
+	<dd><a href='/manual/en/refs.fileprocess.process.php'>Process Control Extensions</a></dd>
+	<dd><a href='/manual/en/refs.basic.other.php'>Other Basic Extensions</a></dd>
+	<dd><a href='/manual/en/refs.remote.other.php'>Other Services</a></dd>
+	<dd><a href='/manual/en/refs.search.php'>Search Engine Extensions</a></dd>
+	<dd><a href='/manual/en/refs.utilspec.server.php'>Server Specific Extensions</a></dd>
+	<dd><a href='/manual/en/refs.basic.session.php'>Session Extensions</a></dd>
+	<dd><a href='/manual/en/refs.basic.text.php'>Text Processing</a></dd>
+	<dd><a href='/manual/en/refs.basic.vartype.php'>Variable and Type Related Extensions</a></dd>
+	<dd><a href='/manual/en/refs.webservice.php'>Web Services</a></dd>
+	<dd><a href='/manual/en/refs.utilspec.windows.php'>Windows Only Extensions</a></dd>
+	<dd><a href='/manual/en/refs.xml.php'>XML Manipulation</a></dd>
+</dl>
+<dl>
+<dt>Keyboard Shortcuts</dt><dt>?</dt>
+<dd>This help</dd>
+<dt>j</dt>
+<dd>Next menu item</dd>
+<dt>k</dt>
+<dd>Previous menu item</dd>
+<dt>g p</dt>
+<dd>Previous man page</dd>
+<dt>g n</dt>
+<dd>Next man page</dd>
+<dt>G</dt>
+<dd>Scroll to bottom</dd>
+<dt>g g</dt>
+<dd>Scroll to top</dd>
+<dt>g h</dt>
+<dd>Goto homepage</dd>
+<dt>g s</dt>
+<dd>Goto search<br>(current page)</dd>
+<dt>/</dt>
+<dd>Focus search box</dd>
+</dl></div></nav>
+<div id="goto">
+    <div class="search">
+         <div class="text"></div>
+         <div class="results"><ul></ul></div>
+   </div>
+</div>
+
+  <div id="breadcrumbs" class="clearfix">
+    <div id="breadcrumbs-inner">
+          <div class="next">
+        <a href="intro.dbase.php">
+          Introducci&oacute;n &raquo;
+        </a>
+      </div>
+              <div class="prev">
+        <a href="function.dbplus-xunlockrel.php">
+          &laquo; dbplus_xunlockrel        </a>
+      </div>
+          <ul>
+            <li><a href='index.php'>Manual de PHP</a></li>      <li><a href='funcref.php'>Referencia de funciones</a></li>      <li><a href='refs.database.php'>Extensiones de bases de datos</a></li>      <li><a href='refs.database.vendors.php'>Extensiones de bases de datos espec&iacute;ficas del proveedor</a></li>      </ul>
+    </div>
+  </div>
+
+
+
+
+<div id="layout" class="clearfix">
+  <section id="layout-content">
+  <div class="page-tools">
+    <div class="change-language">
+      <form action="/manual/change.php" method="get" id="changelang" name="changelang">
+        <fieldset>
+          <label for="changelang-langs">Change language:</label>
+          <select onchange="document.changelang.submit()" name="page" id="changelang-langs">
+            <option value='en/book.dbase.php'>English</option>
+            <option value='pt_BR/book.dbase.php'>Brazilian Portuguese</option>
+            <option value='zh/book.dbase.php'>Chinese (Simplified)</option>
+            <option value='fr/book.dbase.php'>French</option>
+            <option value='de/book.dbase.php'>German</option>
+            <option value='ja/book.dbase.php'>Japanese</option>
+            <option value='kr/book.dbase.php'>Korean</option>
+            <option value='ro/book.dbase.php'>Romanian</option>
+            <option value='ru/book.dbase.php'>Russian</option>
+            <option value='es/book.dbase.php' selected="selected">Spanish</option>
+            <option value='tr/book.dbase.php'>Turkish</option>
+            <option value="help-translate.php">Other</option>
+          </select>
+        </fieldset>
+      </form>
+    </div>
+    <div class="edit-bug">
+      <a href="https://edit.php.net/?project=PHP&amp;perm=es/book.dbase.php">Edit</a>
+      <a href="https://bugs.php.net/report.php?bug_type=Documentation+problem&amp;manpage=book.dbase">Report a Bug</a>
+    </div>
+  </div><div id="book.dbase" class="book">
+ 
+ <h1 class="title">dBase</h1>
+ 
+ 
+ 
+ 
+ 
+ 
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+ 
+
+
+
+ 
+
+
+
+ 
+<ul class="chunklist chunklist_book"><li><a href="intro.dbase.php">Introducci&oacute;n</a></li><li><a href="dbase.setup.php">Instalaci&oacute;n/Configuraci&oacute;n</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="dbase.requirements.php">Requerimientos</a></li><li><a href="dbase.installation.php">Instalaci&oacute;n</a></li><li><a href="dbase.configuration.php">Configuraci&oacute;n en tiempo de ejecuci&oacute;n</a></li><li><a href="dbase.resources.php">Tipos de recursos</a></li></ul></li><li><a href="dbase.constants.php">Constantes predefinidas</a></li><li><a href="ref.dbase.php">Funciones de dBase</a><ul class="chunklist chunklist_book chunklist_children"><li><a href="function.dbase-add-record.php">dbase_add_record</a> — A&ntilde;ade un registro a una base de datos</li><li><a href="function.dbase-close.php">dbase_close</a> — Cierra una base de datos</li><li><a href="function.dbase-create.php">dbase_create</a> — Crea una base de datos</li><li><a href="function.dbase-delete-record.php">dbase_delete_record</a> — Borra un registro de una base de datos</li><li><a href="function.dbase-get-header-info.php">dbase_get_header_info</a> — Obtiene la informaci&oacute;n de cabecera de una base de datos</li><li><a href="function.dbase-get-record-with-names.php">dbase_get_record_with_names</a> — Obtiene un registro de una base de datos como una matriz asociativa</li><li><a href="function.dbase-get-record.php">dbase_get_record</a> — Obtiene un registro de una base de datos como una matriz indexada</li><li><a href="function.dbase-numfields.php">dbase_numfields</a> — Obtiene el n&uacute;mero de campos de una base de datos</li><li><a href="function.dbase-numrecords.php">dbase_numrecords</a> — Obtener el n&uacute;mero de registros de una base de datos</li><li><a href="function.dbase-open.php">dbase_open</a> — Abre una base de datos</li><li><a href="function.dbase-pack.php">dbase_pack</a> — Empaquetar una base de datos</li><li><a href="function.dbase-replace-record.php">dbase_replace_record</a> — Reemplaza un registro en una base de datos</li></ul></li></ul></div>
+<section id="usernotes">
+ <div class="head">
+  <span class="action"><a href="/manual/add-note.php?sect=book.dbase&amp;redirect=http://php.net/manual/es/book.dbase.php"><img src='/images/notes-add@2x.png' alt='add a note' width='12' height='12'> <small>add a note</small></a></span>
+  <h3 class="title">User Contributed Notes <span class="count">1 note</span></h3>
+ </div><div id="allnotes">
+  <div class="note" id="92631">  <div class="votes">
+    <div id="Vu92631">
+    <a href="/manual/vote-note.php?id=92631&amp;page=book.dbase&amp;vote=up" title="Vote up!" class="usernotes-voteu">up</a>
+    </div>
+    <div id="Vd92631">
+    <a href="/manual/vote-note.php?id=92631&amp;page=book.dbase&amp;vote=down" title="Vote down!" class="usernotes-voted">down</a>
+    </div>
+    <div class="tally" id="V92631" title="49% like this...">
+    -1
+    </div>
+  </div>
+  <a href="#92631" class="name">
+  <strong class="user"><em>Anonymous</em></strong></a><a class="genanchor" href="#92631"> &para;</a><div class="date" title="2009-07-31 09:51"><strong>5 years ago</strong></div>
+  <div class="text" id="Hcom92631">
+<div class="phpcode"><code><span class="html">
+Unfortunately the dbase functions are not compiled into my commercial server's php and I needed to read some geo data in shape files, which include data in dbfs.<br /><br />So maybe this will help some others:<br /><br /><span class="default">&lt;?php<br /></span><span class="keyword">function </span><span class="default">echo_dbf</span><span class="keyword">(</span><span class="default">$dbfname</span><span class="keyword">) {<br />&nbsp; &nbsp; </span><span class="default">$fdbf </span><span class="keyword">= </span><span class="default">fopen</span><span class="keyword">(</span><span class="default">$dbfname</span><span class="keyword">,</span><span class="string">'r'</span><span class="keyword">); <br />&nbsp; &nbsp; </span><span class="default">$fields </span><span class="keyword">= array();<br />&nbsp; &nbsp; </span><span class="default">$buf </span><span class="keyword">= </span><span class="default">fread</span><span class="keyword">(</span><span class="default">$fdbf</span><span class="keyword">,</span><span class="default">32</span><span class="keyword">);<br />&nbsp; &nbsp; </span><span class="default">$header</span><span class="keyword">=</span><span class="default">unpack</span><span class="keyword">( </span><span class="string">"VRecordCount/vFirstRecord/vRecordLength"</span><span class="keyword">, </span><span class="default">substr</span><span class="keyword">(</span><span class="default">$buf</span><span class="keyword">,</span><span class="default">4</span><span class="keyword">,</span><span class="default">8</span><span class="keyword">));<br />&nbsp; &nbsp; echo </span><span class="string">'Header: '</span><span class="keyword">.</span><span class="default">json_encode</span><span class="keyword">(</span><span class="default">$header</span><span class="keyword">).</span><span class="string">'&lt;br/&gt;'</span><span class="keyword">;<br />&nbsp; &nbsp; </span><span class="default">$goon </span><span class="keyword">= </span><span class="default">true</span><span class="keyword">; <br />&nbsp; &nbsp; </span><span class="default">$unpackString</span><span class="keyword">=</span><span class="string">''</span><span class="keyword">;<br />&nbsp; &nbsp; while (</span><span class="default">$goon </span><span class="keyword">&amp;&amp; !</span><span class="default">feof</span><span class="keyword">(</span><span class="default">$fdbf</span><span class="keyword">)) { </span><span class="comment">// read fields:<br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="default">$buf </span><span class="keyword">= </span><span class="default">fread</span><span class="keyword">(</span><span class="default">$fdbf</span><span class="keyword">,</span><span class="default">32</span><span class="keyword">);<br />&nbsp; &nbsp; &nbsp; &nbsp; if (</span><span class="default">substr</span><span class="keyword">(</span><span class="default">$buf</span><span class="keyword">,</span><span class="default">0</span><span class="keyword">,</span><span class="default">1</span><span class="keyword">)==</span><span class="default">chr</span><span class="keyword">(</span><span class="default">13</span><span class="keyword">)) {</span><span class="default">$goon</span><span class="keyword">=</span><span class="default">false</span><span class="keyword">;} </span><span class="comment">// end of field list<br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="keyword">else {<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="default">$field</span><span class="keyword">=</span><span class="default">unpack</span><span class="keyword">( </span><span class="string">"a11fieldname/A1fieldtype/Voffset/Cfieldlen/Cfielddec"</span><span class="keyword">, </span><span class="default">substr</span><span class="keyword">(</span><span class="default">$buf</span><span class="keyword">,</span><span class="default">0</span><span class="keyword">,</span><span class="default">18</span><span class="keyword">));<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; echo </span><span class="string">'Field: '</span><span class="keyword">.</span><span class="default">json_encode</span><span class="keyword">(</span><span class="default">$field</span><span class="keyword">).</span><span class="string">'&lt;br/&gt;'</span><span class="keyword">;<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="default">$unpackString</span><span class="keyword">.=</span><span class="string">"A</span><span class="default">$field</span><span class="keyword">[</span><span class="default">fieldlen</span><span class="keyword">]</span><span class="default">$field</span><span class="keyword">[</span><span class="default">fieldname</span><span class="keyword">]</span><span class="string">/"</span><span class="keyword">;<br />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span><span class="default">array_push</span><span class="keyword">(</span><span class="default">$fields</span><span class="keyword">, </span><span class="default">$field</span><span class="keyword">);}}<br />&nbsp; &nbsp; </span><span class="default">fseek</span><span class="keyword">(</span><span class="default">$fdbf</span><span class="keyword">, </span><span class="default">$header</span><span class="keyword">[</span><span class="string">'FirstRecord'</span><span class="keyword">]+</span><span class="default">1</span><span class="keyword">); </span><span class="comment">// move back to the start of the first record (after the field definitions)<br />&nbsp; &nbsp; </span><span class="keyword">for (</span><span class="default">$i</span><span class="keyword">=</span><span class="default">1</span><span class="keyword">; </span><span class="default">$i</span><span class="keyword">&lt;=</span><span class="default">$header</span><span class="keyword">[</span><span class="string">'RecordCount'</span><span class="keyword">]; </span><span class="default">$i</span><span class="keyword">++) {<br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="default">$buf </span><span class="keyword">= </span><span class="default">fread</span><span class="keyword">(</span><span class="default">$fdbf</span><span class="keyword">,</span><span class="default">$header</span><span class="keyword">[</span><span class="string">'RecordLength'</span><span class="keyword">]);<br />&nbsp; &nbsp; &nbsp; &nbsp; </span><span class="default">$record</span><span class="keyword">=</span><span class="default">unpack</span><span class="keyword">(</span><span class="default">$unpackString</span><span class="keyword">,</span><span class="default">$buf</span><span class="keyword">);<br />&nbsp; &nbsp; &nbsp; &nbsp; echo </span><span class="string">'record: '</span><span class="keyword">.</span><span class="default">json_encode</span><span class="keyword">(</span><span class="default">$record</span><span class="keyword">).</span><span class="string">'&lt;br/&gt;'</span><span class="keyword">;<br />&nbsp; &nbsp; &nbsp; &nbsp; echo </span><span class="default">$i</span><span class="keyword">.</span><span class="default">$buf</span><span class="keyword">.</span><span class="string">'&lt;br/&gt;'</span><span class="keyword">;} </span><span class="comment">//raw record<br />&nbsp; &nbsp; </span><span class="default">fclose</span><span class="keyword">(</span><span class="default">$fdbf</span><span class="keyword">); }<br /></span><span class="default">?&gt;<br /></span><br />This function simply dumps an entire file using echo and json_encode, so you can tweak it to your own needs... (eg random access would just be a matter of changing the seek to : fseek($fdbf, $header['FirstRecord']+1 +($header['RecordLength']* $desiredrecord0based); removing the for loop and returning $record<br /><br />This function doesn't do any type conversion, but it does extract the type if you need to play with dates, or tidy up the numbers etc.<br /><br />So quick and dirty but maybe of use to somebody and illustrates the power of unpack.<br /><br />Erich</span>
+</code></div>
+  </div>
+ </div></div>
+
+ <div class="foot"><a href="/manual/add-note.php?sect=book.dbase&amp;redirect=http://php.net/manual/es/book.dbase.php"><img src='/images/notes-add@2x.png' alt='add a note' width='12' height='12'> <small>add a note</small></a></div>
+</section>    </section><!-- layout-content -->
+        <aside class='layout-menu'>
+    
+        <ul class='parent-menu-list'>
+                                    <li>
+                <a href="refs.database.vendors.php">Extensiones de bases de datos espec&iacute;ficas del proveedor</a>
+    
+                                    <ul class='child-menu-list'>
+    
+                          
+                        <li class="">
+                            <a href="book.cubrid.php" title="CUBRID">CUBRID</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.dbplus.php" title="DB++">DB++</a>
+                        </li>
+                          
+                        <li class="current">
+                            <a href="book.dbase.php" title="dBase">dBase</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.filepro.php" title="filePro">filePro</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.ibase.php" title="Firebird/InterBase">Firebird/InterBase</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.fbsql.php" title="FrontBase">FrontBase</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.ibm-db2.php" title="IBM DB2">IBM DB2</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.ifx.php" title="Informix">Informix</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.ingres.php" title="Ingres">Ingres</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.maxdb.php" title="MaxDB">MaxDB</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.mongo.php" title="Mongo">Mongo</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="set.mongodb.php" title="MongoDB">MongoDB</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.msql.php" title="mSQL">mSQL</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.mssql.php" title="Mssql">Mssql</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="set.mysqlinfo.php" title="MySQL">MySQL</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.oci8.php" title="OCI8">OCI8</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.paradox.php" title="Paradox">Paradox</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.pgsql.php" title="PostgreSQL">PostgreSQL</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.sqlite.php" title="SQLite">SQLite</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.sqlite3.php" title="SQLite3">SQLite3</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.sqlsrv.php" title="SQLSRV">SQLSRV</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.sybase.php" title="Sybase">Sybase</a>
+                        </li>
+                          
+                        <li class="">
+                            <a href="book.tokyo-tyrant.php" title="tokyo_&#8203;tyrant">tokyo_&#8203;tyrant</a>
+                        </li>
+                            
+                    </ul>
+                    
+            </li>
+                        
+                    </ul>
+    </aside>
+
+
+  </div><!-- layout -->
+         
+  <footer>
+    <div class="container footer-content">
+      <div class="row-fluid">
+      <ul class="footmenu">
+        <li><a href="/copyright.php">Copyright &copy; 2001-2015 The PHP Group</a></li>
+        <li><a href="/my.php">My PHP.net</a></li>
+        <li><a href="/contact.php">Contact</a></li>
+        <li><a href="/sites.php">Other PHP.net sites</a></li>
+        <li><a href="/mirrors.php">Mirror sites</a></li>
+        <li><a href="/privacy.php">Privacy policy</a></li>
+      </ul>
+      </div>
+    </div>
+  </footer>
+
+    
+ <!-- External and third party libraries. -->
+ <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://php.net/cached.php?t=1421837618&amp;f=/js/ext/modernizr.js"></script>
+<script type="text/javascript" src="http://php.net/cached.php?t=1421837618&amp;f=/js/ext/hogan-2.0.0.min.js"></script>
+<script type="text/javascript" src="http://php.net/cached.php?t=1421837618&amp;f=/js/ext/typeahead.min.js"></script>
+<script type="text/javascript" src="http://php.net/cached.php?t=1421837618&amp;f=/js/ext/mousetrap.min.js"></script>
+<script type="text/javascript" src="http://php.net/cached.php?t=1421837618&amp;f=/js/search.js"></script>
+<script type="text/javascript" src="http://php.net/cached.php?t=1435099203&amp;f=/js/common.js"></script>
+
+<a id="toTop" href="javascript:;"><span id="toTopHover"></span><img width="40" height="40" alt="To Top" src="/images/to-top@2x.png"></a>
+
+</body>
+</html>
+
