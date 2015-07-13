@@ -1,0 +1,108 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Captura de solicitudes" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">DESCUENTO DE NOMINAS</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0">
+					<tr>
+						<td>Origen</td>
+						<td><com:TTextBox ID="ddlOrigen" Width="150px" /></td>
+						<td>Tipo</td>
+						<td><com:TTextBox ID="ddltipo" Width="150px" /></td>				
+					</tr>
+					<tr>
+						<td>Estatus</td>
+						<td><com:TTextBox ID="ddlEstatus" Width="100px" /></td>
+						<td>Tipo de nomina</td>
+						<td><com:TTextBox ID="ddlTipodenomina" Width="100px" /></td>
+						<td>Periodo</td>
+						<td><com:TTextBox ID="ddlPeriodo2" Width="100px" /></td>				
+					</tr>
+					<tr>
+						<td colspan="6" align="center">
+							<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
+								<com:TBoundColumn HeaderText="Origen" DataField="Origen" />
+								<com:TBoundColumn HeaderText="Fecha" DataField="fecha2" />
+								<com:TBoundColumn HeaderText="Hora" DataField="Hora2" />
+								<com:TBoundColumn HeaderText="Usuario" DataField="Usuario2" />
+								<com:TBoundColumn HeaderText="Estatus" DataField="Estatus2" />
+								<com:TBoundColumn HeaderText="Fecha" DataField="Fecha3" />
+								<com:TBoundColumn HeaderText="Hora" DataField="Hora3" />
+								<com:TBoundColumn HeaderText="Usuario" DataField="Usuario3" />
+								<com:TBoundColumn HeaderText="Nomina" DataField="Nomina3" />
+								<com:TBoundColumn HeaderText="Observaciones" DataField="Observaciones3" />
+							</com:TDataGrid>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><com:TTextBox ID="ddlIdContrato" Width="50px" /></td>
+						<td><com:TTextBox ID="ddlCveEmpleado" Width="50px" /></td>
+						<td><com:TTextBox ID="ddlEmpleado" Width="190px" /></td>
+						<!--Botón Buscar-->
+						<td colspan="2" align="center">
+						<com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_Click" IsDefaultButton="true" />
+						</td>
+						<td>Mostrar</td>
+						<td><com:TTextBox ID="ddlMostrar" Width="50px" /></td>
+					</tr>
+					
+					<tr>
+						<td colspan="6" align="center">
+							<com:TDataGrid ID="dgDescuentosDet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
+								<com:TBoundColumn HeaderText="Contrato" DataField="Contrato8" />
+								<com:TBoundColumn HeaderText="Empleado" DataField="Empleado8" />
+								<com:TBoundColumn HeaderText="E" DataField="E8" />
+								<com:TBoundColumn HeaderText="Nombre" DataField="Nombre8" />
+								<com:TBoundColumn HeaderText="Clave" DataField="Clave8" />
+								<com:TBoundColumn HeaderText="Aval1" DataField="Aval8" />
+								<com:TBoundColumn HeaderText="E"DataField="E9" />
+								<com:TBoundColumn HeaderText="Aval2" DataField="Aval9" />
+								<com:TBoundColumn HeaderText="E" DataField="E10" />
+								<com:TBoundColumn HeaderText="Descripción" DataField="Descripcion3" />
+								<com:TBoundColumn HeaderText="Periodo" DataField="Periodo8" />
+								<com:TBoundColumn HeaderText="Periodos" DataField="Periodos8" />
+								<com:TBoundColumn HeaderText="Importe" DataField="Importe8" />
+								<com:TBoundColumn HeaderText="Ap" DataField="Ap8" />
+							</com:TDataGrid>
+						</td>
+					</tr>
+					
+					<tr>
+						<td>Total semana</td>
+						<td><com:TTextBox ID="ddlTotalSemana" Width="100px" /></td>
+						<td>Total Quincena</td>
+						<td><com:TTextBox ID="ddlTotalQuincena" Width="100px" /></td>
+						<td>Total Activos</td>
+						<td><com:TTextBox ID="ddlTotalActivos2" Width="100px" /></td>				
+					</tr>
+					<tr>
+						<td>Total jubilados</td>
+						<td><com:TTextBox ID="ddlTotalJubilados8" Width="100px" /></td>
+					</tr>
+					
+					<tr>
+						<td>Total</td>
+						<td><com:TTextBox ID="ddlTotal8" Width="100px" /></td>
+					</tr>
+					
+				</table>
+			</td>
+		</tr>
+		
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
