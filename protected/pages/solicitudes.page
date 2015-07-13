@@ -1,0 +1,182 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Captura de solicitudes" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">Solicitudes</p>
+			</td>
+		</tr>
+		
+		<tr>
+			<td>
+				<table border="0">
+					<tr>
+						<td>Titular:</td>
+						<td colspan="4"><com:TTextBox ID="txtTitular" /></td>
+					</tr>
+
+					<tr>
+						<td>Folio:</td>
+						<td><com:TTextBox ID="txtFolio" /></td>
+						<td>Fecha:</td>
+						<td><com:TTextBox ID="txtFecha" /></td>
+						<td>Estatus</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<com:TPanel GroupingText="Titular">
+								<table border="0">
+									<tr>
+										<td>No. Único</td>
+										<td><com:TTextBox ID="txtNoUnicoTit" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreTit" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Dirección</td>
+										<td colspan="4"><com:TTextBox ID="txtDireccion" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Categoria</td>
+										<td colspan="2"><com:TTextBox ID="txtCategoria" /></td>
+										<td>Unidad Presupuestal</td>
+										<td><com:TTextBox ID="txtUnidadPresupuestal" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Sindicato</td>
+										<td colspan="2"><com:TTextBox ID="txtSindicato" /></td>
+										<td>Antigüedad</td>
+										<td><com:TTextBox ID="txtAntiguedad" Width="400px" /></td>
+									</tr>
+								</table>
+							</com:TPanel>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<com:TPanel GroupingText="Aval 1">
+								<table border="0">
+									<tr>
+										<td>No. Único</td>
+										<td><com:TTextBox ID="txtNoUnicoTit2" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreTit2" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Dirección</td>
+										<td colspan="4"><com:TTextBox ID="txtDireccion2" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Categoria</td>
+										<td colspan="2"><com:TTextBox ID="txtCategoria2" /></td>
+										<td>Unidad Presupuestal</td>
+										<td><com:TTextBox ID="txtUnidadPresupuestal2" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Sindicato</td>
+										<td colspan="2"><com:TTextBox ID="txtSindicato2" /></td>
+										<td>Antigüedad</td>
+										<td><com:TTextBox ID="txtAntiguedad2" Width="400px" /></td>
+									</tr>
+								</table>
+							</com:TPanel>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="5">
+							<com:TPanel GroupingText="Aval 2">
+								<table border="0">
+									<tr>
+										<td>No. Único</td>
+										<td><com:TTextBox ID="txtNoUnicoTit3" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreTit3" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Dirección</td>
+										<td colspan="4"><com:TTextBox ID="txtDireccion3" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Categoria</td>
+										<td colspan="2"><com:TTextBox ID="txtCategoria3" /></td>
+										<td>Unidad Presupuestal</td>
+										<td><com:TTextBox ID="txtUnidadPresupuestal3" Width="400px" /></td>
+									</tr>
+									<tr>
+										<td>Sindicato</td>
+										<td colspan="2"><com:TTextBox ID="txtSindicato3" /></td>
+										<td>Antigüedad</td>
+										<td><com:TTextBox ID="txtAntiguedad3" Width="400px" /></td>
+									</tr>
+								</table>
+							</com:TPanel>
+						</td>
+					</tr>
+					<td>Fecha Firma Avales</td>
+										<td><com:TTextBox ID="txtFechaFirmaAvales" Width="100px" /></td>
+				</table>
+			</td>
+			<td>
+				<table>
+					<tr>
+						<td>Importe:</td>
+						<td><com:TTextBox ID="txtImporte" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Plazo:</td>
+						<td><com:TTextBox ID="txtPlazo"  width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Tasa:</td>
+						<td><com:TTextBox ID="txtTasa" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Interes:</td>
+						<td><com:TTextBox ID="txtInteres" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Saldo anterior:</td>
+						<td><com:TTextBox ID="txtSaldoAnterior" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Descuentos:</td>
+						<td><com:TTextBox ID="txtDescuentos" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Imp. Descuentos:</td>
+						<td><com:TTextBox ID="txtImpDescuentos" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Imp. Prestamos:</td>
+						<td><com:TTextBox ID="txtImpPrestamos" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Seguro:</td>
+						<td><com:TTextBox ID="txtSeguro" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Diferencia:</td>
+						<td><com:TTextBox ID="txtDiferencia" width="80px" /></td>
+					</tr>
+					<tr>
+						<td>Imp. Cheque:</td>
+						<td><com:TTextBox ID="txtImpCheque" width="80px" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+
+		<!--Botón Guardar-->
+		<tr>
+			<td colspan="2" align="center">
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" />
+			</td>
+		</tr>
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
