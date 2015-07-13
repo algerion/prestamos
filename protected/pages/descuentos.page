@@ -19,7 +19,12 @@
 				<table border="0">
 					<tr>
 						<td>Origen</td>
-						<td><com:TTextBox ID="ddlOrigen" Width="150px" /></td>
+						<td>
+							<com:TDropDownList ID="ddlOrigen">
+								<com:TListItem Value="RH" Text="Activos" />
+								<com:TListItem Value="PE" Text="Jubilados" />
+							</com:TDropDownList>
+						</td>
 						<td>Tipo</td>
 						<td><com:TTextBox ID="ddltipo" Width="150px" /></td>				
 					</tr>
@@ -100,6 +105,11 @@
 					</tr>
 					
 				</table>
+			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+				<com:TButton ID="btnActualizar" OnClick="btnActualizar_Click" Text="Actualizar" />
 			</td>
 		</tr>
 		
