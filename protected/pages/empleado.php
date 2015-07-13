@@ -1,5 +1,5 @@
 <?php
-include_once('../compartidos/clases/leedbf.php');
+include_once('../compartidos/clases/usadbf.php');
 include_once('../compartidos/clases/charset.php');
 include_once('../compartidos/clases/conexion.php');
 
@@ -14,18 +14,18 @@ class Empleado extends TPage
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
 
-		$regs = LeeDBF::registros_dbf("temp/EMPLEARH.dbf");
+		$regs = UsaDBF::registros_dbf("temp/EMPLEARH.dbf");
 		foreach($regs as $r)
 		{
-			$consulta = "insert into empleados values (:numero, :nombre, :paterno, :materno, :ura, :ur, :pr)";
+			$consulta = "insert into empleados (numero, nombre, paterno, materno) values (:numero, :nombre, :paterno, :materno)";
 			$comando = $this->dbConexion->createCommand($consulta);
 			$comando->bindValue(":numero", $r["NUMERO"]);
 			$comando->bindValue(":nombre", $r["NOMBRE"]);
 			$comando->bindValue(":paterno", $r["PATERNO"]);
 			$comando->bindValue(":materno", $r["MATERNO"]);
-			$comando->bindValue(":ura", $r["URA"]);
+/*			$comando->bindValue(":ura", $r["URA"]);
 			$comando->bindValue(":ur", $r["UR"]);
-			$comando->bindValue(":pr", $r["PR"]);
+			$comando->bindValue(":pr", $r["PR"]);*/
 			$comando->execute();
 
 
