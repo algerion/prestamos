@@ -1,9 +1,9 @@
 <?php
-$ftp_server = 'localhost';
+$ftp_server = '192.168.201.234';
 $ftp_user_name = 'nomina';
 $ftp_user_pass = 'nomin4';
-$local_file = 'temp/EMPLEARH.DBF';
-$remote_file = 'EMPLEARH.DBF';
+$local_file = 'temp/bajado.sql';
+$remote_file = 'px.sql';
 
 
 // establecer una conexión básica
