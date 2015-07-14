@@ -1,18 +1,18 @@
 <?php
-<<<<<<< HEAD
+//<<<<<<< HEAD
 $ftp_server = '192.168.201.234';
 $ftp_user_name = 'nomina';
 $ftp_user_pass = 'nomin4';
-$local_file = 'temp/bajado.sql';
-$remote_file = 'px.sql';
-=======
+$local_file = 'temps/bajado.sql';
+$remote_file = 'desno.dbf';
+/*=======
 $ftp_server = '192.168.201.250';
 $ftp_user_name = 'nomina';
 $ftp_user_pass = 'nomin4';
 $local_file = 'temp/index.php';
 $remote_file = 'a.txt';
 >>>>>>> origin/master
-
+*/
 
 // establecer una conexión básica
 $conn_id = ftp_connect($ftp_server); 
