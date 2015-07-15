@@ -73,6 +73,8 @@ class descuentos extends TPage
 				$regs = UsaDBF::registros_dbf("temp/" . $file);
 				if(strcmp(substr(strtoupper($file), 0, 8), "EMPLEARH") == 0)
 					$this->actualiza_tabla_empleados($regs);
+				elseif(strcmp(substr(strtoupper($file), 0, 8), "EMPLEAPE") == 0)
+					$this->actualiza_tabla_pensionados($regs);
 			}
 			ftp_close($conn_id);
 		}
@@ -113,6 +115,39 @@ class descuentos extends TPage
 		
 	}
 	
+	public function actualiza_tabla_pensionados($registros)
+	{
+		foreach($registros as $r)
+		{
+			$consulta = "insert into pensionados (numero, nombre, paterno, materno, sindicato, fec_ingre, status, tipo_nomi) 
+					values (:numero, :nombre, :paterno, :materno, :sindicato, :fec_ingre, :status, :tipo_nomi)";
+			try
+			{
+				$this->consulta_pensionados($consulta, $r);
+			}
+			catch(Exception $e)
+			{
+				$consulta = "update pensionados SET nombre = :nombre, paterno = :paterno, materno = :materno, 
+					sindicato = :sindicato, fec_ingre = :fec_ingre, status = :status, tipo_nomi = :tipo_nomi where numero = :numero";
+				$this->consulta_pensionados($consulta, $r);
+			}
+		}
+	}
+	
+	public function consulta_pensionados($consulta, $r)
+	{
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":numero", $r["NUMERO"]);
+		$comando->bindValue(":nombre", Charset::CambiaCharset($r["NOMBRE"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":paterno", Charset::CambiaCharset($r["PATERNO"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":materno", Charset::CambiaCharset($r["MATERNO"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":sindicato", $r["SINDICATO"]);
+		$comando->bindValue(":fec_ingre", $r["FEC_INGRE"]);
+		$comando->bindValue(":status", $r["STATUS"]);
+		$comando->bindValue(":tipo_nomi", $r["TIPO_NOMI"]);
+		$comando->execute();
+		
+	}
 	
 	
 	
