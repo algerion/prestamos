@@ -71,34 +71,31 @@ class descuentos extends TPage
 			if ($download) 
 			{
 				$regs = UsaDBF::registros_dbf("temp/" . $file);
-				echo strtolower($file);
-				echo substr(strtoupper($file), 0, 3);
-				echo strcmp(substr(strtoupper($file), 0, 3), "EMPLEA");
-/*				foreach($regs as $r)
-				{
-					$consulta = "insert into empleados (numero, nombre, paterno, materno, sindicato, fec_ingre, status, tipo_nomi) 
-							values (:numero, :nombre, :paterno, :materno, :sindicato, :fec_ingre, :status, :tipo_nomi)";
-					try
-					{
-						$this->consulta_empleados($consulta, $r);
-					}
-					catch(Exception $e)
-					{
-						$consulta = "update empleados SET nombre = :nombre, paterno = :paterno, materno = :materno, 
-							sindicato = :sindicato, fec_ingre = :fec_ingre, status = :status, tipo_nomi = :tipo_nomi where numero = :numero";
-						$this->consulta_empleados($consulta, $r);
-					}
-*/
-/*					foreach($r as $key=>$value)
-					{
-						echo $key . ": " . Charset::CambiaCharset($value, 'CP850', 'UTF-8') . " ";
-					}
-					echo "<br />";*/
-//				}
+				if(strcmp(substr(strtoupper($file), 0, 8), "EMPLEARH") == 0)
+					$this->actualiza_tabla_empleados($regs);
 			}
 			ftp_close($conn_id);
 		}
 		return $errorlevel;
+	}
+	
+	public function actualiza_tabla_empleados($registros)
+	{
+		foreach($registros as $r)
+		{
+			$consulta = "insert into empleados (numero, nombre, paterno, materno, sindicato, fec_ingre, status, tipo_nomi) 
+					values (:numero, :nombre, :paterno, :materno, :sindicato, :fec_ingre, :status, :tipo_nomi)";
+			try
+			{
+				$this->consulta_empleados($consulta, $r);
+			}
+			catch(Exception $e)
+			{
+				$consulta = "update empleados SET nombre = :nombre, paterno = :paterno, materno = :materno, 
+					sindicato = :sindicato, fec_ingre = :fec_ingre, status = :status, tipo_nomi = :tipo_nomi where numero = :numero";
+				$this->consulta_empleados($consulta, $r);
+			}
+		}
 	}
 	
 	public function consulta_empleados($consulta, $r)
@@ -115,9 +112,7 @@ class descuentos extends TPage
 		$comando->execute();
 		
 	}
-	public function descarga_dbf
-	if ($download)=Emplea 
-	consulta = Emplea 
+	
 	
 	
 	
