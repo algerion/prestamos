@@ -152,17 +152,17 @@ class descuentos extends TPage
 	{
 		foreach($registros as $r)
 		{
-			$consulta = "insert into descuentos_fijos (numero, nombre, paterno, materno, sindicato, status, tipo_nomi) 
-					values (:numero, :nombre, :paterno, :materno, :sindicato, :, :status, :tipo_nomi)";
+			$consulta = "insert into descuentos_fijos (numero, conceptos, periodo, pagados, importe, porcentaje) 
+					values (:numero, :conceptos, :periodo,:pagados, :importe, :porcentaje)";
 			try
 			{
-				$this->consulta_pensionados($consulta, $r);
+				$this->descuentos_fijos($consulta, $r);
 			}
 			catch(Exception $e)
 			{
-				$consulta = "update descuentos_fijos SET nombre = :nombre, paterno = :paterno, materno = :materno, 
-					sindicato = :sindicato, status = :status, tipo_nomi = :tipo_nomi where numero = :numero";
-				$this->consulta_pensionados($consulta, $r);
+				$consulta = "update descuentos_fijos SET numero = :numero, conceptos = :conceptos, periodo = :periodo, 
+					pagados = :pagados, importe = :importe, porcentaje = :porcentaje ";
+				$this->descuentos_fijos($consulta, $r);
 			}
 		}
 	}
@@ -170,12 +170,11 @@ class descuentos extends TPage
 	{
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":numero", $r["NUMERO"]);
-		$comando->bindValue(":nombre", Charset::CambiaCharset($r["NOMBRE"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":paterno", Charset::CambiaCharset($r["PATERNO"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":materno", Charset::CambiaCharset($r["MATERNO"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":sindicato", $r["SIND"]);
-		$comando->bindValue(":status", $r["STATUS"]);
-		$comando->bindValue(":tipo_nomi", '1');
+		$comando->bindValue(":conceptos", Charset::CambiaCharset($r["periodo"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":periodo", Charset::CambiaCharset($r["periodo"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":pagados", Charset::CambiaCharset($r["pagados"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":importe", $r["impor"]);
+		$comando->bindValue(":porcentaje", $r["porcentaje"]);
 		$comando->execute();
 		
 	}
