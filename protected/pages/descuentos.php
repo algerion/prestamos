@@ -170,7 +170,7 @@ class descuentos extends TPage
 	{
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":numero", $r["NUMERO"]);
-		$comando->bindValue(":conceptos", Charset::CambiaCharset($r["periodo"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":conceptos", Charset::CambiaCharset($r["conceptos"], 'CP850', 'UTF-8'));
 		$comando->bindValue(":periodo", Charset::CambiaCharset($r["periodo"], 'CP850', 'UTF-8'));
 		$comando->bindValue(":pagados", Charset::CambiaCharset($r["pagados"], 'CP850', 'UTF-8'));
 		$comando->bindValue(":importe", $r["impor"]);
@@ -178,7 +178,43 @@ class descuentos extends TPage
 		$comando->execute();
 		
 	}
-	
+			
+			
+			
+			public function bitacora($registros)
+	{
+		foreach($registros as $r)
+		{
+			$consulta = "insert into bitacora (id_registro, fechahora, tabla, archivo, fechahora_archivo, longitud_archivo, importe, id_usuario, estatus , observaciones ) 
+					values (:id_registro, :fechahora, :tabla, :archivo, :fechahora_archivo, :longitud_archivo, :importe, :id_usuario, :estatus , :observaciones
+ )";
+			try
+			{
+				$this->bitacora($consulta, $r);
+			}
+			catch(Exception $e)
+			{
+				$consulta = "id_registro = :id_registro, fechahora = :fechahora, tabla = :tabla, archivo = :archivo, fechahora_archivo = :fechahora_archivo, = longitud_archivo :longitud_archivo, importe = :importe, id_usuario = :id_usuario, estatus = :estatus , observaciones = :observaciones";
+				$this->bitacora($consulta, $r);
+			}
+		}
+	}
+	public function bitacora($consulta, $r)
+	{
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_registro", $r["id_registro"]);
+		$comando->bindValue(":fechahora", Charset::CambiaCharset($r["fechahora"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":tabla", Charset::CambiaCharset($r["tabla"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":archivo", Charset::CambiaCharset($r["archivo"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":fechahora_archivo", $r["fechahora_archivo"]);
+		$comando->bindValue(":longitud_archivo", $r["longitud_archivo"]);
+		$comando->bindValue(":importe", $r["importe"]);
+		$comando->bindValue(":id_usuario", $r["id_usuario"]);
+		$comando->bindValue(":estatus", $r["estatus"]);
+		$comando->bindValue(":observaciones", $r["observaciones"]);
+		$comando->execute();
+		
+	}
 	
 	
 }
