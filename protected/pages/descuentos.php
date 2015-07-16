@@ -133,7 +133,6 @@ class descuentos extends TPage
 			}
 		}
 	}
-	
 	public function consulta_pensionados($consulta, $r)
 	{
 		$comando = $this->dbConexion->createCommand($consulta);
@@ -143,6 +142,38 @@ class descuentos extends TPage
 		$comando->bindValue(":materno", Charset::CambiaCharset($r["MATERNO"], 'CP850', 'UTF-8'));
 		$comando->bindValue(":sindicato", $r["SIND"]);
 		$comando->bindValue(":fec_ingre", $r["FECHALTA"]);
+		$comando->bindValue(":status", $r["STATUS"]);
+		$comando->bindValue(":tipo_nomi", '1');
+		$comando->execute();
+		
+	}
+	
+		public function descuentos_fijos($registros)
+	{
+		foreach($registros as $r)
+		{
+			$consulta = "insert into descuentos_fijos (numero, nombre, paterno, materno, sindicato, status, tipo_nomi) 
+					values (:numero, :nombre, :paterno, :materno, :sindicato, :, :status, :tipo_nomi)";
+			try
+			{
+				$this->consulta_pensionados($consulta, $r);
+			}
+			catch(Exception $e)
+			{
+				$consulta = "update descuentos_fijos SET nombre = :nombre, paterno = :paterno, materno = :materno, 
+					sindicato = :sindicato, status = :status, tipo_nomi = :tipo_nomi where numero = :numero";
+				$this->consulta_pensionados($consulta, $r);
+			}
+		}
+	}
+	public function descuentos_fijos($consulta, $r)
+	{
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":numero", $r["NUMERO"]);
+		$comando->bindValue(":nombre", Charset::CambiaCharset($r["NOMBRE"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":paterno", Charset::CambiaCharset($r["PATERNO"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":materno", Charset::CambiaCharset($r["MATERNO"], 'CP850', 'UTF-8'));
+		$comando->bindValue(":sindicato", $r["SIND"]);
 		$comando->bindValue(":status", $r["STATUS"]);
 		$comando->bindValue(":tipo_nomi", '1');
 		$comando->execute();
