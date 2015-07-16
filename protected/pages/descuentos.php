@@ -66,7 +66,7 @@ class descuentos extends TPage
 				$errorlevel = -2;
 				$download = false;
 				$this->ClientScript->registerEndScript("error_descarga",
-						"alert('No se pudo descargar el archivo " . $file . "del FTP');\n");
+						"alert('No se pudo descargar el archivo " . $file . " del FTP');\n");
 			}
 			if ($download) 
 			{
@@ -141,10 +141,10 @@ class descuentos extends TPage
 		$comando->bindValue(":nombre", Charset::CambiaCharset($r["NOMBRE"], 'CP850', 'UTF-8'));
 		$comando->bindValue(":paterno", Charset::CambiaCharset($r["PATERNO"], 'CP850', 'UTF-8'));
 		$comando->bindValue(":materno", Charset::CambiaCharset($r["MATERNO"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":sindicato", $r["SINDICATO"]);
-		$comando->bindValue(":fec_ingre", $r["FEC_INGRE"]);
+		$comando->bindValue(":sindicato", $r["SIND"]);
+		$comando->bindValue(":fec_ingre", $r["FECHALTA"]);
 		$comando->bindValue(":status", $r["STATUS"]);
-		$comando->bindValue(":tipo_nomi", $r["TIPO_NOMI"]);
+		$comando->bindValue(":tipo_nomi", '1');
 		$comando->execute();
 		
 	}
