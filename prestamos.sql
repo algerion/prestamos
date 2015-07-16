@@ -46,32 +46,31 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
 -- Estructura de tabla para la tabla `catsindicato`
 --
 
-DROP TABLE IF EXISTS `catsindicato`;
-CREATE TABLE IF NOT EXISTS `catsindicato` (
-  `idSindicato` int(11) NOT NULL COMMENT 'Identificador de la tabla \r\n',
-  `sindicato` varchar(50) DEFAULT ' ' COMMENT 'nombre del sindicato\r\n',
-  `cveSindicato` varchar(5) DEFAULT '0' COMMENT 'Clave del Sindicato\r\n',
-  `representante` varchar(150) DEFAULT ' ' COMMENT 'nombre del representante del sindicato'
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=latin1 COMMENT='catÃ¡logo de Sindicatos			\r\n';
+DROP TABLE IF EXISTS `catsindicatos`;
+CREATE TABLE IF NOT EXISTS `catsindicatos` (
+  `cve_sindicato` varchar(5) DEFAULT '0' COMMENT 'Clave del Sindicato',
+  `sindicato` varchar(50) DEFAULT ' ' COMMENT 'Nombre del sindicato',
+  `representante` varchar(150) DEFAULT ' ' COMMENT 'Nombre del representante del sindicato'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Catalogo de sindicatos';
 
 --
 -- Volcado de datos para la tabla `catsindicato`
 --
 
-INSERT INTO `catsindicato` (`idSindicato`, `sindicato`, `cveSindicato`, `representante`) VALUES
-(1, 'CONFIANZA', '0', 'Representante'),
-(2, '3 DE MARZO', '1', 'C. HECTOR MAYORAL GUZMAN'),
-(3, 'AUTONOMO', '2', 'C. JUAN ARAGON MATIAS'),
-(4, 'C.R.O.C.', '3', 'C. EMETERIO GERONIMO SANTIAGO LOPEZ'),
-(5, '12 DE SEPTIEMBRE', '4', 'C. ANGEL ROBERTO CORTEZ RAMIREZ'),
-(6, 'LIBRE', '5', 'C. MARCELINO COACHE VERANO'),
-(7, 'POLICIA', '6', 'Representante'),
-(8, 'TRANSITO', '7', 'Representante'),
-(9, 'PERSONAL OPERATIVO', '8', 'Representante'),
-(10, 'SINDICATO ADMVO', '9', 'Representante'),
-(11, '3 DE MARZO (ADMTVO.)', '10', 'C. HECTOR MAYORAL GUZMAN'),
-(12, 'OPERATIVO', '11', 'Representante'),
-(13, 'CONFIANZA', '12', 'REPRESENTANTE');
+INSERT INTO `catsindicatos` (`sindicato`, `cve_sindicato`, `representante`) VALUES
+('CONFIANZA', '0', 'Representante'),
+('3 DE MARZO', '1', 'C. HECTOR MAYORAL GUZMAN'),
+('AUTONOMO', '2', 'C. JUAN ARAGON MATIAS'),
+('C.R.O.C.', '3', 'C. EMETERIO GERONIMO SANTIAGO LOPEZ'),
+('12 DE SEPTIEMBRE', '4', 'C. ANGEL ROBERTO CORTEZ RAMIREZ'),
+('LIBRE', '5', 'C. MARCELINO COACHE VERANO'),
+('POLICIA', '6', 'Representante'),
+('TRANSITO', '7', 'Representante'),
+('PERSONAL OPERATIVO', '8', 'Representante'),
+('SINDICATO ADMVO', '9', 'Representante'),
+('3 DE MARZO (ADMTVO.)', '10', 'C. HECTOR MAYORAL GUZMAN'),
+('OPERATIVO', '11', 'Representante'),
+('CONFIANZA', '12', 'REPRESENTANTE');
 
 -- --------------------------------------------------------
 
@@ -111,32 +110,6 @@ CREATE TABLE IF NOT EXISTS `empleados` (
   `status` varchar(1) NOT NULL,
   `tipo_nomi` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `empleados`
---
-
-INSERT INTO `empleados` (`numero`, `nombre`, `paterno`, `materno`, `sindicato`, `fec_ingre`, `status`, `tipo_nomi`) VALUES
-(3505, 'PEDRO MIGUEL', 'RUIZ', 'ORDAZ', '2', '1989-09-01', '0', 5),
-(7148, 'BRUNO', 'HERNANDEZ', 'VASQUEZ', '1', '1994-06-13', '0', 5),
-(8144, 'SALOMON', 'MATIAS', 'ANDRES', '1', '1988-11-21', '1', 5),
-(8165, 'CIPRIANO', 'MENDEZ', 'LOPEZ', '1', '1969-10-07', '0', 5),
-(44131, 'CARLOS ALEJANDRO', 'SANTIAGO', 'LOPEZ', '1', '2004-08-24', '0', 5),
-(44493, 'FERNANDO', 'RODRIGUEZ', 'SANCHEZ', '1', '2006-09-25', '1', 5),
-(45692, 'ORLANDO ALEJANDRO', 'VILLANUEVA', 'MORALES', '1', '2010-02-15', '1', 5),
-(45693, 'EMETERIO', 'MILLAN', 'ANSELMO', '1', '2010-02-08', '1', 5),
-(45717, 'JORGE', 'GARCIA', 'GUZMAN', '1', '2010-02-15', '1', 5),
-(47610, 'MARLENNE MARGARITA', 'ORTIZ', 'GARCIA', '5', '2010-02-08', '1', 1),
-(47832, 'ANTONIO', 'PEREZ', 'NIÑO', '0', '2010-01-20', '1', 1),
-(47835, 'NANCY', 'SIERRA', 'BALBUENA', '0', '2010-02-02', '1', 1),
-(47839, 'ANGEL', 'CHAVEZ', 'LOPEZ', '12', '2010-01-01', '1', 1),
-(47842, 'JOSE LUIS', 'CASTILLO', 'COLMENARES', '12', '2010-02-01', '1', 1),
-(47843, 'MARIA TERESA', 'CRUZ', 'MARTINEZ', '12', '2010-02-01', '1', 1),
-(47850, 'MARIA JANETT', 'CABRERA', 'RAMOS', '12', '2010-02-01', '1', 1),
-(47851, 'ERICK CIRENIO', 'OLIVERA', 'VENEGAS', '0', '2010-02-01', '1', 1),
-(47852, 'JAIME LUIS', 'CASTELLANOS', 'FIGUEROA', '0', '2010-01-01', '1', 1);
-
--- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `estatus`
@@ -285,8 +258,8 @@ INSERT INTO `usuarios` (`id_usuario`, `usuario`, `acceso`) VALUES
 --
 -- Indices de la tabla `catsindicato`
 --
-ALTER TABLE `catsindicato`
-  ADD PRIMARY KEY (`idSindicato`), ADD UNIQUE KEY `idSindicato` (`idSindicato`);
+ALTER TABLE `catsindicatos`
+  ADD PRIMARY KEY (`cve_sindicato`), ADD UNIQUE KEY `cve_sindicato` (`cve_sindicato`);
 
 --
 -- Indices de la tabla `descuento`
@@ -329,10 +302,6 @@ ALTER TABLE `usuarios`
 --
 
 --
--- AUTO_INCREMENT de la tabla `catsindicato`
---
-ALTER TABLE `catsindicato`
-  MODIFY `idSindicato` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Identificador de la tabla \r\n',AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT de la tabla `descuento`
 --
