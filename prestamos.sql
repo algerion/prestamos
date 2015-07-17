@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-07-2015 a las 17:03:51
+-- Tiempo de generación: 17-07-2015 a las 21:48:21
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -28,17 +28,18 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `bitacora`;
 CREATE TABLE IF NOT EXISTS `bitacora` (
-  `id_regisrto` int(11) NOT NULL,
-  `fechahora` date NOT NULL,
-  `tabla` varchar(15) NOT NULL,
-  `archivo` varchar(15) NOT NULL,
-  `fechahora_archivo` date NOT NULL,
-  `longitud_archivo` int(1) NOT NULL,
-  `importe` varchar(1) NOT NULL,
-  `id_usuario` int(1) NOT NULL,
-  `estatus` varchar(15) NOT NULL,
-  `observaciones` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id_registro` int(11) NOT NULL AUTO_INCREMENT,
+  `fechahora` datetime NOT NULL,
+  `tabla` varchar(50) NOT NULL,
+  `archivo` varchar(50) NOT NULL,
+  `fechahora_archivo` datetime NOT NULL,
+  `longitud_archivo` int(11) NOT NULL,
+  `importe` decimal(10,2) NOT NULL,
+  `id_usuario` int(11) NOT NULL,
+  `estatus` int(15) NOT NULL,
+  `observaciones` varchar(500) NOT NULL,
+  PRIMARY KEY (`id_registro`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -95,6 +96,24 @@ CREATE TABLE IF NOT EXISTS `descuento` (
   `periodo` int(11) NOT NULL,
   PRIMARY KEY (`id_descuento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `descuentos_fijos`
+--
+
+DROP TABLE IF EXISTS `descuentos_fijos`;
+CREATE TABLE IF NOT EXISTS `descuentos_fijos` (
+  `numero` int(5) NOT NULL,
+  `concepto` int(2) NOT NULL,
+  `periodos` int(3) NOT NULL,
+  `pagados` int(3) NOT NULL,
+  `importe` decimal(12,0) NOT NULL,
+  `porcentaje` decimal(8,0) NOT NULL,
+  `numbene` int(5) NOT NULL,
+  PRIMARY KEY (`numero`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -191,36 +210,20 @@ INSERT INTO `parametros` (`llave`, `valor`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `pdfijarh`
---
-
-DROP TABLE IF EXISTS `pdfijarh`;
-CREATE TABLE IF NOT EXISTS `pdfijarh` (
-  `numero` int(5) NOT NULL,
-  `concepto` int(2) NOT NULL,
-  `periodos` int(3) NOT NULL,
-  `pagados` int(3) NOT NULL,
-  `importe` decimal(12,0) NOT NULL,
-  `porcentaje` decimal(8,0) NOT NULL,
-  `numbene` int(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `pensionados`
 --
 
 DROP TABLE IF EXISTS `pensionados`;
 CREATE TABLE IF NOT EXISTS `pensionados` (
-  `número` int(11) NOT NULL,
+  `numero` int(11) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `paterno` varchar(15) NOT NULL,
   `materno` varchar(15) NOT NULL,
   `sindicato` varchar(2) NOT NULL,
-  `fecha_ingre` date NOT NULL,
-  `estatus` varchar(1) NOT NULL,
-  `tipo_nomi` int(1) NOT NULL
+  `fec_ingre` date NOT NULL,
+  `status` varchar(1) NOT NULL,
+  `tipo_nomi` int(1) NOT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
