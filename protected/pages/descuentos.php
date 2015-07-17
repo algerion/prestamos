@@ -112,7 +112,6 @@ class descuentos extends TPage
 		$comando->bindValue(":status", $r["STATUS"]);
 		$comando->bindValue(":tipo_nomi", $r["TIPO_NOMI"]);
 		$comando->execute();
-		
 	}
 	
 	public function actualiza_tabla_pensionados($registros)
@@ -133,6 +132,7 @@ class descuentos extends TPage
 			}
 		}
 	}
+	
 	public function consulta_pensionados($consulta, $r)
 	{
 		$comando = $this->dbConexion->createCommand($consulta);
@@ -145,10 +145,9 @@ class descuentos extends TPage
 		$comando->bindValue(":status", $r["STATUS"]);
 		$comando->bindValue(":tipo_nomi", '1');
 		$comando->execute();
-		
 	}
 	
-		public function descuentos_fijos($registros)
+	public function actualiza_descuentos_fijos($registros)
 	{
 		foreach($registros as $r)
 		{
@@ -166,7 +165,8 @@ class descuentos extends TPage
 			}
 		}
 	}
-	public function descuentos_fijos($consulta, $r)
+	
+	public function consulta_descuentos_fijos($consulta, $r)
 	{
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":numero", $r["NUMERO"]);
@@ -176,12 +176,9 @@ class descuentos extends TPage
 		$comando->bindValue(":importe", $r["impor"]);
 		$comando->bindValue(":porcentaje", $r["porcentaje"]);
 		$comando->execute();
-		
 	}
 			
-			
-			
-			public function bitacora($registros)
+	public function actualiza_bitacora($registros)
 	{
 		foreach($registros as $r)
 		{
@@ -199,7 +196,8 @@ class descuentos extends TPage
 			}
 		}
 	}
-	public function bitacora($consulta, $r)
+	
+	public function consulta_bitacora($consulta, $r)
 	{
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":id_registro", $r["id_registro"]);
@@ -213,9 +211,6 @@ class descuentos extends TPage
 		$comando->bindValue(":estatus", $r["estatus"]);
 		$comando->bindValue(":observaciones", $r["observaciones"]);
 		$comando->execute();
-		
 	}
-	
-	
 }
 ?>
