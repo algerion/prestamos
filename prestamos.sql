@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.3.11
+-- version 4.1.12
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 16-07-2015 a las 22:41:37
--- Versión del servidor: 5.6.24
--- Versión de PHP: 5.6.8
+-- Tiempo de generación: 17-07-2015 a las 17:03:51
+-- Versión del servidor: 5.6.16
+-- Versión de PHP: 5.5.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -43,34 +43,36 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `catsindicato`
+-- Estructura de tabla para la tabla `catsindicatos`
 --
 
 DROP TABLE IF EXISTS `catsindicatos`;
 CREATE TABLE IF NOT EXISTS `catsindicatos` (
-  `cve_sindicato` varchar(5) DEFAULT '0' COMMENT 'Clave del Sindicato',
+  `cve_sindicato` varchar(5) NOT NULL DEFAULT '0' COMMENT 'Clave del Sindicato',
   `sindicato` varchar(50) DEFAULT ' ' COMMENT 'Nombre del sindicato',
-  `representante` varchar(150) DEFAULT ' ' COMMENT 'Nombre del representante del sindicato'
+  `representante` varchar(150) DEFAULT ' ' COMMENT 'Nombre del representante del sindicato',
+  PRIMARY KEY (`cve_sindicato`),
+  UNIQUE KEY `cve_sindicato` (`cve_sindicato`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Catalogo de sindicatos';
 
 --
--- Volcado de datos para la tabla `catsindicato`
+-- Volcado de datos para la tabla `catsindicatos`
 --
 
-INSERT INTO `catsindicatos` (`sindicato`, `cve_sindicato`, `representante`) VALUES
-('CONFIANZA', '0', 'Representante'),
-('3 DE MARZO', '1', 'C. HECTOR MAYORAL GUZMAN'),
-('AUTONOMO', '2', 'C. JUAN ARAGON MATIAS'),
-('C.R.O.C.', '3', 'C. EMETERIO GERONIMO SANTIAGO LOPEZ'),
-('12 DE SEPTIEMBRE', '4', 'C. ANGEL ROBERTO CORTEZ RAMIREZ'),
-('LIBRE', '5', 'C. MARCELINO COACHE VERANO'),
-('POLICIA', '6', 'Representante'),
-('TRANSITO', '7', 'Representante'),
-('PERSONAL OPERATIVO', '8', 'Representante'),
-('SINDICATO ADMVO', '9', 'Representante'),
-('3 DE MARZO (ADMTVO.)', '10', 'C. HECTOR MAYORAL GUZMAN'),
-('OPERATIVO', '11', 'Representante'),
-('CONFIANZA', '12', 'REPRESENTANTE');
+INSERT INTO `catsindicatos` (`cve_sindicato`, `sindicato`, `representante`) VALUES
+('0', 'CONFIANZA', 'Representante'),
+('1', '3 DE MARZO', 'C. HECTOR MAYORAL GUZMAN'),
+('10', '3 DE MARZO (ADMTVO.)', 'C. HECTOR MAYORAL GUZMAN'),
+('11', 'OPERATIVO', 'Representante'),
+('12', 'CONFIANZA', 'REPRESENTANTE'),
+('2', 'AUTONOMO', 'C. JUAN ARAGON MATIAS'),
+('3', 'C.R.O.C.', 'C. EMETERIO GERONIMO SANTIAGO LOPEZ'),
+('4', '12 DE SEPTIEMBRE', 'C. ANGEL ROBERTO CORTEZ RAMIREZ'),
+('5', 'LIBRE', 'C. MARCELINO COACHE VERANO'),
+('6', 'POLICIA', 'Representante'),
+('7', 'TRANSITO', 'Representante'),
+('8', 'PERSONAL OPERATIVO', 'Representante'),
+('9', 'SINDICATO ADMVO', 'Representante');
 
 -- --------------------------------------------------------
 
@@ -80,7 +82,7 @@ INSERT INTO `catsindicatos` (`sindicato`, `cve_sindicato`, `representante`) VALU
 
 DROP TABLE IF EXISTS `descuento`;
 CREATE TABLE IF NOT EXISTS `descuento` (
-  `id_descuento` int(11) NOT NULL,
+  `id_descuento` int(11) NOT NULL AUTO_INCREMENT,
   `origen` varchar(1) NOT NULL,
   `creado` datetime NOT NULL,
   `modificado` datetime NOT NULL,
@@ -90,8 +92,9 @@ CREATE TABLE IF NOT EXISTS `descuento` (
   `observaciones` text NOT NULL,
   `tipo` varchar(1) NOT NULL,
   `pago` varchar(1) NOT NULL,
-  `periodo` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `periodo` int(11) NOT NULL,
+  PRIMARY KEY (`id_descuento`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -108,8 +111,11 @@ CREATE TABLE IF NOT EXISTS `empleados` (
   `sindicato` varchar(2) NOT NULL,
   `fec_ingre` date NOT NULL,
   `status` varchar(1) NOT NULL,
-  `tipo_nomi` int(1) NOT NULL
+  `tipo_nomi` int(1) NOT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
 
 --
 -- Estructura de tabla para la tabla `estatus`
@@ -117,9 +123,10 @@ CREATE TABLE IF NOT EXISTS `empleados` (
 
 DROP TABLE IF EXISTS `estatus`;
 CREATE TABLE IF NOT EXISTS `estatus` (
-  `id_estatus` int(11) NOT NULL,
-  `estatus` varchar(50) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+  `id_estatus` int(11) NOT NULL AUTO_INCREMENT,
+  `estatus` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_estatus`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
 
 --
 -- Volcado de datos para la tabla `estatus`
@@ -140,15 +147,16 @@ INSERT INTO `estatus` (`id_estatus`, `estatus`) VALUES
 
 DROP TABLE IF EXISTS `movimientos`;
 CREATE TABLE IF NOT EXISTS `movimientos` (
-  `id_movimiento` int(11) NOT NULL,
+  `id_movimiento` int(11) NOT NULL AUTO_INCREMENT,
   `id_contrato` int(11) NOT NULL,
   `num_movto` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `movimiento` varchar(100) NOT NULL,
   `justificacion` varchar(500) NOT NULL,
   `cargo` decimal(12,2) NOT NULL,
-  `abono` decimal(12,2) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `abono` decimal(12,2) NOT NULL,
+  PRIMARY KEY (`id_movimiento`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `movimientos`
@@ -167,7 +175,8 @@ INSERT INTO `movimientos` (`id_movimiento`, `id_contrato`, `num_movto`, `fecha`,
 DROP TABLE IF EXISTS `parametros`;
 CREATE TABLE IF NOT EXISTS `parametros` (
   `llave` varchar(20) NOT NULL,
-  `valor` varchar(250) NOT NULL
+  `valor` varchar(250) NOT NULL,
+  PRIMARY KEY (`llave`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -238,10 +247,11 @@ CREATE TABLE IF NOT EXISTS `solicitud` (
 
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id_usuario` int(32) NOT NULL,
+  `id_usuario` int(32) NOT NULL AUTO_INCREMENT,
   `usuario` varchar(45) NOT NULL,
-  `acceso` varchar(32) NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  `acceso` varchar(32) NOT NULL,
+  PRIMARY KEY (`id_usuario`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Volcado de datos para la tabla `usuarios`
@@ -251,77 +261,6 @@ INSERT INTO `usuarios` (`id_usuario`, `usuario`, `acceso`) VALUES
 (1, 'prueba', '0e7881f0d44670fed326557fc047de90'),
 (2, 'admin', '7a95bf926a0333f57705aeac07a362a2');
 
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `catsindicato`
---
-ALTER TABLE `catsindicatos`
-  ADD PRIMARY KEY (`cve_sindicato`), ADD UNIQUE KEY `cve_sindicato` (`cve_sindicato`);
-
---
--- Indices de la tabla `descuento`
---
-ALTER TABLE `descuento`
-  ADD PRIMARY KEY (`id_descuento`);
-
---
--- Indices de la tabla `empleados`
---
-ALTER TABLE `empleados`
-  ADD PRIMARY KEY (`numero`);
-
---
--- Indices de la tabla `estatus`
---
-ALTER TABLE `estatus`
-  ADD PRIMARY KEY (`id_estatus`);
-
---
--- Indices de la tabla `movimientos`
---
-ALTER TABLE `movimientos`
-  ADD PRIMARY KEY (`id_movimiento`);
-
---
--- Indices de la tabla `parametros`
---
-ALTER TABLE `parametros`
-  ADD PRIMARY KEY (`llave`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id_usuario`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
---
--- AUTO_INCREMENT de la tabla `descuento`
---
-ALTER TABLE `descuento`
-  MODIFY `id_descuento` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `estatus`
---
-ALTER TABLE `estatus`
-  MODIFY `id_estatus` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT de la tabla `movimientos`
---
-ALTER TABLE `movimientos`
-  MODIFY `id_movimiento` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(32) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
