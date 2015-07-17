@@ -23,12 +23,15 @@ class descuentos extends TPage
 		$archivo = "EMPLEA" . $this->ddlOrigen->SelectedValue . ".DBF";
 		$error = $this->descarga_dbf($archivo);
 		if($error == 0)
-			$error = $this->descarga_dbf("desno.dbf");
-		if($error == 0)
+		{
+			$archivo = "PDFIJA" . $this->ddlOrigen->SelectedValue . ".DBF";
+			$error = $this->descarga_dbf($archivo);
+		}
+/*		if($error == 0)
 		{
 			$archivo = "BITACOAP.DBF";
 			$error = $this->descarga_dbf($archivo);
-		}
+		}*/
 
 		if($error == 0)
 			$this->ClientScript->registerEndScript("bajada",
@@ -54,6 +57,7 @@ class descuentos extends TPage
 			$errorlevel = -1;
 			$this->ClientScript->registerEndScript("no_conectado",
 					"alert('No se pudo conectar al FTP, archivo " . $file . "');\n");
+			$this->entrada_bitacora("", $file, 0, -1, "No se pudo conectar al FTP");
 		}
 		if (($conn_id) && ($login_result)) 
 		{  
@@ -67,6 +71,7 @@ class descuentos extends TPage
 				$download = false;
 				$this->ClientScript->registerEndScript("error_descarga",
 						"alert('No se pudo descargar el archivo " . $file . " del FTP');\n");
+				$this->entrada_bitacora("", $file, 0, -1, "No se pudo descargar el archivo del FTP");
 			}
 			if ($download) 
 			{
@@ -75,7 +80,10 @@ class descuentos extends TPage
 					$this->actualiza_tabla_empleados($regs);
 				elseif(strcmp(substr(strtoupper($file), 0, 8), "EMPLEAPE") == 0)
 					$this->actualiza_tabla_pensionados($regs);
+				elseif(strcmp(substr(strtoupper($file), 0, 6), "PDFIJA") == 0)
+					$this->actualiza_descuentos_fijos($regs);
 			}
+			$this->entrada_bitacora("", $file, 0, 3, "Carga completada");
 			ftp_close($conn_id);
 		}
 		return $errorlevel;
@@ -155,13 +163,13 @@ class descuentos extends TPage
 					values (:numero, :conceptos, :periodo,:pagados, :importe, :porcentaje)";
 			try
 			{
-				$this->descuentos_fijos($consulta, $r);
+				$this->consulta_descuentos_fijos($consulta, $r);
 			}
 			catch(Exception $e)
 			{
 				$consulta = "update descuentos_fijos SET numero = :numero, conceptos = :conceptos, periodo = :periodo, 
 					pagados = :pagados, importe = :importe, porcentaje = :porcentaje ";
-				$this->descuentos_fijos($consulta, $r);
+				$this->consulta_descuentos_fijos($consulta, $r);
 			}
 		}
 	}
@@ -178,38 +186,20 @@ class descuentos extends TPage
 		$comando->execute();
 	}
 			
-	public function actualiza_bitacora($registros)
+	public function entrada_bitacora($tabla, $file, $importe, $estatus, $observaciones)
 	{
-		foreach($registros as $r)
-		{
-			$consulta = "insert into bitacora (id_registro, fechahora, tabla, archivo, fechahora_archivo, longitud_archivo, importe, id_usuario, estatus , observaciones ) 
-					values (:id_registro, :fechahora, :tabla, :archivo, :fechahora_archivo, :longitud_archivo, :importe, :id_usuario, :estatus , :observaciones
- )";
-			try
-			{
-				$this->bitacora($consulta, $r);
-			}
-			catch(Exception $e)
-			{
-				$consulta = "id_registro = :id_registro, fechahora = :fechahora, tabla = :tabla, archivo = :archivo, fechahora_archivo = :fechahora_archivo, = longitud_archivo :longitud_archivo, importe = :importe, id_usuario = :id_usuario, estatus = :estatus , observaciones = :observaciones";
-				$this->bitacora($consulta, $r);
-			}
-		}
-	}
-	
-	public function consulta_bitacora($consulta, $r)
-	{
+		$consulta = "insert into bitacora (fechahora, tabla, archivo, fechahora_archivo, longitud_archivo, importe, id_usuario, estatus , observaciones) 
+				values (:fechahora, :tabla, :archivo, :fechahora_archivo, :longitud_archivo, :importe, :id_usuario, :estatus , :observaciones)";
 		$comando = $this->dbConexion->createCommand($consulta);
-		$comando->bindValue(":id_registro", $r["id_registro"]);
-		$comando->bindValue(":fechahora", Charset::CambiaCharset($r["fechahora"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":tabla", Charset::CambiaCharset($r["tabla"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":archivo", Charset::CambiaCharset($r["archivo"], 'CP850', 'UTF-8'));
-		$comando->bindValue(":fechahora_archivo", $r["fechahora_archivo"]);
-		$comando->bindValue(":longitud_archivo", $r["longitud_archivo"]);
-		$comando->bindValue(":importe", $r["importe"]);
-		$comando->bindValue(":id_usuario", $r["id_usuario"]);
-		$comando->bindValue(":estatus", $r["estatus"]);
-		$comando->bindValue(":observaciones", $r["observaciones"]);
+		$comando->bindValue(":fechahora", date("Y-m-d H:i:s"));
+		$comando->bindValue(":tabla", $tabla);
+		$comando->bindValue(":archivo", $file);
+		$comando->bindValue(":fechahora_archivo", date("Y-m-d H:i:s", filemtime("temp/" . $file)));
+		$comando->bindValue(":longitud_archivo", filesize("temp/" . $file));
+		$comando->bindValue(":importe", $importe);
+		$comando->bindValue(":id_usuario", "");
+		$comando->bindValue(":estatus", $estatus);
+		$comando->bindValue(":observaciones", $observaciones);
 		$comando->execute();
 	}
 }
