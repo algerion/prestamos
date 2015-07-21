@@ -109,6 +109,7 @@
 		</tr>
 		<tr>
 			<td align="center" width="100%">
+				<com:TButton ID="btnRecibir" OnClick="btnRecibir_Click" Text="Recibir" />
 				<com:TButton ID="btnActualizar" OnClick="btnActualizar_Click" Text="Actualizar" />
 			</td>
 		</tr>

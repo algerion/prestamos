@@ -18,6 +18,10 @@ class descuentos extends TPage
 */
 	}
 	
+	public function btnRecibir_Click($sender, $param)
+	{
+	}
+	
 	public function btnActualizar_Click($sender, $param)
 	{
 		$regsdfij = 0;
