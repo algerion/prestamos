@@ -21,20 +21,30 @@
 						<td>Origen</td>
 						<td>
 							<com:TDropDownList ID="ddlOrigen">
-								<com:TListItem Value="RH" Text="Activos" />
-								<com:TListItem Value="PE" Text="Jubilados" />
+								<com:TListItem Value="NO" Text="Nóminas" />
+								<com:TListItem Value="PR" Text="Préstamos" />
 							</com:TDropDownList>
 						</td>
 						<td>Tipo</td>
-						<td><com:TTextBox ID="ddltipo" Width="150px" /></td>				
+						<td>
+							<com:TActiveDropDownList ID="ddlTipo" OnSelectedIndexChanged="ddlTipo_Change">
+								<com:TListItem Value="RH" Text="Activos" />
+								<com:TListItem Value="PE" Text="Jubilados" />
+							</com:TActiveDropDownList>
+						</td>
 					</tr>
 					<tr>
 						<td>Estatus</td>
-						<td><com:TTextBox ID="ddlEstatus" Width="100px" /></td>
+						<td><com:TDropDownList ID="ddlEstatus" DataTextField="estatus" DataValueField="id_estatus" /></td>
 						<td>Tipo de nomina</td>
-						<td><com:TTextBox ID="ddlTipodenomina" Width="100px" /></td>
+						<td>
+							<com:TActiveDropDownList ID="ddlTipoNomina">
+								<com:TListItem Value="Q" Text="Quincena" />
+								<com:TListItem Value="R" Text="Raya" />
+							</com:TActiveDropDownList>
+						</td>
 						<td>Periodo</td>
-						<td><com:TTextBox ID="ddlPeriodo2" Width="100px" /></td>				
+						<td><com:TTextBox ID="txtPeriodo" Width="100px" MaxLength="2" /></td>				
 					</tr>
 					<tr>
 						<td colspan="6" align="center">

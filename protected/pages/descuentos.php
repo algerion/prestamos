@@ -1,4 +1,5 @@
 <?php
+Prado::using('System.Web.UI.ActiveControls.*');
 include_once('../compartidos/clases/conexion.php');
 include_once('../compartidos/clases/usadbf.php');
 include_once('../compartidos/clases/charset.php');
@@ -12,21 +13,52 @@ class descuentos extends TPage
 		parent::onLoad($param);
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
-/*		if(!$this->IsPostBack)
+		if(!$this->IsPostBack)
 		{
+			$estatus = Conexion::Retorna_Registro($this->dbConexion, "estatus", array(), " id_estatus > 0");
+			$this->ddlEstatus->DataSource = $estatus;
+			$this->ddlEstatus->dataBind();
 		}
-*/
 	}
 	
 	public function btnRecibir_Click($sender, $param)
 	{
+		$archivo = "DESNO" . ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text . ".DBF";
+		$regsdesno = $this->descarga_dbf($archivo);
+		if($regsdesno)
+		{
+			$this->actualiza_desno($regsdesno);
+
+			$this->ClientScript->registerEndScript("bajada",
+				"alert('carga desno completada');\n");
+		}
+	}
+
+	public function actualiza_desno($registros)
+	{
+		$parametros = array('clavecon'=>'CLAVECON', 'importe'=>'IMPORTE', 'periodo'=>'PERIODO', 'periodos'=>'PERIODOS', 
+				'contrato'=>'CONTRATO', 'aplicados'=>'APLICADOS', 'tipo'=>'TIPO', 'nomina'=>'NOMINA', 'aval1'=>'AVAL1', 'aval2'=>'AVAL2', 
+				'nota'=>'NOTA', 'apaval'=>'APAVAL', 'empleact'=>'EMPLEACT', 'aval1act'=>'AVAL1ACT', 'aval2act'=>'AVAL2ACT');
+		$seleccion = array('numero'=>'NUMERO');
+		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuentos_fijos", $registros, $parametros, $seleccion);
+	}
+
+	public function ddlTipo_Change($sender, $param)
+	{
+		if($this->ddlTipo->SelectedValue == 'PE')
+		{
+			$this->ddlTipoNomina->Enabled = false;
+			$this->ddlTipoNomina->SelectedValue = "Q";
+		}
+		else
+			$this->ddlTipoNomina->Enabled = true;
 	}
 	
 	public function btnActualizar_Click($sender, $param)
 	{
 		$regsdfij = 0;
 		
-		$archivo = "EMPLEA" . $this->ddlOrigen->SelectedValue . ".DBF";
+		$archivo = "EMPLEA" . $this->ddlTipo->SelectedValue . ".DBF";
 		$regsempl = $this->descarga_dbf($archivo);
 		
 		if($regsempl)
@@ -36,7 +68,7 @@ class descuentos extends TPage
 			elseif(strcmp(substr(strtoupper($archivo), 0, 8), "EMPLEAPE") == 0)
 				$this->actualiza_tabla_pensionados($regsempl);
 
-			$archivo = "PDFIJA" . $this->ddlOrigen->SelectedValue . ".DBF";
+			$archivo = "PDFIJA" . $this->ddlTipo->SelectedValue . ".DBF";
 			$regsdfij = $this->descarga_dbf($archivo);
 		}
 
