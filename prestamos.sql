@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 17-07-2015 a las 21:48:21
+-- Tiempo de generación: 23-07-2015 a las 18:34:22
 -- Versión del servidor: 5.6.16
 -- Versión de PHP: 5.5.11
 
@@ -39,7 +39,14 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
   `estatus` int(15) NOT NULL,
   `observaciones` varchar(500) NOT NULL,
   PRIMARY KEY (`id_registro`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Volcado de datos para la tabla `bitacora`
+--
+
+INSERT INTO `bitacora` (`id_registro`, `fechahora`, `tabla`, `archivo`, `fechahora_archivo`, `longitud_archivo`, `importe`, `id_usuario`, `estatus`, `observaciones`) VALUES
+(1, '2015-07-22 11:43:34', '', 'EMPLEARH.DBF', '2015-07-17 14:02:04', 3918, '0.00', 0, -1, 'No se pudo conectar al FTP');
 
 -- --------------------------------------------------------
 
@@ -114,6 +121,32 @@ CREATE TABLE IF NOT EXISTS `descuentos_fijos` (
   `numbene` int(5) NOT NULL,
   PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `descuento_detalle`
+--
+
+DROP TABLE IF EXISTS `descuento_detalle`;
+CREATE TABLE IF NOT EXISTS `descuento_detalle` (
+  `id_detalle` int(11) NOT NULL AUTO_INCREMENT,
+  `id_descuento` int(11) NOT NULL,
+  `empleado` int(11) NOT NULL,
+  `clave` int(11) NOT NULL,
+  `importe` decimal(10,2) NOT NULL,
+  `periodo` int(11) NOT NULL,
+  `periodos` int(11) NOT NULL,
+  `contrato` int(11) NOT NULL,
+  `tipoNomina` varchar(1) NOT NULL,
+  `nomina` int(11) NOT NULL,
+  `aplicado` int(11) NOT NULL,
+  `aval1` int(11) NOT NULL,
+  `aval2` int(11) NOT NULL,
+  `nota` int(11) NOT NULL,
+  `aplicaravales` int(11) NOT NULL,
+  PRIMARY KEY (`id_detalle`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
