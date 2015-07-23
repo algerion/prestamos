@@ -27,23 +27,24 @@ class descuentos extends TPage
 		$regsdesno = $this->descarga_dbf($archivo);
 		if($regsdesno)
 		{
-			$parametros = array("origen"=>"N", "creado"=>date("Ymd"), "modificado"=>date("Ymd"), "creador"=>0, "modificador"=>0, "id_estatus"=>3,
+			$parametros = array("origen"=>"N", "creado"=>date("Ymd H:i:s"), "modificado"=>date("Ymd H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3,
 					"observaciones"=>"desno recibido exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), 
 					"pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>$this->txtPeriodo->Text);
 			Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
-			$this->actualiza_desno($regsdesno);
+			$id = Conexion::Ultimo_Id_Generado($this->dbConexion);
+			$this->actualiza_desno($regsdesno, $id);
 
 			$this->ClientScript->registerEndScript("bajada",
 				"alert('carga desno completada');\n");
 		}
 	}
 
-	public function actualiza_desno($registros)
+	public function actualiza_desno($registros, $id_descuento)
 	{
 		$parametros = array('clavecon'=>'CLAVECON', 'importe'=>'IMPORTE', 'periodo'=>'PERIODO', 'periodos'=>'PERIODOS', 
-				'contrato'=>'CONTRATO', 'aplicados'=>'APLICADOS', 'tipo'=>'TIPO', 'nomina'=>'NOMINA', 'aval1'=>'AVAL1', 'aval2'=>'AVAL2', 
-				'nota'=>'NOTA', 'apaval'=>'APAVAL', 'empleact'=>'EMPLEACT', 'aval1act'=>'AVAL1ACT', 'aval2act'=>'AVAL2ACT');
-		$seleccion = array('numero'=>'NUMERO');
+				'contrato'=>'CONTRATO', 'aplicado'=>'APLICADO', 'tipo_nomina'=>'TIPO', 'nomina'=>'NOMINA', 'aval1'=>'AVAL1', 'aval2'=>'AVAL2', 
+				'nota'=>'NOTA', 'aplicaravales'=>'APAVAL');
+		$seleccion = array('id_descuento'=>":" . $id_descuento, 'num_empleado'=>'NUMERO');
 		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuento_detalle", $registros, $parametros, $seleccion);
 	}
 
