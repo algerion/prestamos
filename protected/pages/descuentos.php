@@ -21,6 +21,42 @@ class descuentos extends TPage
 		}
 	}
 	
+	public function btnGenerar_Click($sender, $param)
+	{
+		//$this->getPage()->getCallbackClient()->callClientFunction("reemplaza_desno", array());
+		//SELECT id_descuento FROM descuento WHERE id_estatus = 1 ORDER BY creado LIMIT 1
+		$id_descuento = Conexion::Retorna_Campo($this->dbConexion, "descuento", "id_descuento", array("id_estatus"=>1));
+		if($id_descuento != "")
+			$this->ClientScript->registerEndScript("reemplaza_desno_genera",
+				"reemplaza_desno('Ya existe un desno generado. ¿Reemplazar?', 1);\n");
+		else
+			$this->ClientScript->registerEndScript("reemplaza_desno_genera",
+				"reemplaza_desno('El archivo de descuentos de " . $this->ddlTipo->SelectedItem->Text . " sera generado, ¿Desea continuar?', 2);\n");
+	}
+	
+	public function cbOperaciones_Callback($sender, $param)
+	{
+		if($param->CallbackParameter->valor)
+		{
+			if($param->CallbackParameter->tipo == 1)
+			{
+				$id_descuento = Conexion::Retorna_Campo($this->dbConexion, "descuento", "id_descuento", array("id_estatus"=>1));
+				Elimina_Registro($this->dbConexion, "descuento_detalle", array("id_descuento"=>$id_descuento));
+				Elimina_Registro($this->dbConexion, "descuento", array("id_descuento"=>$id_descuento));
+			}
+
+			$parametros = array("origen"=>"P", "creado"=>date("Ymd H:i:s"), "modificado"=>date("Ymd H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>1,
+					"observaciones"=>"desno generado exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), 
+					"pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>(is_numeric($this->txtPeriodo->Text) ? $this->txtPeriodo->Text : 0));
+			Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
+			$id = Conexion::Ultimo_Id_Generado($this->dbConexion);
+			$this->actualiza_desno($regsdesno, $id);
+
+			$this->ClientScript->registerEndScript("exito",
+				"alert('desno generado exitosamente');\n");
+		}
+	}
+	
 	public function btnRecibir_Click($sender, $param)
 	{
 		$archivo = "DESNO" . ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text . ".DBF";
@@ -39,26 +75,6 @@ class descuentos extends TPage
 		}
 	}
 
-	public function actualiza_desno($registros, $id_descuento)
-	{
-		$parametros = array('clavecon'=>'CLAVECON', 'importe'=>'IMPORTE', 'periodo'=>'PERIODO', 'periodos'=>'PERIODOS', 
-				'contrato'=>'CONTRATO', 'aplicado'=>'APLICADO', 'tipo_nomina'=>'TIPO', 'nomina'=>'NOMINA', 'aval1'=>'AVAL1', 'aval2'=>'AVAL2', 
-				'nota'=>'NOTA', 'aplicaravales'=>'APAVAL');
-		$seleccion = array('id_descuento'=>":" . $id_descuento, 'num_empleado'=>'NUMERO');
-		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuento_detalle", $registros, $parametros, $seleccion);
-	}
-
-	public function ddlTipo_Change($sender, $param)
-	{
-		if($this->ddlTipo->SelectedValue == 'PE')
-		{
-			$this->ddlTipoNomina->Enabled = false;
-			$this->ddlTipoNomina->SelectedValue = "Q";
-		}
-		else
-			$this->ddlTipoNomina->Enabled = true;
-	}
-	
 	public function btnActualizar_Click($sender, $param)
 	{
 		$regsdfij = 0;
@@ -153,6 +169,15 @@ class descuentos extends TPage
 		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuentos_fijos", $registros, $parametros, $seleccion);
 	}
 
+	public function actualiza_desno($registros, $id_descuento)
+	{
+		$parametros = array('clavecon'=>'CLAVECON', 'importe'=>'IMPORTE', 'periodo'=>'PERIODO', 'periodos'=>'PERIODOS', 
+				'contrato'=>'CONTRATO', 'aplicado'=>'APLICADO', 'tipo_nomina'=>'TIPO', 'nomina'=>'NOMINA', 'aval1'=>'AVAL1', 'aval2'=>'AVAL2', 
+				'nota'=>'NOTA', 'aplicaravales'=>'APAVAL');
+		$seleccion = array('id_descuento'=>":" . $id_descuento, 'num_empleado'=>'NUMERO');
+		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuento_detalle", $registros, $parametros, $seleccion);
+	}
+
 	public function entrada_bitacora($tabla, $file, $importe, $estatus, $observaciones)
 	{
 		$consulta = "insert into bitacora (fechahora, tabla, archivo, fechahora_archivo, longitud_archivo, importe, id_usuario, estatus , observaciones) 
@@ -176,6 +201,17 @@ class descuentos extends TPage
 		$comando->bindValue(":estatus", $estatus);
 		$comando->bindValue(":observaciones", $observaciones);
 		$comando->execute();
+	}
+
+	public function ddlTipo_Change($sender, $param)
+	{
+		if($this->ddlTipo->SelectedValue == 'PE')
+		{
+			$this->ddlTipoNomina->Enabled = false;
+			$this->ddlTipoNomina->SelectedValue = "Q";
+		}
+		else
+			$this->ddlTipoNomina->Enabled = true;
 	}
 }
 ?>

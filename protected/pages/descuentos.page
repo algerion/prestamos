@@ -3,8 +3,25 @@
 	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
 	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
 	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+	<com:TClientScript ID="cscrPrompt">
+		function msg(msg)
+		{
+			alert(msg);
+		}
+
+		function reemplaza_desno(msg, tipo)
+		{
+			valor = confirm(msg, "Reemplazar desno");
+			
+			var request = <%= $this->cbOperaciones->ActiveControl->Javascript %>;
+			var param = {'valor' : valor, 'tipo' : tipo};
+			request.setCallbackParameter(param);
+			request.dispatch();
+		}
+	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
+	<com:TCallback ID="cbOperaciones" OnCallback="cbOperaciones_Callback" ActiveControl.CausesValidation="false" />
 	<!--Datos del solicitante-->
 	<table style="width: 100%" border="0">
 
@@ -119,6 +136,7 @@
 		</tr>
 		<tr>
 			<td align="center" width="100%">
+				<com:TButton ID="btnGenerar" OnClick="btnGenerar_Click" Text="Generar" />
 				<com:TButton ID="btnRecibir" OnClick="btnRecibir_Click" Text="Recibir" />
 				<com:TButton ID="btnActualizar" OnClick="btnActualizar_Click" Text="Actualizar" />
 			</td>
