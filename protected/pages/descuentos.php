@@ -160,8 +160,16 @@ class descuentos extends TPage
 		$comando->bindValue(":fechahora", date("Y-m-d H:i:s"));
 		$comando->bindValue(":tabla", $tabla);
 		$comando->bindValue(":archivo", $file);
-		$comando->bindValue(":fechahora_archivo", date("Y-m-d H:i:s", filemtime("temp/" . $file)));
-		$comando->bindValue(":longitud_archivo", filesize("temp/" . $file));
+		if(file_exists("temp/" . $file))
+		{
+			$comando->bindValue(":fechahora_archivo", date("Y-m-d H:i:s", filemtime("temp/" . $file)));
+			$comando->bindValue(":longitud_archivo", filesize("temp/" . $file));
+		}
+		else
+		{
+			$comando->bindValue(":fechahora_archivo", date("Y-m-d H:i:s"));
+			$comando->bindValue(":longitud_archivo", 0);
+		}
 		$comando->bindValue(":importe", $importe);
 		$comando->bindValue(":id_usuario", "");
 		$comando->bindValue(":estatus", $estatus);
