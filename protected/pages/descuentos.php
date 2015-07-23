@@ -27,6 +27,10 @@ class descuentos extends TPage
 		$regsdesno = $this->descarga_dbf($archivo);
 		if($regsdesno)
 		{
+			$parametros = array("origen"=>"N", "creado"=>date("Ymd"), "modificado"=>date("Ymd"), "creador"=>0, "modificador"=>0, "id_estatus"=>3,
+					"observaciones"=>"desno recibido exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), 
+					"pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>$this->txtPeriodo->Text);
+			Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
 			$this->actualiza_desno($regsdesno);
 
 			$this->ClientScript->registerEndScript("bajada",
@@ -40,7 +44,7 @@ class descuentos extends TPage
 				'contrato'=>'CONTRATO', 'aplicados'=>'APLICADOS', 'tipo'=>'TIPO', 'nomina'=>'NOMINA', 'aval1'=>'AVAL1', 'aval2'=>'AVAL2', 
 				'nota'=>'NOTA', 'apaval'=>'APAVAL', 'empleact'=>'EMPLEACT', 'aval1act'=>'AVAL1ACT', 'aval2act'=>'AVAL2ACT');
 		$seleccion = array('numero'=>'NUMERO');
-		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuentos_fijos", $registros, $parametros, $seleccion);
+		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "descuento_detalle", $registros, $parametros, $seleccion);
 	}
 
 	public function ddlTipo_Change($sender, $param)
