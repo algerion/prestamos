@@ -1,0 +1,43 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Búsqueda de empleados" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table width="100%" border="1">
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">Búsqueda de empleados</p>
+			</td>
+		</tr>
+		<tr>
+			<td>Número único/Nombre:</td>
+			<td><com:TTextBox ID="txtNombre" Width="400px" /></td>
+		</tr>
+		<tr>
+			<td>Sindicato:</td>
+			<td>Tipo:</td>
+		</tr>
+		<tr>
+			<td><com:TDropDownList ID="ddlSindicato" DataTextField="sindicato" DataValueField="cve_sindicato" /></td>
+			<td>
+				<com:TDropDownList ID="ddlTipo">
+					<com:TListItem Text="Todos" Value="0" />
+					<com:TListItem Text="Activos" Value="1" />
+					<com:TListItem Text="Jubilados" Value="2" />
+					<com:TListItem Text="Externos" Value="3" />
+				</com:TDropDownList>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_Click" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center"><com:TDataGrid ID="dgEmpleados" /></td>
+		</tr>
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
