@@ -36,7 +36,7 @@
 			<td colspan="2" align="center"><com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_Click" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center"><com:TDataGrid ID="dgEmpleados" /></td>
+			<td colspan="2" align="center"><com:TDataGrid ID="dgEmpleados" HeaderStyle.CssClass="encab" ItemStyle.CssClass="filapar" AlternatingItemStyle.CssClass="filaimpar" /></td>
 		</tr>
 	</table>
 	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
