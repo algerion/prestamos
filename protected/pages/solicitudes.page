@@ -11,7 +11,7 @@
 			if(num == 114) 
 			{
 				event.preventDefault();
-				alert("Pulsaste F3");
+				open('index.php?page=busca_empleado&sufijo=' + empleado, '_blank');
 			}
 		}
 	</com:TClientScript>
@@ -48,9 +48,9 @@
 								<table width="100%" border="1">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoTit" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 1)" /><com:TLinkButton ID="lbnBuscarTitular" Text="Buscar" /></td>
+										<td><com:TTextBox ID="txtNoUnicoTit" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Tit')" /><com:TLinkButton ID="lbnBuscarTitular" Text="Buscar" /></td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedad" Width="100px" ReadOnly="True" /></td>
+										<td><com:TTextBox ID="txtAntiguedadTit" Width="100px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Nombre</td>
@@ -58,12 +58,15 @@
 									</tr>
 									<tr>
 										<td>Sindicato</td>
-										<td colspan="3"><com:TTextBox ID="txtSindicato" Width="400px" ReadOnly="True" /></td>
+										<td colspan="3"><com:TTextBox ID="txtSindicatoTit" Width="400px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
 						</td>
-						<td align="center"><com:TImage ID="imgEstatusTit" ImageUrl="images/rojo.png" Visible="False" /></td>
+						<td align="center">
+							<com:TImage ID="imgEstatusTit" ImageUrl="images/rojo.png" Visible="False" />
+							<com:THiddenField ID="hidTipoTit" />
+						</td>
 					</tr>
 					<tr>
 						<td colspan="4">
@@ -71,7 +74,7 @@
 								<table width="100%" border="1">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoAval1" Width="80px" ReadOnly="True" /></td>
+										<td><com:TTextBox ID="txtNoUnicoAval1" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval1')" /></td>
 										<td>Antigüedad</td>
 										<td><com:TTextBox ID="txtAntiguedadAval1" Width="100px" ReadOnly="True" /></td>
 									</tr>
@@ -86,7 +89,10 @@
 								</table>
 							</com:TPanel>
 						</td>
-						<td align="center"><com:TImage ID="imgEstatusAval1" ImageUrl="images/rojo.png" Visible="False" /></td>
+						<td align="center">
+							<com:TImage ID="imgEstatusAval1" ImageUrl="images/rojo.png" Visible="False" />
+							<com:THiddenField ID="hidTipoAval1" />
+						</td>
 					</tr>
 					<tr>
 						<td colspan="4">
@@ -94,7 +100,7 @@
 								<table width="100%" border="1">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoAval2" Width="80px" ReadOnly="True" /></td>
+										<td><com:TTextBox ID="txtNoUnicoAval2" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval2')" /></td>
 										<td>Antigüedad</td>
 										<td><com:TTextBox ID="txtAntiguedadAval2" Width="100px" ReadOnly="True" /></td>
 									</tr>
@@ -109,7 +115,10 @@
 								</table>
 							</com:TPanel>
 						</td>
-						<td align="center"><com:TImage ID="imgEstatusAval2" ImageUrl="images/rojo.png" Visible="False" /></td>
+						<td align="center">
+							<com:TImage ID="imgEstatusAval2" ImageUrl="images/rojo.png" Visible="False" />
+							<com:THiddenField ID="hidTipoAval2" />
+						</td>
 					</tr>
 					<tr>
 						<td>Fecha Firma Avales</td>
