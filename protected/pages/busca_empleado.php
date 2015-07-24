@@ -28,21 +28,23 @@ class busca_empleado extends TPage
 	
 	public function btnBuscar_Click($sender, $param)
 	{
-		$camposempjub = "SELECT e.numero, nombre, paterno, materno, cs.sindicato, fec_ingre, IFNULL(df.importe, 0) AS importe, IFNULL(df.porcentaje, 0) AS porcentaje FROM ";
+		$camposempjub = "SELECT e.numero, nombre, paterno, materno, cs.sindicato, fec_ingre, TIMESTAMPDIFF(YEAR, fec_ingre, CURDATE()) AS antiguedad, " . 
+				"IFNULL(df.importe, 0) AS importe, IFNULL(df.porcentaje, 0) AS porcentaje";
 		$joinsempjub = " e LEFT JOIN catsindicatos cs ON e.sindicato = cs.cve_sindicato LEFT JOIN descuentos_fijos df ON e.numero = df.numero AND df.concepto = 61";
-		$externos = "SELECT e.numero, nombre, paterno, materno, 0 AS sindicato, fec_ingre, 0 AS importe, 0 AS porcentaje FROM externos e";
+		$externos = "SELECT e.numero, nombre, paterno, materno, 0 AS sindicato, fec_ingre, 0 AS antiguedad, 0 AS importe, 0 AS porcentaje, 'E' AS tipo FROM externos e";
 		$consulta = "";
 		$where = " WHERE (e.numero LIKE :busca OR e.nombre LIKE :busca OR e.paterno LIKE :busca OR e.materno LIKE :busca) ";
+		$sind = "";
 		
 		if($this->ddlSindicato->SelectedValue != "T")
-			$where .= "AND e.sindicato = :sindicato ";
+			$sind .= "AND e.sindicato = :sindicato ";
 		
 		if($this->ddlTipo->SelectedValue == 0 || $this->ddlTipo->SelectedValue == 1)
-			$consulta .= $camposempjub . "empleados" . $joinsempjub . $where;
+			$consulta .= $camposempjub . ", 'A' AS tipo FROM empleados" . $joinsempjub . $where . $sind;
 		if($this->ddlTipo->SelectedValue == 0)
 			$consulta .= " UNION ";
 		if($this->ddlTipo->SelectedValue == 0 || $this->ddlTipo->SelectedValue == 2)
-			$consulta .= $camposempjub . "pensionados" . $joinsempjub . $where;
+			$consulta .= $camposempjub . ", 'J' AS tipo FROM pensionados" . $joinsempjub . $where . $sind;
 		if($this->ddlTipo->SelectedValue == 0)
 			$consulta .= " UNION ";
 		if($this->ddlTipo->SelectedValue == 0 || $this->ddlTipo->SelectedValue == 3)
@@ -53,6 +55,13 @@ class busca_empleado extends TPage
 		if($this->ddlSindicato->SelectedValue != "")
 			$comando->bindValue("sindicato", $this->ddlSindicato->SelectedValue);
 		$resultado = $comando->query()->readAll();
+		for($i = 0; $i < count($resultado); $i++)
+		{
+			$campos = "'" . $this->Request["sufijo"] . "', '" . $resultado[$i]["numero"] . "', '" . $resultado[$i]["nombre"] . " " . $resultado[$i]["paterno"] . " " . 
+					$resultado[$i]["materno"] . "', '" . $resultado[$i]["sindicato"] . "', '" . $resultado[$i]["antiguedad"] . "', '" . $resultado[$i]["tipo"] . "'";
+					
+			$resultado[$i]["numero"] = "<a href='#' onclick=\"regresa(" . $campos . ")\">" . $resultado[$i]["numero"] . "</a>";
+		}
 		$this->dgEmpleados->DataSource = $resultado;
 		$this->dgEmpleados->dataBind();
 	}

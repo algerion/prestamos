@@ -3,6 +3,17 @@
 	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
 	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
 	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+	<com:TClientScript ID="cscrPrompt">
+		function regresa(sufijo, numero, nombre, sindicato, antiguedad, tipo)
+		{
+			opener.document.getElementById('ctl0_Main_txtNoUnico' + sufijo).value = numero;
+			opener.document.getElementById('ctl0_Main_txtAntiguedad' + sufijo).value = antiguedad;
+			opener.document.getElementById('ctl0_Main_txtNombre' + sufijo).value = nombre;
+			opener.document.getElementById('ctl0_Main_txtSindicato' + sufijo).value = sindicato;
+			opener.document.getElementById('ctl0_Main_hidTipo' + sufijo).value = tipo;
+			close();
+		}
+	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
 	<!--Datos del solicitante-->
