@@ -8,7 +8,8 @@
 		{
 			num = event.keyCode;
 
-			if(num == 114) {
+			if(num == 114) 
+			{
 				event.preventDefault();
 				alert("Pulsaste F3");
 			}
