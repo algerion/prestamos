@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 24-07-2015 a las 06:24:36
+-- Tiempo de generación: 24-07-2015 a las 17:09:35
 -- Versión del servidor: 5.5.34
 -- Versión de PHP: 5.3.27
 
@@ -114,6 +114,32 @@ CREATE TABLE IF NOT EXISTS `descuentos_fijos` (
   `numbene` int(5) NOT NULL,
   PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `descuento_detalle`
+--
+
+DROP TABLE IF EXISTS `descuento_detalle`;
+CREATE TABLE IF NOT EXISTS `descuento_detalle` (
+  `id_detalle` int(11) NOT NULL AUTO_INCREMENT,
+  `id_descuento` int(11) NOT NULL,
+  `num_empleado` int(11) NOT NULL,
+  `clavecon` int(11) NOT NULL,
+  `importe` decimal(10,2) NOT NULL,
+  `periodo` int(11) NOT NULL,
+  `periodos` int(11) NOT NULL,
+  `contrato` int(11) NOT NULL,
+  `tipo_nomina` varchar(1) NOT NULL,
+  `nomina` int(11) NOT NULL,
+  `aplicado` int(11) NOT NULL,
+  `aval1` int(11) NOT NULL,
+  `aval2` int(11) NOT NULL,
+  `nota` int(11) NOT NULL,
+  `aplicaravales` int(11) NOT NULL,
+  PRIMARY KEY (`id_detalle`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=535 ;
 
 -- --------------------------------------------------------
 
@@ -256,10 +282,10 @@ CREATE TABLE IF NOT EXISTS `pensionados` (
   `paterno` varchar(50) NOT NULL,
   `materno` varchar(50) NOT NULL,
   `sindicato` int(11) NOT NULL,
-  `fec_ingre` date NOT NULL,
+  `fec_ingre` datetime NOT NULL,
   `sexo` varchar(1) NOT NULL,
   `status` varchar(1) NOT NULL,
-  `tipo_nomi` int(1) NOT NULL,
+  `tipo_nomi` varchar(1) NOT NULL,
   PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
