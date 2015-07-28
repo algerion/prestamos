@@ -82,7 +82,7 @@ class descuentos extends TPage
 		$archivo = "EMPLEA" . $this->ddlTipo->SelectedValue . ".DBF";
 		$regsempl = $this->descarga_dbf($archivo);
 		
-		if($regsempl)
+		if(is_array($regsempl))
 		{
 			if(strcmp(substr(strtoupper($archivo), 0, 8), "EMPLEARH") == 0)
 				$this->actualiza_tabla_empleados($regsempl);
@@ -93,10 +93,9 @@ class descuentos extends TPage
 			$regsdfij = $this->descarga_dbf($archivo);
 		}
 
-		if($regsdfij)
+		if(is_array($regsdfij))
 		{
 			$this->actualiza_descuentos_fijos($regsdfij);
-
 			$this->ClientScript->registerEndScript("bajada",
 				"alert('carga completada');\n");
 		}
@@ -156,7 +155,7 @@ class descuentos extends TPage
 	public function actualiza_tabla_pensionados($registros)
 	{
 		$parametros = array('nombre'=>'NOMBRE', 'paterno'=>'PATERNO', 'materno'=>'MATERNO', 'sindicato'=>'SIND', 'fec_ingre'=>'FECHALTA', 
-				'status'=>'STATUS', 'importe_pension'=>'IMPORTE', tipo_nomi'=>':1');
+				'status'=>'STATUS', 'importe_pension'=>'IMPORTE', 'tipo_nomi'=>':1');
 		$seleccion = array('numero'=>'NUMERO');
 		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "pensionados", $registros, $parametros, $seleccion);
 	}
