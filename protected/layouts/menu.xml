@@ -2,24 +2,8 @@
 <Menu ID="mnuPrincipal">
 	<MenuItem ID="smHome" Title="Inicio" Url="index.php?page=Home" Description="Inicio" />
 	<MenuItem ID="smSolicitudes" Title="Solicitudes">
-		<MenuItem ID="smSolc" Title="Capturar" Url="index.php?page=solicitudes" Description="Captura de solicitud" IdPag="solc" />
-		<MenuItem ID="smSolModulo" Title="Acuerdos con el Presidente" Url="index.php?page=acuerdos" Description="Captura de acuerdos entre el Presidente Municipal y los Secretarios Municipales" IdPag="acue" />
-		<MenuItem ID="smSolMedios" Title="Medios de comunicación" Url="index.php?page=quejas_medios" Description="Solicitudes obtenidas por prensa, radio o televisión" IdPag="medc" />
-		<MenuItem ID="smSolObservador" Title="Operativo observador" Url="index.php?page=observador" Description="Solicitudes obtenidas por medio del operativo observador" IdPag="opob" />
-		<MenuItem ID="smSolModulo" Title="Módulo de atención" Url="index.php?page=modulo&amp;fuente=14" Description="Captura de solicitudes en el módulo de vinculación ciudadana" IdPag="modu" />
-		<MenuItem ID="smSolModulo" Title="Solicitud en audiencia" Url="index.php?page=modulo&amp;fuente=13" Description="Captura de solicitudes realizadas en audiencia pública" IdPag="audp" />
-		<MenuItem ID="smSolCorreo" Title="Correo electrónico" Url="index.php?page=bandeja" Description="Solicitudes obtenidas vía correo electrónico" IdPag="mail" />
-		<MenuItem ID="smSolConsulta" Title="Consulta" Url="index.php?page=pendientes&amp;operacion=cons" Description="Consulta de solicitudes" IdPag="cons" />
-		<MenuItem ID="smSolSeguimiento" Title="Seguimiento" Url="index.php?page=pendientes&amp;operacion=resp" Description="Seguimiento de solicitudes" IdPag="resp" />
-		<MenuItem ID="smSolEdicion" Title="Edición" Url="index.php?page=pendientes&amp;operacion=edit" Description="Edición de solicitudes previamente capturadas" IdPag="edit" />
-		<MenuItem ID="smSolListaAudiencia" Title="Lista de Audiencias" Url="index.php?page=lista_turnos" Description="Generar listado de solicitudes de audiencia pública" IdPag="audi" />
-		<MenuItem ID="smSolTurnoActual" Title="Turno actual" Url="index.php?page=num_turnos" Description="Mostrar el turno actual de audiencia pública" IdPag="ntrn" />
-		<MenuItem ID="smSolControlTurnos" Title="Control de turnos" Url="index.php?page=num_turnos_admin&amp;id=1" Description="Controlar turnos de audiencia pública" IdPag="ntra" />
-		<MenuItem ID="smSolPorcentajes" Title="Porcentaje de atención" Url="index.php?page=porcentajes" Description="Porcentaje de atención de solicitudes" IdPag="porc" />
-		<MenuItem ID="smSolTurnar" Title="Turnar solicitudes" Url="index.php?page=turnar" Description="Turnar solicitudes realizadas vía Internet o en el Módulo de Vinculación Ciudadana" IdPag="turn" />
-		<MenuItem ID="smSolApoyos" Title="Apoyos para la ciudadanía" Url="index.php?page=cambiado" Description="Apoyos brindados a la ciudadanía" Visible="false" />
-
-		<MenuItem ID="smSolEmpleado" Title="Generar solicitud" Url="index.php?page=empleados" Description="Realizar solicitud" IdPag="empl" Visible="false" />
+		<MenuItem ID="smSolc" Title="Nueva" Url="index.php?page=solicitudes&amp;opcion=nueva" Description="Captura de solicitud" />
+		<MenuItem ID="smSolc" Title="Modificar" Url="index.php?page=solicitudes&amp;opcion=modificar" Description="Modificar solicitud" />
 	</MenuItem>
 	<MenuItem ID="smCatalogos" Title="Catálogos">
 		<MenuItem ID="smCatJefes" Title="Modificar datos de jefes" Url="index.php?page=jefes&amp;popup=1" Description="Modificar el nombre del jefe de un área y el nombre de su puesto" Target="_blank" IdPag="jefe" />
