@@ -47,7 +47,14 @@
 			<td colspan="2" align="center"><com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_Click" /></td>
 		</tr>
 		<tr>
-			<td colspan="2" align="center"><com:TDataGrid ID="dgEmpleados" HeaderStyle.CssClass="encab" ItemStyle.CssClass="filapar" AlternatingItemStyle.CssClass="filaimpar" /></td>
+			<td colspan="2" align="center">
+				<com:TDataGrid ID="dgEmpleados" HeaderStyle.CssClass="encab" ItemStyle.CssClass="filapar" 
+						AlternatingItemStyle.CssClass="filaimpar">
+					<prop:EmptyTemplate>
+						<com:TLiteral Text="No se encuentran trabajadores" />
+					</prop:EmptyTemplate>
+				</com:TDataGrid>
+			</td>
 		</tr>
 	</table>
 	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
