@@ -15,7 +15,7 @@ class consultas extends TPage
 
 		if(!$this->IsPostBack)
 		{
-			$resultado = Busquedas::obtenerPrestamoAnteriorSinRedocumentado($this->dbConexion, 6979);
+			$resultado = Busquedas::obtenerPrestamoAnteriorSinRedocumentado($this->dbConexion, 6173);
 			print_r($resultado);
 		}
 	}
