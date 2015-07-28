@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-07-2015 a las 09:06:20
+-- Tiempo de generación: 28-07-2015 a las 22:43:06
 -- Versión del servidor: 5.6.24
 -- Versión de PHP: 5.6.8
 
@@ -71,6 +71,28 @@ INSERT INTO `catsindicatos` (`cve_sindicato`, `sindicato`, `representante`) VALU
 (10, '3 DE MARZO (ADMTVO.)', 'C. HECTOR MAYORAL GUZMAN'),
 (11, 'OPERATIVO', 'Representante'),
 (12, 'CONFIANZA', 'REPRESENTANTE');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contrato`
+--
+
+DROP TABLE IF EXISTS `contrato`;
+CREATE TABLE IF NOT EXISTS `contrato` (
+  `id_contrato` int(11) DEFAULT NULL,
+  `id_solicitud` int(11) DEFAULT NULL,
+  `creado` date DEFAULT NULL,
+  `entrega_cheque` date DEFAULT NULL,
+  `num_cheque` varchar(35) DEFAULT NULL,
+  `observacion` varchar(250) DEFAULT NULL,
+  `estatus` varchar(1) DEFAULT NULL,
+  `id_usuario` int(11) DEFAULT NULL,
+  `entrega_real` date DEFAULT NULL,
+  `autorizado` date DEFAULT NULL,
+  `congelado` int(11) DEFAULT NULL,
+  `seguro` decimal(11,2) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -287,12 +309,39 @@ CREATE TABLE IF NOT EXISTS `pensionados` (
 
 DROP TABLE IF EXISTS `solicitud`;
 CREATE TABLE IF NOT EXISTS `solicitud` (
-  `numero` int(5) NOT NULL,
-  `upres` varchar(5) NOT NULL,
-  `clavecon` varchar(2) NOT NULL,
-  `importe` int(9) NOT NULL,
-  `observ` varchar(7) NOT NULL,
-  `periodo` int(2) NOT NULL
+  `id_solicitud` int(11) NOT NULL,
+  `creada` datetime DEFAULT NULL,
+  `titular` int(11) NOT NULL,
+  `antiguedad` decimal(11,2) NOT NULL,
+  `tipo_empleado` varchar(1) DEFAULT NULL,
+  `cve_sindicato` int(11) NOT NULL,
+  `aval1` int(11) DEFAULT NULL,
+  `antig_aval1` decimal(11,2) DEFAULT NULL,
+  `tipo_aval1` varchar(1) DEFAULT NULL,
+  `cve_sind_aval1` int(11) DEFAULT NULL,
+  `aval2` int(11) DEFAULT NULL,
+  `antig_aval2` decimal(11,2) DEFAULT NULL,
+  `tipo_aval2` varchar(1) DEFAULT NULL,
+  `cve_sind_aval2` int(11) DEFAULT NULL,
+  `importe` decimal(11,2) NOT NULL,
+  `plazo` int(11) DEFAULT NULL,
+  `tasa` decimal(11,2) DEFAULT NULL,
+  `saldo_anterior` decimal(11,2) DEFAULT NULL,
+  `id_contrato_ant` int(11) DEFAULT NULL,
+  `descuento` decimal(11,2) DEFAULT NULL,
+  `importe_pa_tit` decimal(11,2) DEFAULT NULL,
+  `porcentaje_pa_tit` decimal(11,2) DEFAULT NULL,
+  `importe_pa_aval1` decimal(11,2) DEFAULT NULL,
+  `porcentaje_pa_aval1` decimal(11,2) DEFAULT NULL,
+  `importe_pa_aval2` decimal(11,2) DEFAULT NULL,
+  `porcentaje_pa_aval2` decimal(11,2) DEFAULT NULL,
+  `firma` datetime DEFAULT NULL,
+  `observacion` varchar(250) NOT NULL,
+  `firma1` varchar(75) DEFAULT NULL,
+  `firma2` varchar(75) DEFAULT NULL,
+  `estatus` varchar(1) NOT NULL,
+  `id_usuario` int(11) DEFAULT NULL,
+  `seguro` decimal(11,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -393,6 +442,12 @@ ALTER TABLE `pensionados`
   ADD PRIMARY KEY (`numero`);
 
 --
+-- Indices de la tabla `solicitud`
+--
+ALTER TABLE `solicitud`
+  ADD PRIMARY KEY (`id_solicitud`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -437,6 +492,11 @@ ALTER TABLE `externos`
 --
 ALTER TABLE `movimientos`
   MODIFY `id_movimiento` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT de la tabla `solicitud`
+--
+ALTER TABLE `solicitud`
+  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
