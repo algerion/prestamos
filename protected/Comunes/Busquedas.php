@@ -9,7 +9,7 @@ class Busquedas
 		$joinsempjub = " e LEFT JOIN catsindicatos cs ON e.sindicato = cs.cve_sindicato " .
 				"LEFT JOIN descuentos_fijos df ON e.numero = df.numero AND df.concepto = 61";
 		$externos = "SELECT e.numero, nombre, paterno, materno, 0 AS sindicato, fec_ingre, " . 
-				"0 AS antiguedad, 0 AS importe, 0 AS porcentaje, 'E' AS tipo FROM externos e";
+				"0 AS antiguedad, 0 AS importe, 0 AS porcentaje, 'EXTERNO' AS tipo FROM externos e";
 		$consulta = "";
 		$where = " WHERE (e.numero LIKE :busca OR e.nombre LIKE :busca OR e.paterno LIKE :busca OR e.materno LIKE :busca) ";
 		$sind = "";
@@ -19,12 +19,12 @@ class Busquedas
 		
 		if($tipo == 0 || $tipo == 1)
 			$consulta .= $camposempjub . 
-					", CASE WHEN cs.cve_sindicato IN (0, 12) THEN 'C' ELSE 'S' END AS tipo FROM empleados" . 
+					", CASE WHEN cs.cve_sindicato IN (0, 12) THEN 'CONFIANZA' ELSE 'SINDICALIZADO' END AS tipo FROM empleados" . 
 					$joinsempjub . $where . $sind;
 		if($tipo == 0)
 			$consulta .= " UNION ";
 		if($tipo == 0 || $tipo == 2)
-			$consulta .= $camposempjub . ", 'J' AS tipo FROM pensionados" . $joinsempjub . $where . $sind;
+			$consulta .= $camposempjub . ", 'JUBILADO' AS tipo FROM pensionados" . $joinsempjub . $where . $sind;
 		if($tipo == 0)
 			$consulta .= " UNION ";
 		if($tipo == 0 || $tipo == 3)
