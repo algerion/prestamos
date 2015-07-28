@@ -19,6 +19,11 @@
 		{
 			open('index.php?page=busca_empleado&sufijo=' + empleado, '_blank');
 		}
+		
+		window.onbeforeunload = function exitAlert()
+		{
+			return "Los datos que no se han guardado se perderán.";
+		}
 	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
@@ -86,7 +91,10 @@
 								<table width="100%" border="1">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoAval1" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval1')" /></td>
+										<td>
+											<com:TTextBox ID="txtNoUnicoAval1" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval1')" />
+											<a href="#" onclick="abrir('Aval1')">Buscar</a>
+										</td>
 										<td>Antigüedad</td>
 										<td><com:TTextBox ID="txtAntiguedadAval1" Width="100px" ReadOnly="True" /></td>
 									</tr>
@@ -115,7 +123,10 @@
 								<table width="100%" border="1">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoAval2" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval2')" /></td>
+										<td>
+											<com:TTextBox ID="txtNoUnicoAval2" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval2')" />
+											<a href="#" onclick="abrir('Aval2')">Buscar</a>
+										</td>
 										<td>Antigüedad</td>
 										<td><com:TTextBox ID="txtAntiguedadAval2" Width="100px" ReadOnly="True" /></td>
 									</tr>
@@ -197,7 +208,7 @@
 		<!--Botón Guardar-->
 		<tr>
 			<td colspan="2" align="center">
-				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" />
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" />
 			</td>
 		</tr>
 	</table>

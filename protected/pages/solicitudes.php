@@ -22,6 +22,10 @@ class solicitudes extends TPage
 		}
 
 	}
+	
+	public function btnGuardar_Click($sender, $param)
+	{
+	}
 }
 
 ?>
