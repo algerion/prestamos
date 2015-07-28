@@ -36,7 +36,8 @@ class busca_empleado extends TPage
 			$campos = "'" . $this->Request["sufijo"] . "', '" . $resultado[$i]["numero"] . "', '" . 
 					$resultado[$i]["nombre"] . " " . $resultado[$i]["paterno"] . " " . 
 					$resultado[$i]["materno"] . "', '" . $resultado[$i]["sindicato"] . "', '" . 
-					$resultado[$i]["antiguedad"] . "', '" . $resultado[$i]["tipo"] . "'";
+					$resultado[$i]["antiguedad"] . "', '" . $resultado[$i]["tipo"] . "', '" .
+					$resultado[$i]["importe"] . "', '" . $resultado[$i]["porcentaje"] . "'";
 					
 			$resultado[$i]["numero"] = "<a href='#' onclick=\"regresa(" . $campos . ")\">" . $resultado[$i]["numero"] . "</a>";
 		}
