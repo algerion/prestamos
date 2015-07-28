@@ -12,9 +12,9 @@ class MainLayout extends TTemplateControl
 	{
 		parent::onInit($param);
 		
-		if($this->User->IsGuest)
+/*		if($this->User->IsGuest)
 			$this->mnuPrincipal->Visible = false;
-		else
+		else*/
 			$this->mnuPrincipal->Visible = true;
 /*
 		echo $this->User->Name;
@@ -42,7 +42,6 @@ class MainLayout extends TTemplateControl
 
 	public function creaMenuXml($xml, $padre)
 	{
-//		$activar = new Acceso('dbac');
 		$asignados = array();
 
 		foreach($xml as $ele)
@@ -54,7 +53,7 @@ class MainLayout extends TTemplateControl
 				else
 					$idpag = "";
 
-				if(!$this->User->IsGuest)
+//				if(!$this->User->IsGuest)
 				{
 					if($idpag == "" || array_search($idpag, $this->User->Roles))
 					{
