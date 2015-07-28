@@ -156,7 +156,7 @@ class descuentos extends TPage
 	public function actualiza_tabla_pensionados($registros)
 	{
 		$parametros = array('nombre'=>'NOMBRE', 'paterno'=>'PATERNO', 'materno'=>'MATERNO', 'sindicato'=>'SIND', 'fec_ingre'=>'FECHALTA', 
-				'status'=>'STATUS', 'tipo_nomi'=>':1');
+				'status'=>'STATUS', 'importe_pension'=>'IMPORTE', tipo_nomi'=>':1');
 		$seleccion = array('numero'=>'NUMERO');
 		Conexion::Inserta_Actualiza_Registros($this->dbConexion, "pensionados", $registros, $parametros, $seleccion);
 	}
