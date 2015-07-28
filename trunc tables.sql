@@ -1,4 +1,5 @@
 TRUNCATE bitacora;
+TRUNCATE contrato;
 TRUNCATE descuento;
 TRUNCATE descuento_detalle;
 TRUNCATE descuentos_fijos;
