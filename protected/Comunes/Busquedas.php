@@ -49,6 +49,16 @@ class Busquedas
 
 		return $comando->query()->readAll();
 	}
-	public static function
+	public static function obtenerPrestamoAnteriorSinRedocumentado($conexion, $titular)
+	{
+		$consulta = "SELECT e.numero";
+		$comando = $conexion->createCommand($consulta);
+		$comando->bindValue("busca", "%" . $busca . "%");
+		if($sindicato != null)
+			$comando->bindValue("sindicato", $sindicato);
+
+		return $comando->query()->readAll();	
+	}
+	public static function encriptar y desencriptar el valor
 }
 ?>
