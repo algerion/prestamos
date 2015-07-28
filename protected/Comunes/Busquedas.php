@@ -2,6 +2,9 @@
 class Busquedas
 {
 	public static function empleados($conexion, $tipo, $busca, $sindicato = null)
+	
+	dbconexion->creteCommand
+	
 	{
 		$camposempjub = "SELECT e.numero, nombre, paterno, materno, cs.sindicato, fec_ingre, " .
 				"TIMESTAMPDIFF(YEAR, fec_ingre, CURDATE()) AS antiguedad, " . 
