@@ -2,9 +2,6 @@
 class Busquedas
 {
 	public static function empleados($conexion, $tipo, $busca, $sindicato = null)
-	
-	dbconexion->creteCommand
-	
 	{
 		$camposempjub = "SELECT e.numero, nombre, paterno, materno, cs.sindicato, fec_ingre, " .
 				"TIMESTAMPDIFF(YEAR, fec_ingre, CURDATE()) AS antiguedad, " . 
@@ -40,15 +37,18 @@ class Busquedas
 			$comando->bindValue("sindicato", $sindicato);
 
 		return $comando->query()->readAll();
-		
-		public static function obtenerPrestamoAnterior($conexion, $tipo, $busca, $sindicato = null)
-		{
-			$camposempjub = "SELECT e.numero"
-			
-			
-			
-		}
-		
 	}
+
+	public static function obtenerPrestamoAnterior($conexion, $titular)
+	{
+		$consulta = "SELECT e.numero";
+		$comando = $conexion->createCommand($consulta);
+		$comando->bindValue("busca", "%" . $busca . "%");
+		if($sindicato != null)
+			$comando->bindValue("sindicato", $sindicato);
+
+		return $comando->query()->readAll();
+	}
+	public static function
 }
 ?>
