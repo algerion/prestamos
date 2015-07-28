@@ -51,7 +51,7 @@ class Busquedas
 	}
 	public static function obtenerPrestamoAnteriorSinRedocumentado($conexion, $titular)
 	{
-		$consulta = "SELECT e.numero";
+		$consulta = "SELECT e.numero,contrato,idsolicitud,movimiento,idcontrato,activo,titular,estatus,activo,saldo";
 		$comando = $conexion->createCommand($consulta);
 		$comando->bindValue("busca", "%" . $busca . "%");
 		if($sindicato != null)
@@ -59,6 +59,5 @@ class Busquedas
 
 		return $comando->query()->readAll();	
 	}
-	public static function encriptar y desencriptar el valor
 }
 ?>
