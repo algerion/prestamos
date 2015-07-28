@@ -37,6 +37,15 @@ class Busquedas
 			$comando->bindValue("sindicato", $sindicato);
 
 		return $comando->query()->readAll();
+		
+		public static function obtenerPrestamoAnterior($conexion, $tipo, $busca, $sindicato = null)
+		{
+			$camposempjub = "SELECT e.numero"
+			
+			
+			
+		}
+		
 	}
 }
 ?>
