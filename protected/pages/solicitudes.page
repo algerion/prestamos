@@ -11,8 +11,13 @@
 			if(num == 114) 
 			{
 				event.preventDefault();
-				open('index.php?page=busca_empleado&sufijo=' + empleado, '_blank');
+				abrir(empleado);
 			}
+		}
+		
+		function abrir(empleado)
+		{
+			open('index.php?page=busca_empleado&sufijo=' + empleado, '_blank');
 		}
 	</com:TClientScript>
 </com:TContent>
@@ -48,7 +53,11 @@
 								<table width="100%" border="1">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoTit" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Tit')" /><com:TLinkButton ID="lbnBuscarTitular" Text="Buscar" /></td>
+										<td>
+											<com:TTextBox ID="txtNoUnicoTit" Width="80px" ReadOnly="True" 
+													Attributes.onkeydown="busca(event, 'Tit')" />
+											<a href="#" onclick="abrir('Tit')">Buscar</a>
+										</td>
 										<td>Antigüedad</td>
 										<td><com:TTextBox ID="txtAntiguedadTit" Width="100px" ReadOnly="True" /></td>
 									</tr>
