@@ -51,7 +51,8 @@ class Busquedas
 	}
 	public static function obtenerPrestamoAnteriorSinRedocumentado($conexion, $titular)
 	{
-		$consulta = "SELECT e.numero,contrato,idsolicitud,movimiento,idcontrato,activo,titular,estatus,activo,saldo";
+
+		$consulta = "SELECT e.numero Select B.idContrato, sum(C.Cargo - C.Abono) as saldo " & _"From solicitud A " & _ "Inner Join contrato B on B.idSolicitud = A.idSolicitud " & _ "Inner Join movimiento C On C.idContrato = B.idContrato and C.Activo=1 " &  "Where A.titular = " & titular & " and A.estatus='A' and B.estatus='A' " & _"Group By B.idContrato " & _ "Having saldo > 1 " & _ "Order By B.idContrato "";
 		$comando = $conexion->createCommand($consulta);
 		$comando->bindValue("busca", "%" . $busca . "%");
 		if($sindicato != null)
