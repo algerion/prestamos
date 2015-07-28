@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Menu ID="mnuPrincipal">
 	<MenuItem ID="smHome" Title="Inicio" Url="index.php?page=Home" Description="Inicio" />
-	<MenuItem ID="smSolicitudes" Title="Solicitudes">
-		<MenuItem ID="smSolc" Title="Nueva" Url="index.php?page=solicitudes&amp;opcion=nueva" Description="Captura de solicitud" />
-		<MenuItem ID="smSolc" Title="Modificar" Url="index.php?page=solicitudes&amp;opcion=modificar" Description="Modificar solicitud" />
+	<MenuItem ID="smMovimientos" Title="Movimientos">
+		<MenuItem ID="smMovNvaSol" Title="Nueva Solicitud" Url="index.php?page=solicitudes&amp;opcion=nueva" Description="Captura de solicitud" />
+		<MenuItem ID="smMovEdtSol" Title="Modificar Solicitud" Url="index.php?page=solicitudes&amp;opcion=modificar" Description="Modificar solicitud" />
+		<MenuItem ID="smSolDesno" Title="Archivo de nómina" Url="index.php?page=descuentos" Description="Archivo de nómina" />
 	</MenuItem>
 	<MenuItem ID="smCatalogos" Title="Catálogos">
 		<MenuItem ID="smCatJefes" Title="Modificar datos de jefes" Url="index.php?page=jefes&amp;popup=1" Description="Modificar el nombre del jefe de un área y el nombre de su puesto" Target="_blank" IdPag="jefe" />
