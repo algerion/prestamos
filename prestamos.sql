@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-07-2015 a las 07:17:34
+-- Tiempo de generación: 28-07-2015 a las 09:06:20
 -- Versión del servidor: 5.6.24
 -- Versión de PHP: 5.6.8
 
@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS `empleados` (
   `fec_ingre` date NOT NULL,
   `sexo` varchar(1) DEFAULT NULL,
   `status` varchar(1) NOT NULL,
-  `tipo_nomi` int(1) NOT NULL
+  `tipo_nomi` varchar(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -255,7 +255,7 @@ CREATE TABLE IF NOT EXISTS `parametros` (
 
 INSERT INTO `parametros` (`llave`, `valor`) VALUES
 ('ftp_pass', 'nomin4'),
-('ftp_server', '192.168.201.235'),
+('ftp_server', '192.168.0.5'),
 ('ftp_user', 'nomina');
 
 -- --------------------------------------------------------
