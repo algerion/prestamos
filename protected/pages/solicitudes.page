@@ -66,15 +66,18 @@
 										<td colspan="3"><com:TTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
+										<td>Tipo</td>
+										<td><com:TTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td colspan="3"><com:TTextBox ID="txtSindicatoTit" Width="400px" ReadOnly="True" /></td>
+										<td><com:TTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
 						</td>
 						<td align="center">
 							<com:TImage ID="imgEstatusTit" ImageUrl="images/rojo.png" Visible="False" />
-							<com:THiddenField ID="hidTipoTit" />
+							<com:THiddenField ID="hidImporteTit" />
+							<com:THiddenField ID="hidPorcentajeTit" />
 						</td>
 					</tr>
 					<tr>
@@ -92,15 +95,18 @@
 										<td colspan="3"><com:TTextBox ID="txtNombreAval1" Width="400px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
+										<td>Tipo</td>
+										<td><com:TTextBox ID="txtTipoAval1" Width="100px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td colspan="3"><com:TTextBox ID="txtSindicatoAval1" Width="400px" ReadOnly="True" /></td>
+										<td><com:TTextBox ID="txtSindicatoAval1" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
 						</td>
 						<td align="center">
 							<com:TImage ID="imgEstatusAval1" ImageUrl="images/rojo.png" Visible="False" />
-							<com:THiddenField ID="hidTipoAval1" />
+							<com:THiddenField ID="hidImporteAval1" />
+							<com:THiddenField ID="hidPorcentajeAval1" />
 						</td>
 					</tr>
 					<tr>
@@ -118,15 +124,18 @@
 										<td colspan="3"><com:TTextBox ID="txtNombreAval2" Width="400px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
+										<td>Tipo</td>
+										<td><com:TTextBox ID="txtTipoAval2" Width="100px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td colspan="3"><com:TTextBox ID="txtSindicatoAval2" Width="400px" ReadOnly="True" /></td>
+										<td><com:TTextBox ID="txtSindicatoAval2" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
 						</td>
 						<td align="center">
 							<com:TImage ID="imgEstatusAval2" ImageUrl="images/rojo.png" Visible="False" />
-							<com:THiddenField ID="hidTipoAval2" />
+							<com:THiddenField ID="hidImporteAval2" />
+							<com:THiddenField ID="hidPorcentajeAval2" />
 						</td>
 					</tr>
 					<tr>
