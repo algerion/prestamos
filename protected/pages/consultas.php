@@ -19,6 +19,8 @@ class consultas extends TPage
 			print_r($resultado);
 		}
 	}
-}
+
+	}
+	
 
 ?>

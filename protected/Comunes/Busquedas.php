@@ -41,7 +41,7 @@ class Busquedas
 
 	public static function obtenerPrestamoAnterior($conexion, $titular)
 	{
-		$consulta = "SELECT e.numeroB.idContrato, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato And C.Activo=1 Where A.titular = :titular and A.estatus='A' and B.estatus='A' Group By B.idContrato Having saldo > 1";
+		$consulta = "SELECT B.idContrato, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato And C.Activo=1 Where A.titular = :titular and A.estatus='A' and B.estatus='A' Group By B.idContrato Having saldo > 1";
 		$comando = $conexion->createCommand($consulta);
 		$comando->bindValue("busca", "%" . $busca . "%");
 		if($sindicato != null)
