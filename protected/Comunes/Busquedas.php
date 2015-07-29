@@ -63,11 +63,11 @@ class Busquedas
 	{
 		$consulta = "Select A.idSolicitud, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato and A.aval1 = aval  Or A.aval2 =  aval 
     By B.idContrato, A.estatus 
-   Having (saldo > 1) or (A.estatus = 'S') " & _
-   "Order By B.idContrato "
+   Having (saldo > 1) or (A.estatus = 'S') " & _;
 		$comando = $conexion->createCommand($consulta);
-		$comando->bindValue("aval_disponible", $aval_disponible);
+		$comando->bindValue("aval_disponible","%". $aval_disponible . "%");
 		if($sindicato != null)
+		return $comando->query()->readAll();	
 	}
 }
 ?>
