@@ -10,7 +10,8 @@ class Busquedas
 				"LEFT JOIN descuentos_fijos df ON e.numero = df.numero AND df.concepto = 61";
 		$externos = "SELECT e.numero, nombre, paterno, materno, 0 AS sindicato, fec_ingre, " . 
 				"0 AS antiguedad, 0 AS importe, 0 AS porcentaje, 'EXTERNO' AS tipo FROM externos e";
-		$consulta = "";
+		$consulta = "Select A.idSolicitud, sum(C.Cargo - C.Abono) as saldo froin solicitud A Join contrato B on B.idSolicitud = A.idSolicitud  Join movimiento C On C.idContrato = B.idContrato and (A.aval1 = " & aval & " Or A.aval2 = " & aval & " )" By B.idContrato and A.estatusHaving (saldo > 1) or (A.estatus = 'S') group By B.idContrato ";
+   
 		$where = " WHERE (e.numero LIKE :busca OR e.nombre LIKE :busca OR e.paterno LIKE :busca OR e.materno LIKE :busca) ";
 		$sind = "";
 		
