@@ -61,9 +61,13 @@ class Busquedas
 	}
 	public static function aval_disponible($conexion, $titular)
 	{
-		$consulta = "LSQuery = c"
+		$consulta = "Select A.idSolicitud, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato and A.aval1 = aval  Or A.aval2 =  aval 
+    By B.idContrato, A.estatus 
+   Having (saldo > 1) or (A.estatus = 'S') " & _
+   "Order By B.idContrato "
 		$comando = $conexion->createCommand($consulta);
 		$comando->bindValue("aval_disponible", $aval_disponible);
+		if($sindicato != null)
 	}
 }
 ?>
