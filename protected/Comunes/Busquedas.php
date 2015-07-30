@@ -76,12 +76,56 @@ class Busquedas
 	
 	public static function generaContratosAltaRedocumenta($conexion, $fechaInicio, $fechaFin)
 	{
-		$consulta = "Select A.idSolicitud, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato and A.aval1 = aval  Or A.aval2 =  aval 
-    By B.idContrato, A.estatus Having (saldo > 1) or (A.estatus = 'S') ";
+		$consulta = "SELECT c.id_contrato  ,
+          mov.creacion     ,
+          s.titular     ,
+          tce.nombre    ,
+          cya.SumaCargos,
+          cya.SumaAbonos,
+          cya.Saldo     ,
+          s.id_solicitud ,
+          s.id_contrato_ant,
+          s.saldo_anterior,
+          ((s.plazo * 2) * s.descuento) AS importePrestamo,
+          CASE 
+	       WHEN tce.tipo <> 'A' THEN 80
+	       WHEN (s.cve_sindicato=2) THEN 211
+               WHEN (s.cve_sindicato=11) THEN 211
+               WHEN (s.cve_sindicato=1) THEN 113
+               WHEN (s.cve_sindicato=13) THEN 113
+               ELSE s.cve_sindicato
+          END AS cve_sindicato,
+
+          CASE 
+               WHEN tce.tipo <> 'A' THEN 'JUBILADOS'
+               WHEN (s.cve_sindicato=2) THEN '3 DE MARZO + (ADMIN)'
+               WHEN (s.cve_sindicato=11) THEN '3 DE MARZO + (ADMIN)'
+               WHEN (s.cve_sindicato=1) THEN 'CONFIANZA + (2)'
+               WHEN (s.cve_sindicato=13) THEN 'CONFIANZA + (2)'
+               ELSE cs.sindicato
+          END AS sindicato
+   FROM Contrato AS c
+   INNER JOIN Movimientos     AS mov ON mov.id_contrato  = c.id_contrato AND mov.id_tipo_movto=1 
+   AND DATE(mov.creacion) BETWEEN DATE  (:fechaInicio) AND IF (:fechaFin='',DATE (:fechaInicio),DATE (:fechaFin))
+   LEFT JOIN   solicitud    AS s   ON   s.id_solicitud = c.id_solicitud
+   LEFT JOIN 
+(SELECT numero, CONCAT(nombre, ' ', paterno, ' ', materno) AS nombre, fec_ingre, 'A' AS tipo FROM empleados
+UNION
+SELECT numero, CONCAT(nombre, ' ', paterno, ' ', materno) AS nombre, fec_ingre, 'J' AS tipo FROM pensionados
+UNION
+SELECT numero, CONCAT(nombre, ' ', paterno, ' ', materno) AS nombre, fec_ingre, 'E' AS tipo FROM externos)   
+   AS tce ON tce.numero = s.titular
+   LEFT JOIN catsindicatos    AS cs  ON  cs.cve_sindicato = s.cve_sindicato
+   LEFT JOIN 
+(SELECT id_contrato,SUM(cargo) AS SumaCargos, SUM(Abono) AS SumaAbonos, SUM(cargo) - SUM(Abono) AS saldo FROM Movimientos
+WHERE activo=1
+GROUP BY id_contrato)   
+    AS cya ON cya.id_contrato  = c.id_contrato
+   ORDER BY s.cve_sindicato, c.id_contrato DESC;";
 		$comando = $conexion->createCommand($consulta);
-		$comando->bindValue("aval_disponible","%". $aval_disponible . "%");
-		if($sindicato != null)
-		return $comando->query()->readAll();	
+		$comando->bindValue("fechaInicio", $fechaInicio);
+		$comando->bindValue("fechaFin", $fechaFin);
+		return $comando->query()->readAll();
 	}
 }
 ?>
