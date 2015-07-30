@@ -41,11 +41,13 @@ class Busquedas
 
 	public static function obtenerPrestamoAnterior($conexion, $titular)
 	{
-		$consulta = "SELECT B.idContrato, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato And C.Activo=1 Where A.titular = :titular and A.estatus='A' and B.estatus='A' Group By B.idContrato Having saldo > 1";
+		$consulta = "SELECT B.id_contrato, sum(C.Cargo - C.Abono) as saldo 
+				From solicitud A Join contrato B on B.id_solicitud = A.id_solicitud 
+				Join movimientos C On C.id_contrato = B.id_contrato And C.Activo=1 
+				Where A.titular = :titular and A.estatus='A' and B.estatus='A' 
+				Group By B.id_contrato Having saldo > 1";
 		$comando = $conexion->createCommand($consulta);
-		$comando->bindValue("busca", "%" . $busca . "%");
-		if($sindicato != null)
-			$comando->bindValue("sindicato", $sindicato);
+		$comando->bindValue("titular", $titular);
 
 		return $comando->query()->readAll();
 		
@@ -62,8 +64,7 @@ class Busquedas
 	public static function aval_disponible($conexion, $titular)
 	{
 		$consulta = "Select A.idSolicitud, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato and A.aval1 = aval  Or A.aval2 =  aval 
-    By B.idContrato, A.estatus 
-   Having (saldo > 1) or (A.estatus = 'S') " & _;
+    By B.idContrato, A.estatus Having (saldo > 1) or (A.estatus = 'S') " & _;
 		$comando = $conexion->createCommand($consulta);
 		$comando->bindValue("aval_disponible","%". $aval_disponible . "%");
 		if($sindicato != null)
