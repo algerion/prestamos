@@ -52,6 +52,7 @@ class Busquedas
 		return $comando->query()->readAll();
 		
 	}
+	
 	public static function obtenerPrestamoAnteriorSinRedocumentado($conexion, $titular)
 	{
 
@@ -61,10 +62,22 @@ class Busquedas
 
 		return $comando->query()->readAll();		
 	}
-	public static function aval_disponible($conexion, $titular)
+	
+	public static function aval_disponible($conexion, $aval)
+	{
+		$consulta = "Select A.id_Solicitud, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato
+		B on B.id_Solicitud = A.id_Solicitud Join movimientos
+		C On C.id_Contrato = B.id_Contrato where (A.aval1 = :aval  Or A.aval2 =  :aval) 
+		group by B.id_Contrato, A.estatus Having (saldo > 1) or (A.estatus = 'S') ";
+		$comando = $conexion->createCommand($consulta);
+		$comando->bindValue("aval", $aval);
+		return $comando->query()->readAll();	
+	}
+	
+	public static function generaContratosAltaRedocumenta($conexion, $fechaInicio, $fechaFin)
 	{
 		$consulta = "Select A.idSolicitud, sum(C.Cargo - C.Abono) as saldo From solicitud A Join contrato B on B.idSolicitud = A.idSolicitud Join movimiento C On C.idContrato = B.idContrato and A.aval1 = aval  Or A.aval2 =  aval 
-    By B.idContrato, A.estatus Having (saldo > 1) or (A.estatus = 'S') " & _;
+    By B.idContrato, A.estatus Having (saldo > 1) or (A.estatus = 'S') ";
 		$comando = $conexion->createCommand($consulta);
 		$comando->bindValue("aval_disponible","%". $aval_disponible . "%");
 		if($sindicato != null)
