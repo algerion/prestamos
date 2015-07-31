@@ -1,34 +1,27 @@
--- phpMyAdmin SQL Dump
--- version 4.3.11
--- http://www.phpmyadmin.net
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 28-07-2015 a las 22:43:06
--- Versión del servidor: 5.6.24
--- Versión de PHP: 5.6.8
+/*
+SQLyog Community v12.12 (32 bit)
+MySQL - 5.6.24 : Database - prestamos
+*********************************************************************
+*/
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Base de datos: `prestamos`
---
+/*!40101 SET SQL_MODE=''*/;
 
--- --------------------------------------------------------
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`prestamos` /*!40100 DEFAULT CHARACTER SET latin1 */;
 
---
--- Estructura de tabla para la tabla `bitacora`
---
+USE `prestamos`;
+
+/*Table structure for table `bitacora` */
 
 DROP TABLE IF EXISTS `bitacora`;
-CREATE TABLE IF NOT EXISTS `bitacora` (
-  `id_registro` int(11) NOT NULL,
+
+CREATE TABLE `bitacora` (
+  `id_registro` int(11) NOT NULL AUTO_INCREMENT,
   `fechahora` datetime NOT NULL,
   `tabla` varchar(50) NOT NULL,
   `archivo` varchar(50) NOT NULL,
@@ -37,49 +30,33 @@ CREATE TABLE IF NOT EXISTS `bitacora` (
   `importe` decimal(11,2) NOT NULL,
   `id_usuario` int(11) NOT NULL,
   `estatus` int(15) NOT NULL,
-  `observaciones` varchar(500) NOT NULL
+  `observaciones` varchar(500) NOT NULL,
+  PRIMARY KEY (`id_registro`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `bitacora` */
 
---
--- Estructura de tabla para la tabla `catsindicatos`
---
+/*Table structure for table `catsindicatos` */
 
 DROP TABLE IF EXISTS `catsindicatos`;
-CREATE TABLE IF NOT EXISTS `catsindicatos` (
+
+CREATE TABLE `catsindicatos` (
   `cve_sindicato` int(11) NOT NULL COMMENT 'Clave del Sindicato',
   `sindicato` varchar(50) DEFAULT ' ' COMMENT 'Nombre del sindicato',
-  `representante` varchar(150) DEFAULT ' ' COMMENT 'Nombre del representante del sindicato'
+  `representante` varchar(150) DEFAULT ' ' COMMENT 'Nombre del representante del sindicato',
+  PRIMARY KEY (`cve_sindicato`),
+  UNIQUE KEY `cve_sindicato` (`cve_sindicato`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Catalogo de sindicatos';
 
---
--- Volcado de datos para la tabla `catsindicatos`
---
+/*Data for the table `catsindicatos` */
 
-INSERT INTO `catsindicatos` (`cve_sindicato`, `sindicato`, `representante`) VALUES
-(0, 'CONFIANZA', 'Representante'),
-(1, '3 DE MARZO', 'C. HECTOR MAYORAL GUZMAN'),
-(2, 'AUTONOMO', 'C. JUAN ARAGON MATIAS'),
-(3, 'C.R.O.C.', 'C. EMETERIO GERONIMO SANTIAGO LOPEZ'),
-(4, '12 DE SEPTIEMBRE', 'C. ANGEL ROBERTO CORTEZ RAMIREZ'),
-(5, 'LIBRE', 'C. MARCELINO COACHE VERANO'),
-(6, 'POLICIA', 'Representante'),
-(7, 'TRANSITO', 'Representante'),
-(8, 'PERSONAL OPERATIVO', 'Representante'),
-(9, 'SINDICATO ADMVO', 'Representante'),
-(10, '3 DE MARZO (ADMTVO.)', 'C. HECTOR MAYORAL GUZMAN'),
-(11, 'OPERATIVO', 'Representante'),
-(12, 'CONFIANZA', 'REPRESENTANTE');
+insert  into `catsindicatos`(`cve_sindicato`,`sindicato`,`representante`) values (0,'CONFIANZA','Representante'),(1,'3 DE MARZO','C. HECTOR MAYORAL GUZMAN'),(2,'AUTONOMO','C. JUAN ARAGON MATIAS'),(3,'C.R.O.C.','C. EMETERIO GERONIMO SANTIAGO LOPEZ'),(4,'12 DE SEPTIEMBRE','C. ANGEL ROBERTO CORTEZ RAMIREZ'),(5,'LIBRE','C. MARCELINO COACHE VERANO'),(6,'POLICIA','Representante'),(7,'TRANSITO','Representante'),(8,'PERSONAL OPERATIVO','Representante'),(9,'SINDICATO ADMVO','Representante'),(10,'3 DE MARZO (ADMTVO.)','C. HECTOR MAYORAL GUZMAN'),(11,'OPERATIVO','Representante'),(12,'CONFIANZA','REPRESENTANTE');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `contrato`
---
+/*Table structure for table `contrato` */
 
 DROP TABLE IF EXISTS `contrato`;
-CREATE TABLE IF NOT EXISTS `contrato` (
+
+CREATE TABLE `contrato` (
   `id_contrato` int(11) DEFAULT NULL,
   `id_solicitud` int(11) DEFAULT NULL,
   `creado` date DEFAULT NULL,
@@ -94,15 +71,14 @@ CREATE TABLE IF NOT EXISTS `contrato` (
   `seguro` decimal(11,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `contrato` */
 
---
--- Estructura de tabla para la tabla `descuento`
---
+/*Table structure for table `descuento` */
 
 DROP TABLE IF EXISTS `descuento`;
-CREATE TABLE IF NOT EXISTS `descuento` (
-  `id_descuento` int(11) NOT NULL,
+
+CREATE TABLE `descuento` (
+  `id_descuento` int(11) NOT NULL AUTO_INCREMENT,
   `origen` varchar(1) NOT NULL,
   `creado` datetime NOT NULL,
   `modificado` datetime NOT NULL,
@@ -112,34 +88,18 @@ CREATE TABLE IF NOT EXISTS `descuento` (
   `observaciones` text NOT NULL,
   `tipo` varchar(1) NOT NULL,
   `pago` varchar(1) NOT NULL,
-  `periodo` int(11) NOT NULL
+  `periodo` int(11) NOT NULL,
+  PRIMARY KEY (`id_descuento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `descuento` */
 
---
--- Estructura de tabla para la tabla `descuentos_fijos`
---
-
-DROP TABLE IF EXISTS `descuentos_fijos`;
-CREATE TABLE IF NOT EXISTS `descuentos_fijos` (
-  `numero` int(5) NOT NULL,
-  `concepto` int(2) NOT NULL,
-  `periodos` int(3) NOT NULL,
-  `pagados` int(3) NOT NULL,
-  `importe` decimal(11,2) NOT NULL,
-  `porcentaje` decimal(11,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `descuento_detalle`
---
+/*Table structure for table `descuento_detalle` */
 
 DROP TABLE IF EXISTS `descuento_detalle`;
-CREATE TABLE IF NOT EXISTS `descuento_detalle` (
-  `id_detalle` int(11) NOT NULL,
+
+CREATE TABLE `descuento_detalle` (
+  `id_detalle` int(11) NOT NULL AUTO_INCREMENT,
   `id_descuento` int(11) NOT NULL,
   `num_empleado` int(11) NOT NULL,
   `clavecon` int(11) NOT NULL,
@@ -153,17 +113,33 @@ CREATE TABLE IF NOT EXISTS `descuento_detalle` (
   `aval1` int(11) NOT NULL,
   `aval2` int(11) NOT NULL,
   `nota` int(11) NOT NULL,
-  `aplicaravales` int(11) NOT NULL
+  `aplicaravales` int(11) NOT NULL,
+  PRIMARY KEY (`id_detalle`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `descuento_detalle` */
 
---
--- Estructura de tabla para la tabla `empleados`
---
+/*Table structure for table `descuentos_fijos` */
+
+DROP TABLE IF EXISTS `descuentos_fijos`;
+
+CREATE TABLE `descuentos_fijos` (
+  `numero` int(5) NOT NULL,
+  `concepto` int(2) NOT NULL,
+  `periodos` int(3) NOT NULL,
+  `pagados` int(3) NOT NULL,
+  `importe` decimal(11,2) NOT NULL,
+  `porcentaje` decimal(11,2) NOT NULL,
+  PRIMARY KEY (`numero`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `descuentos_fijos` */
+
+/*Table structure for table `empleados` */
 
 DROP TABLE IF EXISTS `empleados`;
-CREATE TABLE IF NOT EXISTS `empleados` (
+
+CREATE TABLE `empleados` (
   `numero` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `paterno` varchar(50) NOT NULL,
@@ -172,62 +148,46 @@ CREATE TABLE IF NOT EXISTS `empleados` (
   `fec_ingre` date NOT NULL,
   `sexo` varchar(1) DEFAULT NULL,
   `status` varchar(1) NOT NULL,
-  `tipo_nomi` varchar(1) NOT NULL
+  `tipo_nomi` varchar(1) NOT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `empleados` */
 
---
--- Estructura de tabla para la tabla `estatus`
---
+/*Table structure for table `estatus` */
 
 DROP TABLE IF EXISTS `estatus`;
-CREATE TABLE IF NOT EXISTS `estatus` (
-  `id_estatus` int(11) NOT NULL,
-  `estatus` varchar(50) NOT NULL
+
+CREATE TABLE `estatus` (
+  `id_estatus` int(11) NOT NULL AUTO_INCREMENT,
+  `estatus` varchar(50) NOT NULL,
+  PRIMARY KEY (`id_estatus`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `estatus`
---
+/*Data for the table `estatus` */
 
-INSERT INTO `estatus` (`id_estatus`, `estatus`) VALUES
-(-1, 'error'),
-(1, 'generado'),
-(2, 'enviado'),
-(3, 'recibido'),
-(4, 'aplicado');
+insert  into `estatus`(`id_estatus`,`estatus`) values (-1,'error'),(1,'generado'),(2,'enviado'),(3,'recibido'),(4,'aplicado');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `estatus_empleado`
---
+/*Table structure for table `estatus_empleado` */
 
 DROP TABLE IF EXISTS `estatus_empleado`;
-CREATE TABLE IF NOT EXISTS `estatus_empleado` (
-  `id_estatus_empl` int(11) NOT NULL,
-  `estatus` varchar(50) DEFAULT NULL
+
+CREATE TABLE `estatus_empleado` (
+  `id_estatus_empl` int(11) NOT NULL AUTO_INCREMENT,
+  `estatus` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id_estatus_empl`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `estatus_empleado`
---
+/*Data for the table `estatus_empleado` */
 
-INSERT INTO `estatus_empleado` (`id_estatus_empl`, `estatus`) VALUES
-(1, 'BAJA TEMPORAL'),
-(2, 'ACTIVO'),
-(3, 'BAJA DEFINITIVA');
+insert  into `estatus_empleado`(`id_estatus_empl`,`estatus`) values (1,'BAJA TEMPORAL'),(2,'ACTIVO'),(3,'BAJA DEFINITIVA');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `externos`
---
+/*Table structure for table `externos` */
 
 DROP TABLE IF EXISTS `externos`;
-CREATE TABLE IF NOT EXISTS `externos` (
-  `numero` int(11) NOT NULL,
+
+CREATE TABLE `externos` (
+  `numero` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(50) DEFAULT NULL,
   `paterno` varchar(50) DEFAULT NULL,
   `materno` varchar(50) DEFAULT NULL,
@@ -235,18 +195,18 @@ CREATE TABLE IF NOT EXISTS `externos` (
   `curp` varchar(18) DEFAULT NULL,
   `fec_ingre` datetime DEFAULT NULL,
   `sexo` varchar(1) DEFAULT NULL,
-  `status` varchar(1) DEFAULT NULL
+  `status` varchar(1) DEFAULT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `externos` */
 
---
--- Estructura de tabla para la tabla `movimientos`
---
+/*Table structure for table `movimientos` */
 
 DROP TABLE IF EXISTS `movimientos`;
-CREATE TABLE IF NOT EXISTS `movimientos` (
-  `id_movimiento` int(11) NOT NULL,
+
+CREATE TABLE `movimientos` (
+  `id_movimiento` int(11) NOT NULL AUTO_INCREMENT,
   `id_contrato` int(11) NOT NULL,
   `creacion` datetime NOT NULL,
   `id_tipo_movto` int(11) NOT NULL,
@@ -256,38 +216,31 @@ CREATE TABLE IF NOT EXISTS `movimientos` (
   `id_usuario` int(11) DEFAULT NULL,
   `aplicacion` datetime DEFAULT NULL,
   `id_descuento` int(11) DEFAULT NULL,
-  `activo` int(11) DEFAULT NULL
+  `activo` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_movimiento`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `movimientos` */
 
---
--- Estructura de tabla para la tabla `parametros`
---
+/*Table structure for table `parametros` */
 
 DROP TABLE IF EXISTS `parametros`;
-CREATE TABLE IF NOT EXISTS `parametros` (
+
+CREATE TABLE `parametros` (
   `llave` varchar(20) NOT NULL,
-  `valor` varchar(250) NOT NULL
+  `valor` varchar(250) NOT NULL,
+  PRIMARY KEY (`llave`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `parametros`
---
+/*Data for the table `parametros` */
 
-INSERT INTO `parametros` (`llave`, `valor`) VALUES
-('ftp_pass', 'nomin4'),
-('ftp_server', '192.168.0.5'),
-('ftp_user', 'nomina');
+insert  into `parametros`(`llave`,`valor`) values ('ftp_pass','nomin4'),('ftp_server','192.168.0.5'),('ftp_user','nomina');
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `pensionados`
---
+/*Table structure for table `pensionados` */
 
 DROP TABLE IF EXISTS `pensionados`;
-CREATE TABLE IF NOT EXISTS `pensionados` (
+
+CREATE TABLE `pensionados` (
   `numero` int(11) NOT NULL,
   `num_empleado` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
@@ -298,18 +251,18 @@ CREATE TABLE IF NOT EXISTS `pensionados` (
   `sexo` varchar(1) NOT NULL,
   `status` varchar(1) NOT NULL,
   `tipo_nomi` varchar(1) NOT NULL,
-  `importe_pension` decimal(11,2) DEFAULT NULL
+  `importe_pension` decimal(11,2) DEFAULT NULL,
+  PRIMARY KEY (`numero`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `pensionados` */
 
---
--- Estructura de tabla para la tabla `solicitud`
---
+/*Table structure for table `solicitud` */
 
 DROP TABLE IF EXISTS `solicitud`;
-CREATE TABLE IF NOT EXISTS `solicitud` (
-  `id_solicitud` int(11) NOT NULL,
+
+CREATE TABLE `solicitud` (
+  `id_solicitud` int(11) NOT NULL AUTO_INCREMENT,
   `creada` datetime DEFAULT NULL,
   `titular` int(11) NOT NULL,
   `antiguedad` decimal(11,2) NOT NULL,
@@ -341,167 +294,28 @@ CREATE TABLE IF NOT EXISTS `solicitud` (
   `firma2` varchar(75) DEFAULT NULL,
   `estatus` varchar(1) NOT NULL,
   `id_usuario` int(11) DEFAULT NULL,
-  `seguro` decimal(11,2) DEFAULT NULL
+  `seguro` decimal(11,2) DEFAULT NULL,
+  PRIMARY KEY (`id_solicitud`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- --------------------------------------------------------
+/*Data for the table `solicitud` */
 
---
--- Estructura de tabla para la tabla `usuarios`
---
+/*Table structure for table `usuarios` */
 
 DROP TABLE IF EXISTS `usuarios`;
-CREATE TABLE IF NOT EXISTS `usuarios` (
-  `id_usuario` int(32) NOT NULL,
+
+CREATE TABLE `usuarios` (
+  `id_usuario` int(32) NOT NULL AUTO_INCREMENT,
   `usuario` varchar(45) NOT NULL,
-  `acceso` varchar(32) NOT NULL
+  `acceso` varchar(32) NOT NULL,
+  PRIMARY KEY (`id_usuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `usuarios`
---
+/*Data for the table `usuarios` */
 
-INSERT INTO `usuarios` (`id_usuario`, `usuario`, `acceso`) VALUES
-(1, 'prueba', '0e7881f0d44670fed326557fc047de90'),
-(2, 'admin', '7a95bf926a0333f57705aeac07a362a2');
+insert  into `usuarios`(`id_usuario`,`usuario`,`acceso`) values (1,'prueba','0e7881f0d44670fed326557fc047de90'),(2,'admin','7a95bf926a0333f57705aeac07a362a2');
 
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `bitacora`
---
-ALTER TABLE `bitacora`
-  ADD PRIMARY KEY (`id_registro`);
-
---
--- Indices de la tabla `catsindicatos`
---
-ALTER TABLE `catsindicatos`
-  ADD PRIMARY KEY (`cve_sindicato`), ADD UNIQUE KEY `cve_sindicato` (`cve_sindicato`);
-
---
--- Indices de la tabla `descuento`
---
-ALTER TABLE `descuento`
-  ADD PRIMARY KEY (`id_descuento`);
-
---
--- Indices de la tabla `descuentos_fijos`
---
-ALTER TABLE `descuentos_fijos`
-  ADD PRIMARY KEY (`numero`);
-
---
--- Indices de la tabla `descuento_detalle`
---
-ALTER TABLE `descuento_detalle`
-  ADD PRIMARY KEY (`id_detalle`);
-
---
--- Indices de la tabla `empleados`
---
-ALTER TABLE `empleados`
-  ADD PRIMARY KEY (`numero`);
-
---
--- Indices de la tabla `estatus`
---
-ALTER TABLE `estatus`
-  ADD PRIMARY KEY (`id_estatus`);
-
---
--- Indices de la tabla `estatus_empleado`
---
-ALTER TABLE `estatus_empleado`
-  ADD PRIMARY KEY (`id_estatus_empl`);
-
---
--- Indices de la tabla `externos`
---
-ALTER TABLE `externos`
-  ADD PRIMARY KEY (`numero`);
-
---
--- Indices de la tabla `movimientos`
---
-ALTER TABLE `movimientos`
-  ADD PRIMARY KEY (`id_movimiento`);
-
---
--- Indices de la tabla `parametros`
---
-ALTER TABLE `parametros`
-  ADD PRIMARY KEY (`llave`);
-
---
--- Indices de la tabla `pensionados`
---
-ALTER TABLE `pensionados`
-  ADD PRIMARY KEY (`numero`);
-
---
--- Indices de la tabla `solicitud`
---
-ALTER TABLE `solicitud`
-  ADD PRIMARY KEY (`id_solicitud`);
-
---
--- Indices de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  ADD PRIMARY KEY (`id_usuario`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `bitacora`
---
-ALTER TABLE `bitacora`
-  MODIFY `id_registro` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `descuento`
---
-ALTER TABLE `descuento`
-  MODIFY `id_descuento` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `descuento_detalle`
---
-ALTER TABLE `descuento_detalle`
-  MODIFY `id_detalle` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `estatus`
---
-ALTER TABLE `estatus`
-  MODIFY `id_estatus` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
---
--- AUTO_INCREMENT de la tabla `estatus_empleado`
---
-ALTER TABLE `estatus_empleado`
-  MODIFY `id_estatus_empl` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
---
--- AUTO_INCREMENT de la tabla `externos`
---
-ALTER TABLE `externos`
-  MODIFY `numero` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `movimientos`
---
-ALTER TABLE `movimientos`
-  MODIFY `id_movimiento` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `solicitud`
---
-ALTER TABLE `solicitud`
-  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT de la tabla `usuarios`
---
-ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int(32) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
