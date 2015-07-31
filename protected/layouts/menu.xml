@@ -4,6 +4,8 @@
 	<MenuItem ID="smMovimientos" Title="Movimientos">
 		<MenuItem ID="smMovNvaSol" Title="Nueva Solicitud" Url="index.php?page=solicitudes&amp;opcion=nueva" Description="Captura de solicitud" />
 		<MenuItem ID="smMovEdtSol" Title="Modificar Solicitud" Url="index.php?page=solicitudes&amp;opcion=modificar" Description="Modificar solicitud" />
+		<MenuItem ID="smMovEdtSol" Title="Contratos" Url="index.php?page=contrato" Description="Contratos" />
+		<MenuItem ID="smMovEdtSol" Title="Movimientos" Url="index.php?page=movimientos" Description="Movimientos" />
 		<MenuItem ID="smSolDesno" Title="Archivo de nómina" Url="index.php?page=descuentos" Description="Archivo de nómina" />
 	</MenuItem>
 	<MenuItem ID="smCatalogos" Title="Catálogos">
