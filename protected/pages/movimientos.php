@@ -22,7 +22,7 @@ class movimientos extends TPage
 */
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
-		$consulta = "SELECT num_movto, fecha, movimiento, justificacion, cargo, abono FROM movimientos";
+		$consulta = "SELECT id_movimiento, creacion, descripcion, cargo, abono FROM movimientos where id_contrato = 8809";
 		$comando = $this->dbConexion->createCommand($consulta);
 		$resultado = $comando->query()->readAll();
 		$this->pnlMovimientos->DataSource = $resultado;

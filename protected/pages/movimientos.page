@@ -49,10 +49,9 @@
 					<tr>
 						<td colspan="6" align="center">
 							<com:TDataGrid ID="pnlMovimientos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
-								<com:TBoundColumn HeaderText="No. Movimiento" DataField="num_movto" />
-								<com:TBoundColumn HeaderText="Fecha" DataField="fecha" />
-								<com:TBoundColumn HeaderText="Movimiento" DataField="movimiento" />
-								<com:TBoundColumn HeaderText="Justificación" DataField="justificacion" />
+								<com:TBoundColumn HeaderText="No. Movimiento" DataField="id_movimiento" />
+								<com:TBoundColumn HeaderText="Fecha" DataField="creacion" />
+								<com:TBoundColumn HeaderText="Justificación" DataField="descripcion" />
 								<com:TBoundColumn HeaderText="Cargo" DataField="cargo" />
 								<com:TBoundColumn HeaderText="Abono" DataField="abono" />
 							</com:TDataGrid>
