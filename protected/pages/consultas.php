@@ -18,8 +18,11 @@ class consultas extends TPage
 			//$resultado = Busquedas::obtenerPrestamoAnteriorSinRedocumentado($this->dbConexion, 6173);
 			//$resultado = Busquedas::obtenerPrestamoAnterior($this->dbConexion, 6173);
 			//$resultado = Busquedas::aval_disponible($this->dbConexion, 6173);
-			$resultado = Busquedas::generaContratosAltaRedocumenta($this->dbConexion, '20150101', '20150730');
-			print_r($resultado);
+			//$resultado = Busquedas::generaContratosAltaRedocumenta($this->dbConexion, '20150101', '20150730');
+			$resultado = Busquedas::subreporte_resumen_de_importes_por_sindicato($this->dbConexion, '20150101', '20150730');
+			//print_r($resultado);
+			$this->dgPrueba->DataSource = $resultado;
+			$this->dgPrueba->dataBind();
 		}
 	}
 }

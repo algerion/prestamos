@@ -127,5 +127,36 @@ GROUP BY id_contrato)
 		$comando->bindValue("fechaFin", $fechaFin);
 		return $comando->query()->readAll();
 	}
+    
+	public static function subreporte_resumen_de_importes_por_sindicato($conexion, $fechaInicio, $fechaFin)
+	{
+		$consulta = " SELECT  s.cve_sindicato,sindicato,SUM(s.saldo_anterior)AS TotalRedocumentacion,
+          SUM(((s.plazo * 2) * s.descuento))AS TotalImportePrestamo 
+		  FROM Contrato AS c
+   INNER JOIN Movimientos     AS mov ON mov.id_contrato  = c.id_contrato AND mov.id_tipo_movto=1 
+   AND DATE(mov.creacion) BETWEEN DATE  (:fechaInicio) AND IF (:fechaFin='',DATE (:fechaInicio),DATE (:fechaFin))
+   LEFT JOIN   solicitud    AS s   ON   s.id_solicitud = c.id_solicitud
+   LEFT JOIN 
+(SELECT numero, CONCAT(nombre, ' ', paterno, ' ', materno) AS nombre, fec_ingre, 'A' AS tipo FROM empleados
+UNION
+SELECT numero, CONCAT(nombre, ' ', paterno, ' ', materno) AS nombre, fec_ingre, 'J' AS tipo FROM pensionados
+UNION
+SELECT numero, CONCAT(nombre, ' ', paterno, ' ', materno) AS nombre, fec_ingre, 'E' AS tipo FROM externos)   
+   AS tce ON tce.numero = s.titular
+   LEFT JOIN catsindicatos    AS cs  ON  cs.cve_sindicato = s.cve_sindicato
+   LEFT JOIN 
+(SELECT id_contrato,SUM(cargo) AS SumaCargos, SUM(Abono) AS SumaAbonos, SUM(cargo) - SUM(Abono) AS saldo FROM Movimientos
+WHERE activo=1
+GROUP BY id_contrato)   
+    AS cya ON cya.id_contrato  = c.id_contrato
+   GROUP BY  s.cve_sindicato
+   ORDER BY s.cve_sindicato, c.id_contrato DESC";
+        $comando = $conexion->createCommand($consulta);
+		$comando->bindValue("fechaInicio", $fechaInicio);
+		$comando->bindValue("fechaFin", $fechaFin);
+		return $comando->query()->readAll();
+	}
 }
+	
 ?>
+     

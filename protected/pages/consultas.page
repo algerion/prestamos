@@ -1,3 +1,4 @@
 <%@ MasterClass="Application.layouts.MainLayout" Title="Página para prueba de consultas" %>
 <com:TContent ID="Main">
+<com:TDataGrid ID="dgPrueba" />
 </com:TContent>
