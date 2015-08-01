@@ -1,6 +1,6 @@
 /*
-SQLyog Community v12.12 (32 bit)
-MySQL - 5.6.24 : Database - prestamos
+SQLyog Community v10.1 
+MySQL - 5.5.34 : Database - prestamos
 *********************************************************************
 */
 
@@ -50,7 +50,7 @@ CREATE TABLE `catsindicatos` (
 
 /*Data for the table `catsindicatos` */
 
-insert  into `catsindicatos`(`cve_sindicato`,`sindicato`,`representante`) values (0,'CONFIANZA','Representante'),(1,'3 DE MARZO','C. HECTOR MAYORAL GUZMAN'),(2,'AUTONOMO','C. JUAN ARAGON MATIAS'),(3,'C.R.O.C.','C. EMETERIO GERONIMO SANTIAGO LOPEZ'),(4,'12 DE SEPTIEMBRE','C. ANGEL ROBERTO CORTEZ RAMIREZ'),(5,'LIBRE','C. MARCELINO COACHE VERANO'),(6,'POLICIA','Representante'),(7,'TRANSITO','Representante'),(8,'PERSONAL OPERATIVO','Representante'),(9,'SINDICATO ADMVO','Representante'),(10,'3 DE MARZO (ADMTVO.)','C. HECTOR MAYORAL GUZMAN'),(11,'OPERATIVO','Representante'),(12,'CONFIANZA','REPRESENTANTE');
+insert  into `catsindicatos`(`cve_sindicato`,`sindicato`,`representante`) values (1,'CONFIANZA','Representante'),(2,'3 DE MARZO','C. HECTOR MAYORAL GUZMAN'),(3,'AUTONOMO','C. JUAN ARAGON MATIAS'),(4,'C.R.O.C.','C. EMETERIO GERONIMO SANTIAGO LOPEZ'),(5,'12 DE SEPTIEMBRE','C. ANGEL ROBERTO CORTEZ RAMIREZ'),(6,'LIBRE','C. MARCELINO COACHE VERANO'),(7,'POLICIA','Representante'),(8,'TRANSITO','Representante'),(9,'PERSONAL OPERATIVO','Representante'),(10,'SINDICATO ADMVO','Representante'),(11,'3 DE MARZO (ADMTVO.)','C. HECTOR MAYORAL GUZMAN'),(12,'OPERATIVO','Representante'),(13,'CONFIANZA','REPRESENTANTE');
 
 /*Table structure for table `contrato` */
 
@@ -181,6 +181,20 @@ CREATE TABLE `estatus_empleado` (
 /*Data for the table `estatus_empleado` */
 
 insert  into `estatus_empleado`(`id_estatus_empl`,`estatus`) values (1,'BAJA TEMPORAL'),(2,'ACTIVO'),(3,'BAJA DEFINITIVA');
+
+/*Table structure for table `estatus_prestamo` */
+
+DROP TABLE IF EXISTS `estatus_prestamo`;
+
+CREATE TABLE `estatus_prestamo` (
+  `id_estatus_p` varchar(1) NOT NULL,
+  `estatus_p` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`id_estatus_p`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `estatus_prestamo` */
+
+insert  into `estatus_prestamo`(`id_estatus_p`,`estatus_p`) values ('A','Autorizado'),('C','Cancelado'),('S','Solicitado');
 
 /*Table structure for table `externos` */
 
@@ -314,6 +328,29 @@ CREATE TABLE `usuarios` (
 /*Data for the table `usuarios` */
 
 insert  into `usuarios`(`id_usuario`,`usuario`,`acceso`) values (1,'prueba','0e7881f0d44670fed326557fc047de90'),(2,'admin','7a95bf926a0333f57705aeac07a362a2');
+
+/*Table structure for table `sujetos` */
+
+DROP TABLE IF EXISTS `sujetos`;
+
+/*!50001 DROP VIEW IF EXISTS `sujetos` */;
+/*!50001 DROP TABLE IF EXISTS `sujetos` */;
+
+/*!50001 CREATE TABLE  `sujetos`(
+ `numero` int(11) ,
+ `nombre` varchar(152) ,
+ `fec_ingre` datetime ,
+ `sindicato` bigint(20) ,
+ `tipo` varchar(1) ,
+ `status` varchar(1) 
+)*/;
+
+/*View structure for view sujetos */
+
+/*!50001 DROP TABLE IF EXISTS `sujetos` */;
+/*!50001 DROP VIEW IF EXISTS `sujetos` */;
+
+/*!50001 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `sujetos` AS select `empleados`.`numero` AS `numero`,concat(`empleados`.`nombre`,' ',`empleados`.`paterno`,' ',`empleados`.`materno`) AS `nombre`,`empleados`.`fec_ingre` AS `fec_ingre`,`empleados`.`sindicato` AS `sindicato`,'A' AS `tipo`,`empleados`.`status` AS `status` from `empleados` union select `pensionados`.`numero` AS `numero`,concat(`pensionados`.`nombre`,' ',`pensionados`.`paterno`,' ',`pensionados`.`materno`) AS `nombre`,`pensionados`.`fec_ingre` AS `fec_ingre`,`pensionados`.`sindicato` AS `sindicato`,'J' AS `tipo`,`pensionados`.`status` AS `status` from `pensionados` union select `externos`.`numero` AS `numero`,concat(`externos`.`nombre`,' ',`externos`.`paterno`,' ',`externos`.`materno`) AS `nombre`,`externos`.`fec_ingre` AS `fec_ingre`,0 AS `0`,'E' AS `tipo`,`externos`.`status` AS `status` from `externos` */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
