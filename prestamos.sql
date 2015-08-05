@@ -314,6 +314,20 @@ CREATE TABLE `solicitud` (
 
 /*Data for the table `solicitud` */
 
+/*Table structure for table `tipo_empleado` */
+
+DROP TABLE IF EXISTS `tipo_empleado`;
+
+CREATE TABLE `tipo_empleado` (
+  `tipo_empleado` varchar(1) NOT NULL,
+  `texto` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`tipo_empleado`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+/*Data for the table `tipo_empleado` */
+
+insert  into `tipo_empleado`(`tipo_empleado`,`texto`) values ('A','ACTIVO'),('C','CONFIANZA'),('E','EXTERNO'),('J','JUBILADO'),('S','SINDICALIZADO');
+
 /*Table structure for table `usuarios` */
 
 DROP TABLE IF EXISTS `usuarios`;
