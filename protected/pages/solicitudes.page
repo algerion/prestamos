@@ -4,26 +4,36 @@
 	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
 	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
 	<com:TClientScript ID="cscrPrompt">
-		function busca(event, empleado)
+		function busca(event, sufijo)
 		{
 			num = event.keyCode;
 
-			if(num == 114) 
+			if(num == 114)
 			{
 				event.preventDefault();
-				abrir(empleado);
+				abrir(sufijo);
+			}
+			else if(num != 13)
+			{
+				limpia_campos(sufijo);
 			}
 		}
 		
-		function abrir(empleado)
+		function abrir(sufijo)
 		{
-			open('index.php?page=busca_empleado&sufijo=' + empleado, '_blank');
+			open('index.php?page=busca_empleado&sufijo=' + sufijo, '_blank');
 		}
 		
-		window.onbeforeunload = function exitAlert()
+		function limpia_campos(sufijo)
 		{
-			return "Los datos que no se han guardado se perderán.";
+			opener.document.getElementById('ctl0_Main_txtAntiguedad' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtNombre' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtSindicato' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtTipo' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_hidImporte' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_hidPorcentaje' + sufijo).value = '';
 		}
+		
 	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
@@ -42,7 +52,7 @@
 				<table width="100%" border="1">
 					<tr>
 						<td>Titular:</td>
-						<td colspan="5"><com:TTextBox ID="txtTitular" /></td>
+						<td colspan="5"><com:TTextBox ID="txtTitular" Attributes.onchange="advertencia(this.value)" /></td>
 					</tr>
 
 					<tr>
@@ -59,22 +69,21 @@
 									<tr>
 										<td>No. Único</td>
 										<td>
-											<com:TTextBox ID="txtNoUnicoTit" Width="80px" ReadOnly="True" 
-													Attributes.onkeydown="busca(event, 'Tit')" />
+											<com:TActiveTextBox ID="txtNoUnicoTit" Width="80px" Attributes.onkeydown="busca(event, 'Tit')" Attributes.onchange="advertencia(this.value)" />
 											<a href="#" onclick="abrir('Tit')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedadTit" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="100px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Nombre</td>
-										<td colspan="3"><com:TTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" /></td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Tipo</td>
-										<td><com:TTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td><com:TTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -92,21 +101,21 @@
 									<tr>
 										<td>No. Único</td>
 										<td>
-											<com:TTextBox ID="txtNoUnicoAval1" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval1')" />
+											<com:TActiveTextBox ID="txtNoUnicoAval1" Width="80px" Attributes.onkeydown="busca(event, 'Aval1')" Attributes.onchange="advertencia(this.value)" />
 											<a href="#" onclick="abrir('Aval1')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedadAval1" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="100px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
-										<td colspan="3"><com:TTextBox ID="txtNombreAval1" Width="400px" ReadOnly="True" /></td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNombreAval1" Width="400px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Tipo</td>
-										<td><com:TTextBox ID="txtTipoAval1" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtTipoAval1" Width="100px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td><com:TTextBox ID="txtSindicatoAval1" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtSindicatoAval1" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -124,21 +133,21 @@
 									<tr>
 										<td>No. Único</td>
 										<td>
-											<com:TTextBox ID="txtNoUnicoAval2" Width="80px" ReadOnly="True" Attributes.onkeydown="busca(event, 'Aval2')" />
+											<com:TActiveTextBox ID="txtNoUnicoAval2" Width="80px" Attributes.onkeydown="busca(event, 'Aval2')" Attributes.onchange="advertencia(this.value)" />
 											<a href="#" onclick="abrir('Aval2')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedadAval2" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadAval2" Width="100px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
-										<td colspan="3"><com:TTextBox ID="txtNombreAval2" Width="400px" ReadOnly="True" /></td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNombreAval2" Width="400px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Tipo</td>
-										<td><com:TTextBox ID="txtTipoAval2" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtTipoAval2" Width="100px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td><com:TTextBox ID="txtSindicatoAval2" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtSindicatoAval2" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -151,7 +160,7 @@
 					</tr>
 					<tr>
 						<td>Fecha Firma Avales</td>
-						<td colspan="5"><com:TTextBox ID="txtFechaFirmaAvales" Width="100px" ReadOnly="True" /></td>
+						<td colspan="5"><com:TDatePicker ID="datFechaFirmaAvales" DateFormat="dd/MMMM/yyyy" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td>
 					</tr>
 				</table>
 			</td>
@@ -159,15 +168,15 @@
 				<table width="100%" border="1">
 					<tr>
 						<td>Importe:</td>
-						<td><com:TTextBox ID="txtImporte" width="80px" ReadOnly="True" /></td>
+						<td><com:TTextBox ID="txtImporte" width="80px" Attributes.onchange="advertencia(this.value)" /></td>
 					</tr>
 					<tr>
 						<td>Plazo:</td>
-						<td><com:TTextBox ID="txtPlazo"  width="80px" ReadOnly="True" /></td>
+						<td><com:TTextBox ID="txtPlazo"  width="80px" Attributes.onchange="advertencia(this.value)" /></td>
 					</tr>
 					<tr>
 						<td>Tasa:</td>
-						<td><com:TTextBox ID="txtTasa" width="80px" ReadOnly="True" /></td>
+						<td><com:TTextBox ID="txtTasa" width="80px" Attributes.onchange="advertencia(this.value)" /></td>
 					</tr>
 					<tr>
 						<td>Interes:</td>

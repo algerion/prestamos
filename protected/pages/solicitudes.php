@@ -1,6 +1,7 @@
 <?php
 //Prado::using('System.Util.*'); //TVarDump
-/*Prado::using('System.Web.UI.ActiveControls.*');
+Prado::using('System.Web.UI.ActiveControls.*');
+/*
 include_once('../compartidos/clases/listas.php');
 include_once('../compartidos/clases/envia_mail.php');
 include_once('../compartidos/clases/charset.php');
@@ -19,13 +20,30 @@ class solicitudes extends TPage
 		if(!$this->IsPostBack)
 		{
 			$this->txtFecha->Text = date("d-m-Y");
-			$this->carga_solicitud();
+			//$this->carga_solicitud();
+			$this->Rellena_Datos(41062);
 		}
-
+	
 	}
 	
 	public function btnGuardar_Click($sender, $param)
 	{
+	}
+	
+	public function Rellena_Datos($num_unico)
+	{
+		$result = Conexion::Retorna_Consulta($this->dbConexion, "sujetos", array("nombre", "fec_ingre", "sindicato", "tipo"), array("numero"=>$num_unico));
+		if(count($result) > 0)
+		{
+			$intervalo = date_diff(date_create($result[0]["fec_ingre"]), new DateTime("now"));
+			$formato = '%m meses';
+			if($intervalo->format('%y') > 0)
+				$formato = '%y años ' . $formato;
+			$this->txtAntiguedadTit->Text = $intervalo->format($formato);
+			$this->txtNombreTit->Text = $result[0]["nombre"];
+			$this->txtTipoTit->Text = $result[0]["tipo"];
+			$this->txtSindicatoTit->Text = $result[0]["sindicato"];
+		}
 	}
 	
 	public function carga_solicitud($id_solicitud = null)
@@ -49,37 +67,39 @@ class solicitudes extends TPage
 		$comando = $this->dbConexion->createCommand($consulta);
 		$result = $comando->query()->readAll();
 		
-		$this->txtTitular->Text = $result[0]["num_tit"];
-		$this->txtFolio->Text = 8000;
-		$this->txtFecha->Text = $result[0]["creada"];
-		$this->txtNoUnicoTit->Text = $result[0]["num_tit"];
-		$this->txtAntiguedadTit->Text = $result[0]["tit_ant"];
-		$this->txtNombreTit->Text = $result[0]["titular"];
-		$this->txtTipoTit->Text = "ACTIVO";
-		$this->txtSindicatoTit->Text = $result[0]["tit_sind"];
-		$this->txtNoUnicoAval1->Text = $result[0]["aval1"];
-		$this->txtAntiguedadAval1->Text = $result[0]["aval1_ant"];
-		$this->txtNombreAval1->Text = $result[0]["aval1_n"];
-		$this->txtTipoAval1->Text = "ACTIVO";
-		$this->txtSindicatoAval1->Text = $result[0]["aval1_sind"];
-		$this->txtNoUnicoAval2->Text = $result[0]["aval2"];
-		$this->txtAntiguedadAval2->Text = $result[0]["num_tit"];
-		$this->txtNombreAval2->Text = $result[0]["aval2_n"];
-		$this->txtTipoAval2->Text = "ACTIVO";
-		$this->txtSindicatoAval2->Text = $result[0]["aval2_sind"];
-		$this->txtFechaFirmaAvales->Text = $result[0]["firma"];
-		$this->txtImporte->Text = $result[0]["importe"];
-		$this->txtPlazo->Text = $result[0]["plazo"];
-		$this->txtTasa->Text = $result[0]["tasa"];
-		$this->txtInteres->Text = $result[0]["importe"] * $result[0]["plazo"] * $result[0]["tasa"] / 100;
-		$this->txtSaldoAnterior->Text = $result[0]["saldo_anterior"];
-		$this->txtDescuentos->Text = $result[0]["descuento"];
-		$this->txtImpDescuentos->Text = 0;
-		$this->txtImpPrestamos->Text = 0;
-		$this->txtSeguro->Text = 0;
-		$this->txtDiferencia->Text = 0;
-		$this->txtImpCheque->Text = $result[0]["importe"];
-
+		if(count($result) > 0)
+		{
+			$this->txtTitular->Text = $result[0]["num_tit"];
+			$this->txtFolio->Text = 8000;
+			$this->txtFecha->Text = $result[0]["creada"];
+			$this->txtNoUnicoTit->Text = $result[0]["num_tit"];
+			$this->txtAntiguedadTit->Text = $result[0]["tit_ant"];
+			$this->txtNombreTit->Text = $result[0]["titular"];
+			$this->txtTipoTit->Text = "ACTIVO";
+			$this->txtSindicatoTit->Text = $result[0]["tit_sind"];
+			$this->txtNoUnicoAval1->Text = $result[0]["aval1"];
+			$this->txtAntiguedadAval1->Text = $result[0]["aval1_ant"];
+			$this->txtNombreAval1->Text = $result[0]["aval1_n"];
+			$this->txtTipoAval1->Text = "ACTIVO";
+			$this->txtSindicatoAval1->Text = $result[0]["aval1_sind"];
+			$this->txtNoUnicoAval2->Text = $result[0]["aval2"];
+			$this->txtAntiguedadAval2->Text = $result[0]["num_tit"];
+			$this->txtNombreAval2->Text = $result[0]["aval2_n"];
+			$this->txtTipoAval2->Text = "ACTIVO";
+			$this->txtSindicatoAval2->Text = $result[0]["aval2_sind"];
+			$this->datFechaFirmaAvales->Text = strtotime($result[0]["firma"]);
+			$this->txtImporte->Text = $result[0]["importe"];
+			$this->txtPlazo->Text = $result[0]["plazo"];
+			$this->txtTasa->Text = $result[0]["tasa"];
+			$this->txtInteres->Text = $result[0]["importe"] * $result[0]["plazo"] * $result[0]["tasa"] / 100;
+			$this->txtSaldoAnterior->Text = $result[0]["saldo_anterior"];
+			$this->txtDescuentos->Text = $result[0]["descuento"];
+			$this->txtImpDescuentos->Text = 0;
+			$this->txtImpPrestamos->Text = 0;
+			$this->txtSeguro->Text = 0;
+			$this->txtDiferencia->Text = 0;
+			$this->txtImpCheque->Text = $result[0]["importe"];
+		}
 	}
 }
 
