@@ -21,7 +21,7 @@ class solicitudes extends TPage
 		{
 			$this->txtFecha->Text = date("d-m-Y");
 			//$this->carga_solicitud();
-			$this->Rellena_Datos(41062);
+			
 		}
 	
 	}
@@ -30,19 +30,32 @@ class solicitudes extends TPage
 	{
 	}
 	
-	public function Rellena_Datos($num_unico)
+	public function txtNoUnico_CallBack($sender, $param)
+	{
+		$this->Rellena_Datos($sender->Text, str_replace("txtNoUnico", "", $sender->ID));
+	}
+	
+	public function Rellena_Datos($num_unico, $sufijo)
 	{
 		$result = Conexion::Retorna_Consulta($this->dbConexion, "sujetos", array("nombre", "fec_ingre", "sindicato", "tipo"), array("numero"=>$num_unico));
 		if(count($result) > 0)
 		{
 			$intervalo = date_diff(date_create($result[0]["fec_ingre"]), new DateTime("now"));
 			$formato = '%m meses';
-			if($intervalo->format('%y') > 0)
+			if($intervalo->format('%y') > 100)
+				$formato = 'Desconocida';
+			elseif($intervalo->format('%y') > 0)
 				$formato = '%y años ' . $formato;
-			$this->txtAntiguedadTit->Text = $intervalo->format($formato);
-			$this->txtNombreTit->Text = $result[0]["nombre"];
-			$this->txtTipoTit->Text = $result[0]["tipo"];
-			$this->txtSindicatoTit->Text = $result[0]["sindicato"];
+			$ant = "txtAntiguedad" . $sufijo;
+			$this->$ant->Text = $intervalo->format($formato);
+			$nom = "txtNombre" . $sufijo;
+			$this->$nom->Text = $result[0]["nombre"];
+			$tipo = Conexion::Retorna_Campo($this->dbConexion, "tipo_empleado", "texto", array("tipo_empleado"=>$result[0]["tipo"]));
+			$tip = "txtTipo" . $sufijo;
+			$this->$tip->Text = $tipo;
+			$sindicato = Conexion::Retorna_Campo($this->dbConexion, "catsindicatos", "sindicato", array("cve_sindicato"=>$result[0]["sindicato"]));
+			$sin = "txtSindicato" . $sufijo;
+			$this->$sin->Text = $sindicato;
 		}
 	}
 	

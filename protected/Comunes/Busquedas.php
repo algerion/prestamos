@@ -3,15 +3,16 @@ class Busquedas
 {
 	public static function empleados($conexion, $tipo, $busca, $sindicato = null)
 	{
-		$camposempjub = "SELECT e.numero, nombre, paterno, materno, cs.sindicato, fec_ingre, " .
-				"TIMESTAMPDIFF(YEAR, fec_ingre, CURDATE()) AS antiguedad, " . 
+		$camposempjub = "SELECT e.numero, e.nombre, cs.sindicato, fec_ingre, " .
+				"TIMESTAMPDIFF(YEAR, fec_ingre, CURDATE()) AS anual, " . 
+				"TIMESTAMPDIFF(MONTH, fec_ingre, CURDATE()) MOD 12 AS mensual, " . 
 				"IFNULL(df.importe, 0) AS importe, IFNULL(df.porcentaje, 0) AS porcentaje";
 		$joinsempjub = " e LEFT JOIN catsindicatos cs ON e.sindicato = cs.cve_sindicato " .
 				"LEFT JOIN descuentos_fijos df ON e.numero = df.numero AND df.concepto = 61";
-		$externos = "SELECT e.numero, nombre, paterno, materno, 0 AS sindicato, fec_ingre, " . 
-				"0 AS antiguedad, 0 AS importe, 0 AS porcentaje, 'EXTERNO' AS tipo FROM externos e";
+		$externos = "SELECT e.numero, nombre, 0 AS sindicato, fec_ingre, " . 
+				"0 AS anual, 0 as mensual, 0 AS importe, 0 AS porcentaje, 'EXTERNO' AS tipo FROM externos e";
 		$consulta = "";
-		$where = " WHERE (e.numero LIKE :busca OR e.nombre LIKE :busca OR e.paterno LIKE :busca OR e.materno LIKE :busca) ";
+		$where = " WHERE (e.numero LIKE :busca OR e.nombre LIKE :busca) ";
 		$sind = "";
 		
 		if($sindicato != null)

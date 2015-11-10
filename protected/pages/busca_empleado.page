@@ -6,13 +6,13 @@
 	<com:TClientScript ID="cscrPrompt">
 		function regresa(sufijo, numero, nombre, sindicato, antiguedad, tipo, importe, porcentaje)
 		{
-			opener.document.getElementById('ctl0_Main_txtNoUnico' + sufijo).value = numero;
-			opener.document.getElementById('ctl0_Main_txtAntiguedad' + sufijo).value = antiguedad;
+			opener.document.getElementById('ctl0_Main_txtNoUnico' + sufijo).value = numero + "\n";
+/*			opener.document.getElementById('ctl0_Main_txtAntiguedad' + sufijo).value = antiguedad;
 			opener.document.getElementById('ctl0_Main_txtNombre' + sufijo).value = nombre;
 			opener.document.getElementById('ctl0_Main_txtSindicato' + sufijo).value = sindicato;
 			opener.document.getElementById('ctl0_Main_txtTipo' + sufijo).value = tipo;
 			opener.document.getElementById('ctl0_Main_hidImporte' + sufijo).value = importe;
-			opener.document.getElementById('ctl0_Main_hidPorcentaje' + sufijo).value = porcentaje;
+			opener.document.getElementById('ctl0_Main_hidPorcentaje' + sufijo).value = porcentaje;*/
 			close();
 		}
 	</com:TClientScript>

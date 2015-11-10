@@ -30,7 +30,8 @@ class busca_empleado extends TPage
 	public function btnBuscar_Click($sender, $param)
 	{
 		$sind = ($this->ddlSindicato->SelectedValue != "T" ? $this->ddlSindicato->SelectedValue : null);
-		$resultado = Busquedas::empleados($this->dbConexion, $this->ddlTipo->SelectedValue, $this->txtNombre->Text, $sind);
+		//$resultado = Busquedas::empleados($this->dbConexion, $this->ddlTipo->SelectedValue, $this->txtNombre->Text, $sind);
+		$resultado = Conexion::Retorna_Registro($this->dbConexion, "sujetos", 
 		for($i = 0; $i < count($resultado); $i++)
 		{
 			$campos = "'" . $this->Request["sufijo"] . "', '" . $resultado[$i]["numero"] . "', '" . 

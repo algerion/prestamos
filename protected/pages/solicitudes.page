@@ -13,7 +13,7 @@
 				event.preventDefault();
 				abrir(sufijo);
 			}
-			else if(num != 13)
+			else if(num != 9 && num != 13)
 			{
 				limpia_campos(sufijo);
 			}
@@ -69,11 +69,12 @@
 									<tr>
 										<td>No. Único</td>
 										<td>
-											<com:TActiveTextBox ID="txtNoUnicoTit" Width="80px" Attributes.onkeydown="busca(event, 'Tit')" Attributes.onchange="advertencia(this.value)" />
+											<com:TActiveTextBox ID="txtNoUnicoTit" Width="80px" OnCallback="txtNoUnico_CallBack" AutoPostBack="True" 
+													Attributes.onkeydown="busca(event, 'Tit')" Attributes.onchange="advertencia(this.value)" />
 											<a href="#" onclick="abrir('Tit')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="200px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Nombre</td>
@@ -101,11 +102,12 @@
 									<tr>
 										<td>No. Único</td>
 										<td>
-											<com:TActiveTextBox ID="txtNoUnicoAval1" Width="80px" Attributes.onkeydown="busca(event, 'Aval1')" Attributes.onchange="advertencia(this.value)" />
+											<com:TActiveTextBox ID="txtNoUnicoAval1" Width="80px" OnCallback="txtNoUnico_CallBack" AutoPostBack="True" 
+													Attributes.onkeydown="busca(event, 'Aval1')" Attributes.onchange="advertencia(this.value)" />
 											<a href="#" onclick="abrir('Aval1')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="200px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
@@ -133,11 +135,12 @@
 									<tr>
 										<td>No. Único</td>
 										<td>
-											<com:TActiveTextBox ID="txtNoUnicoAval2" Width="80px" Attributes.onkeydown="busca(event, 'Aval2')" Attributes.onchange="advertencia(this.value)" />
+											<com:TActiveTextBox ID="txtNoUnicoAval2" Width="80px" OnCallback="txtNoUnico_CallBack" AutoPostBack="True" 
+													Attributes.onkeydown="busca(event, 'Aval2')" Attributes.onchange="advertencia(this.value)" />
 											<a href="#" onclick="abrir('Aval2')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TActiveTextBox ID="txtAntiguedadAval2" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadAval2" Width="200px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
