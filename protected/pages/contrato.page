@@ -3,6 +3,32 @@
 	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
 	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
 	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+	<com:TClientScript ID="cscrPrompt">
+			
+	function abrirVentana(url) 
+	{
+    window.open(url, "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=750, height=900");
+	}
+	function busca(event, sufijo)
+		{
+			num = event.keyCode;
+
+			if(num == 114)
+			{
+				event.preventDefault();
+				abrir(sufijo);
+			}
+			else if(num != 9 && num != 13)
+			{
+				limpia_campos(sufijo);
+			}
+		}
+	function abrir(idContrato)
+		{
+			open('reportes/contrato.php?id=idContrato', '_blank');
+		}
+			
+	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
 	<!--Datos del solicitante-->
@@ -19,10 +45,20 @@
 			<td>
 				<table border="0">
 					<tr>
-						<td>Buscar Titular:</td>
-						<td><com:TTextBox ID="txtBuscarTitular" /></td>
+						<td>Buscar Titular/Solicitud:</td>
+						<td><com:TTextBox ID="txtFoliosolicitud" BackColor="yellow" />
+							
+							<com:TRequiredFieldValidator
+							ValidationGroup="Guardar1"
+							ControlToValidate="txtFoliosolicitud"
+							Text="Campo requerido" /></td>
+						<td><com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true" ValidationGroup="Guardar1" /></td>
+					</tr>
+					<tr>
+						<td>Titular:</td>
+						<td><com:TTextBox ID="txtBuscarTitularr" /></td>
 						<td>Folio Solicitud:</td>
-						<td><com:TTextBox ID="txtFoliosolicitud" /></td>
+						<td><com:TTextBox ID="txtFoliosolicitudd" /></td>
 						<td>Estatus</td>
 					</tr>
 
@@ -30,16 +66,16 @@
 						<td>Folio contrato:</td>
 						<td><com:TTextBox ID="txtFoliocontrato" /></td>
 						<td>Fecha contrato:</td>
-						<td><com:TTextBox ID="txtFechaContrato" /></td>
+						<td colspan="5"><com:TDatePicker ID="dattxtFechaContrato" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
 					</tr>
 					<tr>
 					    <td>Fecha autorización:</td>
 						<td><com:TTextBox ID="txtFechaAutorizasioon" /></td>
+						
 					</tr>
 					<tr>
-						<td>Estatus</td>
 						<td>Fecha:</td>
-						<td><com:TTextBox ID="txtfecha2" /></td>
+						<td><com:TTextBox ID="txtfecha" ReadOnly="True"/></td>
 						<td>Fecha Firma Avales:</td>
 						<td><com:TTextBox ID="txtFechaFirmaAvales2" /></td>	
 					</tr>
@@ -53,20 +89,10 @@
 										<td colspan="3"><com:TTextBox ID="txtNombreTit" Width="400px" /></td>
 									</tr>
 									<tr>
-										<td>Dirección</td>
-										<td colspan="4"><com:TTextBox ID="txtDireccion" Width="400px" /></td>
-									</tr>
-									<tr>
-										<td>Categoria</td>
-										<td colspan="2"><com:TTextBox ID="txtCategoria" /></td>
-										<td>Unidad Presupuestal</td>
-										<td><com:TTextBox ID="txtUnidadPresupuestal" Width="400px" /></td>
-									</tr>
-									<tr>
 										<td>Sindicato</td>
-										<td colspan="2"><com:TTextBox ID="txtSindicato" /></td>
+										<td colspan="2"><com:TTextBox ID="txtSindicatoTit" /></td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedad" Width="400px" /></td>
+										<td><com:TTextBox ID="txtAntiguedadTit" Width="400px" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -78,24 +104,14 @@
 								<table border="0">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoTit2" Width="80px" /></td>
-										<td colspan="3"><com:TTextBox ID="txtNombreTit2" Width="400px" /></td>
-									</tr>
-									<tr>
-										<td>Dirección</td>
-										<td colspan="4"><com:TTextBox ID="txtDireccion2" Width="400px" /></td>
-									</tr>
-									<tr>
-										<td>Categoria</td>
-										<td colspan="2"><com:TTextBox ID="txtCategoria2" /></td>
-										<td>Unidad Presupuestal</td>
-										<td><com:TTextBox ID="txtUnidadPresupuestal2" Width="400px" /></td>
+										<td><com:TTextBox ID="txtNoUnicoAval1" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreAval1" Width="400px" /></td>
 									</tr>
 									<tr>
 										<td>Sindicato</td>
-										<td colspan="2"><com:TTextBox ID="txtSindicato2" /></td>
+										<td colspan="2"><com:TTextBox ID="txtSindicatoAval1" /></td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedad2" Width="400px" /></td>
+										<td><com:TTextBox ID="txtAntiguedadAval1" Width="400px" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -107,33 +123,25 @@
 								<table border="0">
 									<tr>
 										<td>No. Único</td>
-										<td><com:TTextBox ID="txtNoUnicoTit3" Width="80px" /></td>
-										<td colspan="3"><com:TTextBox ID="txtNombreTit3" Width="400px" /></td>
-									</tr>
-									<tr>
-										<td>Dirección</td>
-										<td colspan="4"><com:TTextBox ID="txtDireccion3" Width="400px" /></td>
-									</tr>
-									<tr>
-										<td>Categoria</td>
-										<td colspan="2"><com:TTextBox ID="txtCategoria3" /></td>
-										<td>Unidad Presupuestal</td>
-										<td><com:TTextBox ID="txtUnidadPresupuestal3" Width="400px" /></td>
+										<td><com:TTextBox ID="txtNoUnicoAval2" Width="80px" /></td>
+										<td colspan="3"><com:TTextBox ID="txtNombreAval2" Width="400px" /></td>
 									</tr>
 									<tr>
 										<td>Sindicato</td>
-										<td colspan="2"><com:TTextBox ID="txtSindicato3" /></td>
+										<td colspan="2"><com:TTextBox ID="txtSindicatoAval2" /></td>
 										<td>Antigüedad</td>
-										<td><com:TTextBox ID="txtAntiguedad3" Width="400px" /></td>
+										<td><com:TTextBox ID="txtAntiguedadAval2" Width="400px" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
 						</td>
 						<tr>
 						<td>Fecha Expedicion Cheque</td>
-										<td><com:TTextBox ID="txtFechaexpediciocheque" Width="100px" /></td>
-						<td>Fecha Entrega Cheque</td>
-										<td><com:TTextBox ID="txtFechaEntrgaCheque" Width="100px" /></td>
+										<td colspan="5"><com:TDatePicker ID="datFechaexpediciocheque" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /> 
+						Fecha Entrega Cheque
+										<com:TDatePicker ID="datFechaEntrgaCheque" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
+						</tr>
+						<tr>
 						<td>Número De Cheque</td>
 										<td><com:TTextBox ID="txtNumeroDeCheque" Width="100px" /></td>				
 						</tr>
@@ -192,7 +200,7 @@
 		<!--Botón Guardar-->
 		<tr>
 			<td colspan="2" align="center">
-				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" />
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" ValidationGroup="Guardar1" />
 			</td>
 		</tr>
 	</table>
