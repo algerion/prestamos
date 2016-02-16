@@ -31,14 +31,19 @@
 			opener.document.getElementById('ctl0_Main_txtSindicato' + sufijo).value = '';
 			opener.document.getElementById('ctl0_Main_txtTipo' + sufijo).value = '';
 			opener.document.getElementById('ctl0_Main_hidImporte' + sufijo).value = '';
-			opener.document.getElementById('ctl0_Main_hidPorcentaje' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_hidPorcentaje' + sufijo).value = '';	
+			opener.document.getElementById('ctl0_Main_txtSindicatoNum' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtTipoNum' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtMesT' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtNota' + sufijo).value = '';
 		}
+		
 		
 	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
 	<!--Datos del solicitante-->
-	<table width="100%" border="1">
+	<table width="100%" border="0">
 
 		<!--Título-->
 		<tr>
@@ -49,15 +54,18 @@
 		
 		<tr>
 			<td>
-				<table width="100%" border="1">
+				<table width="100%" border="0">
 					<tr>
-						<td>Titular:</td>
-						<td colspan="5"><com:TTextBox ID="txtTitular" Attributes.onchange="advertencia(this.value)" /></td>
+						<td> Buscar Titular/Solicitud:</td>
+						<td colspan="5"><com:TTextBox ID="txtFolio" Attributes.onchange="advertencia(this.value)" />
+						<com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
+						<com:TTextBox ID="txtPrueba" Attributes.onchange="advertencia(this.value)" Visible="false"/></td>
+						
 					</tr>
 
 					<tr>
-						<td>Folio:</td>
-						<td><com:TTextBox ID="txtFolio" /></td>
+						<td> Titular:</td>
+						<td><com:TTextBox ID="txtTitular" BackColor="white"/></td>
 						<td>Fecha:</td>
 						<td><com:TTextBox ID="txtFecha" ReadOnly="True" /></td>
 						<td>Estatus</td>
@@ -65,7 +73,7 @@
 					<tr>
 						<td colspan="4">
 							<com:TPanel GroupingText="Titular">
-								<table width="100%" border="1">
+								<table width="100%" border="0">
 									<tr>
 										<td>No. Único</td>
 										<td>
@@ -74,17 +82,25 @@
 											<a href="#" onclick="abrir('Tit')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="200px" ReadOnly="True" />
+										    <com:TActiveTextBox ID="txtAntiguedadNumTit" Width="40px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Nombre</td>
-										<td colspan="3"><com:TActiveTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" /></td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtMesTTit" Width="40px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Tipo</td>
-										<td><com:TActiveTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtTipoNumTit" Width="20px" ReadOnly="True" /></td> 
 										<td>Sindicato</td>
-										<td><com:TActiveTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtSindicatoNumTit" Width="20px" ReadOnly="True" /></td>
+									</tr>
+									<tr>
+										<td colspan="5"><com:TActiveTextBox ID="txtNotaTit" Width="460px" ReadOnly="True" Visible="false" BackColor="yellow"/></td> 
+										
 									</tr>
 								</table>
 							</com:TPanel>
@@ -98,7 +114,7 @@
 					<tr>
 						<td colspan="4">
 							<com:TPanel GroupingText="Aval 1">
-								<table width="100%" border="1">
+								<table width="100%" border="0">
 									<tr>
 										<td>No. Único</td>
 										<td>
@@ -107,7 +123,8 @@
 											<a href="#" onclick="abrir('Aval1')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="200px" ReadOnly="True" />
+										    <com:TActiveTextBox ID="txtAntiguedadNumAval1" Width="35px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
@@ -115,9 +132,11 @@
 									</tr>
 									<tr>
 										<td>Tipo</td>
-										<td><com:TActiveTextBox ID="txtTipoAval1" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtTipoAval1" Width="100px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtTipoNumAval1" Width="20px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td><com:TActiveTextBox ID="txtSindicatoAval1" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtSindicatoAval1" Width="200px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtSindicatoNumAval1" Width="20px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -131,7 +150,7 @@
 					<tr>
 						<td colspan="4">
 							<com:TPanel GroupingText="Aval 2">
-								<table width="100%" border="1">
+								<table width="100%" border="0">
 									<tr>
 										<td>No. Único</td>
 										<td>
@@ -140,7 +159,8 @@
 											<a href="#" onclick="abrir('Aval2')">Buscar</a>
 										</td>
 										<td>Antigüedad</td>
-										<td><com:TActiveTextBox ID="txtAntiguedadAval2" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtAntiguedadAval2" Width="200px" ReadOnly="True" />
+											<com:TActiveTextBox ID="txtAntiguedadNumAval2" Width="35px" ReadOnly="True" /></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
@@ -148,9 +168,11 @@
 									</tr>
 									<tr>
 										<td>Tipo</td>
-										<td><com:TActiveTextBox ID="txtTipoAval2" Width="100px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtTipoAval2" Width="100px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtTipoNumAval2" Width="20px" ReadOnly="True" /></td>
 										<td>Sindicato</td>
-										<td><com:TActiveTextBox ID="txtSindicatoAval2" Width="200px" ReadOnly="True" /></td>
+										<td><com:TActiveTextBox ID="txtSindicatoAval2" Width="200px" ReadOnly="True" />
+										<com:TActiveTextBox ID="txtSindicatoNumAval2" Width="20px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -163,12 +185,12 @@
 					</tr>
 					<tr>
 						<td>Fecha Firma Avales</td>
-						<td colspan="5"><com:TDatePicker ID="datFechaFirmaAvales" DateFormat="dd/MMMM/yyyy" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td>
+						<td colspan="5"><com:TDatePicker ID="datFechaFirmaAvales" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
 					</tr>
 				</table>
 			</td>
 			<td>
-				<table width="100%" border="1">
+				<table width="100%" border="0">
 					<tr>
 						<td>Importe:</td>
 						<td><com:TTextBox ID="txtImporte" width="80px" Attributes.onchange="advertencia(this.value)" /></td>
@@ -179,7 +201,7 @@
 					</tr>
 					<tr>
 						<td>Tasa:</td>
-						<td><com:TTextBox ID="txtTasa" width="80px" Attributes.onchange="advertencia(this.value)" /></td>
+						<td><com:TTextBox ID="txtTasa" width="80px" Attributes.onchange="advertencia(this.value)" Text="1.00" ReadOnly="True"/></td>
 					</tr>
 					<tr>
 						<td>Interes:</td>
@@ -220,7 +242,8 @@
 		<!--Botón Guardar-->
 		<tr>
 			<td colspan="2" align="center">
-				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" />
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
+				<com:TButton ID="btnModificar" Text="Actualizar" OnClick="btnModificar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
 			</td>
 		</tr>
 	</table>
