@@ -1,0 +1,112 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="Solicitudes" %>
+<com:TContent ID="Cabeceras">
+<style>
+	.Estilo3
+	{
+		/*font-size: x-large;*/
+	}
+</style>
+</com:TContent>
+<com:TContent ID="Main">
+	<p align="center">
+		<strong>DIRECCION DE PENSIONES.</strong>
+		<br />
+		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
+		<br />
+		<strong>SOLICITUD DE PRESTAMO</strong>
+	</p>
+
+	<table width="100%" align="center" border="0">
+		<tr>
+			<td width="20%">&nbsp;</td>
+			<td width="35%">&nbsp;</td>
+			<td width="5%">&nbsp;</td>
+			<td width="20%">DE SOLICITUD:</td>
+			<td width="20%"><com:TLabel ID="lblNumSolicitante" /></td>
+		</tr>
+	<!-- /table>
+
+	<table width="644" border="0" align="center" -->
+		<!-- tr>
+			<td -->
+				<!-- table width="686" align="center" border="0" -->
+					<tr>
+						<td align="right">Solicitante:</td>
+						<td align="left" colspan="3" class="Estilo3"><com:TLabel ID="lblSolicitante" /></td>
+					</tr>
+					<tr>
+						<td align="right">Fecha de Ingreso:</td>
+						<td align="left" class="Estilo3"><com:TLabel ID="lblFechadeIngreso" /></td>
+						<td align="right">Antigüedad:</td>
+						<td align="left" class="Estilo3"><com:TLabel ID="lblAntiguedad" /></td>
+					</tr>
+					<!-- tr>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+						<td><div align="right"></div></td>
+						<td><div align="left"></div></td>
+					</tr>
+					<tr>
+						<td><div align="left">  Sindicato:</div></td>
+						<td><div align="left"><span class="Estilo3">$VarSindicato</span></div></td>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+					</tr>
+					<tr>
+						<td colspan="4"> <div align="left">  ___________________________________________________________________________________  </div></td>
+					</tr>
+					<tr>
+						<td><div align="left"> Aval:</div></td>
+						<td colspan="3"><div align="left"><span class="Estilo3">$Aval1 - $VarAval1</span></div></td>
+					</tr>
+					<tr>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+					</tr>
+					<tr>
+						<td><div align="left"> Aval2:</div></td>
+						<td colspan="3"><div align="left"><span class="Estilo3">$Aval2 - $VarAval2</span></div></td>
+					</tr>
+					<tr>
+						<td colspan="4"><div align="left"></div></td>
+					</tr>
+					<tr>
+						<td colspan="2"><div align="left"> Fecha de firma de los Avales: $nuevafecha </div></td>
+						<td colspan="2"><div align="left"></div></td>
+					</tr>
+					<tr>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+						<td><div align="left"></div></td>
+					</tr>
+					<tr>
+						<td><div align="left"> Plazo de pago:</div></td>
+						<td><div align="left">$meses Meses</div></td>
+						<td><div align="center">Monto:</div></td>
+						<td><div align="left">$ $VarImporte</div></td>
+					</tr>
+					<tr>
+						<td colspan="4"><div align="left">  ___________________________________________________________________________________  </div></td>
+					</tr>
+				</table>
+				<table width="654" border="0" align="center">
+					<tr>
+						<td width="644"><div align="center">DIRECTORA DE PENSIONES</div></td>
+					</tr>
+					<tr>
+						<td>
+							<p>&nbsp;</p>
+							<p align="center">________________________________________________________________</p>
+						</td>
+					</tr>
+					<tr>
+						<td><div align="center">$VarDirector</div></td>
+					</tr -->
+				<!-- /table>
+			</td>
+		</tr -->
+	</table>
+</com:TContent>
