@@ -73,13 +73,16 @@
 						<td colspan="4" align="center">____________________________________________________________________________________________</td>
 					</tr>
 					<tr>
-						<td colspan="4" align="center">DIRECTORA DE PENSIONES <p>&nbsp;</p></td>
+						<td colspan="2" align="center">REPRESENTANTE SINDICAL<p>&nbsp;</p></td>
+						<td colspan="2" align="center">DIRECTORA DE PENSIONES<p>&nbsp;</p></td>
 					</tr>
 					<tr>
-						<td colspan="4" align="center">_________________________________________</td>
+						<td colspan="2" align="center">_________________________________________</td>
+						<td colspan="2" align="center">_________________________________________</td>
 					</tr>
 					<tr>
-						<td colspan="4" align="center"><com:TLabel ID="lbldirector"/></td>
-					</tr>
+						<td colspan="2" align="center"><com:TLabel ID="lblsindicato"/></td>
+						<td colspan="2" align="center"><com:TLabel ID="lbldirector"/></td>
+					</tr>					
 		</table>
 </com:TContent>

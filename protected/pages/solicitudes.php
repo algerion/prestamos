@@ -107,14 +107,13 @@ class solicitudes extends TPage
 		{
 			if($this->txtSindicatoNumTit->Text > 0){
 			$titular=$this->txtNoUnicoTit->Text;
-			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
-					"open('reportes/solicitudesSindicato.php?id=$titular', '_blank');");
-					
+			
+			 $this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
+		  		"document.location.href='index.php?page=reportes.solicitudSindicatopdf&id=$titular','_blank'; ");
 					$this->Limpiar_Campos();
 				}else {
-			$titular=$this->txtNoUnicoTit->Text;
-			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
-					"open('reportes/solicitudess.php?id=$titular', '_blank');");
+			 $this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
+		  		"document.location.href='index.php?page=reportes.solicitudespdf&id=$titular','_blank'; ");
 					$this->Limpiar_Campos();
 			}
 		}
@@ -200,12 +199,6 @@ class solicitudes extends TPage
 				$this->txtNotaTit->Text = 'No cumple con la Antigüedad para el préstamo de: $'.$this->txtImporte->Text;
 			}	
 		}
-		
-		//$comando->execute();
-		/*$titular=$this->txtNoUnicoTit->Text;
-		$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
-				"document.location.target='_blank'; ".
-		  		"document.location.href='reportes/solicitudess.php?id=$titular ';"); */
 	}
 	public function txtNoUnico_CallBack($sender, $param)
 	{

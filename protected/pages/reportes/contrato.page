@@ -1,0 +1,259 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="contrato" %>
+<com:TContent ID="Cabeceras">
+<style>
+	.Estilo1 {font-size: 14px}
+	.Estilo2 {font-size: 11px}
+</style>
+</com:TContent>
+<com:TContent ID="Main">	
+		<table width="100%" align="center" border="0">	
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">CONTRATO DE PRESTAMO A CORTO PLAZO QUE CELEBRAN POR UNA PARTE EL C. <com:TLabel ID="lblTitular" /> Y POR OTRA PARTE LA DIRECCION DE PENSIONES DEL MUNICIPIO DE OAXACA DE
+					JUAREZ, REPRESENTADA POR LA C. <com:TLabel ID="lblDirector" /> EN SU
+					CARACTER DE DIRECTORA GENERAL EL CUAL SE SUJETA AL TENOR DE LAS SIGUIENTES
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="right"  class="Estilo1">Contrato No. <com:TLabel ID="lblContrato" />
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="center"  class="Estilo1">D E C L A R A C I O N E S :
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">I. EL C. <com:TLabel Text="<%=$this->NombreTitular%>" />, antigüedad 22.00 , agremiado al sindicato 3 DE MARZO quien presta
+				sus servicios en la {5dependencia} solicita a la Dirección de Pensiones del Municipio de Oaxaca de
+				Juárez, Oax. se le conceda un préstamo por la cantidad de $ <com:TLabel Text="<%=$this->importeNeto%>" /> ( <com:TLabel Text="<%=$this->ImporteLetras%>" /> ) 
+				</td>						
+			</tr>
+			<tr>
+				<td>						
+					
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">II.- La Dirección de Pensiones del Municipio de Oaxaca de Juárez, Oax., está de acuerdo en
+				conceder dicho préstamo el cuál se sujeta al tenor de las siguientes
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="center"  class="Estilo1">C L A U S U L A S :
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">PRIMERA.- La Dirección de Pensiones del Municipio de Oaxaca de Juárez, Oax. se obliga
+				expresamente a conceder al C. <com:TLabel Text="<%=$this->NombreTitular%>" /> un préstamo por la cantidad de $ <com:TLabel Text="<%=$this->importeNeto%>" />(<com:TLabel Text="<%=$this->ImporteLetras%>" /> ) con un interes del 1.00% mensual.
+				</td>						
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">SEGUNDA.- El C.<com:TLabel Text="<%=$this->NombreTitular%>" /> se compromete exprésamente a devolver la cantidad
+				prestada en un periodo de <com:TLabel ID="lblquincena" /> quincenas y/ó semanas.
+				</td>						
+			</tr>
+			  <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">TERCERA.- El C. <com:TLabel Text="<%=$this->NombreTitular%>" /> faculta a la Dirección de Pensiones del Municipio de Oaxaca
+				de Juárez, Oax., para que a través de la Secretaria de Finanzas y Administración, le sea descontada en forma quincenal y/o semanal
+				la cantidad de $ <com:TLabel ID="lbldescQuincena" />  ( <com:TLabel ID="lblImporLetraQuin" /> )
+				</td>						
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">CUARTA.- El mutuario se obliga a garantizar dicho préstamo con sus aportaciones y las de los
+				avales cuyos datos se detallan al reverso.
+				</td>						
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">QUINTA.- Para garantizar el pago de la cantidad mutuada se constituyen como avales los C.<com:TLabel ID="lblAval1" /> y C. <com:TLabel ID="lblAval2" /> cuya	responsabilidad fenecerá hasta el 
+				día en que se cubra la totalidad del adeudo, renunciando	expresamente a los beneficios de orden y excusión, obligándose las partes para que los
+				descuentos efectuados al fiador, por baja temporal o definitiva del deudor, no sean reembolsados.
+				</td>						
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">SEXTA.- Por el total del capital prestado el deudor ha suscrito un pagaré unico que le será
+				entregado a la liquidación total del préstamo.
+				</td>						
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4" align="justify"  class="Estilo1">SEPTIMA.- Si por cualquier razón imputable a la Dirección de Pensiones, no se realizara el
+				descuento correspondiente a este préstamo, me comprometo informar inmediatamente a la
+				Dirección de Pensiones para que se efectúe de conformidad con lo estipulado en este contrato.
+				</td>						
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+		<table width="100%" align="center" border="0">
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>			
+			<tr>
+				<td align="center">A  V  A  L     1</td>
+				<td align="center">A  V  A  L     2</td>
+			</tr
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center"><com:TLabel ID="lblAvall1" /> </td>
+				<td align="center"><com:TLabel ID="lblAvall2" /> </td>
+			</tr>
+			<tr>
+				<td align="center">_______________________________________</td>
+				<td align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td align="center" class="Estilo2">Nombre Completo</td>
+				<td align="center" class="Estilo2">Nombre Completo</td>
+			</tr>
+			<tr>
+				<td></td>
+			</tr>
+			<tr>
+				<td align="center"><com:TLabel ID="lblAvallSindicato1" /> </td>
+				<td align="center"><com:TLabel ID="lblAvallSindicato2" /> </td>
+			</tr>
+			<tr>
+				<td align="center">_______________________________________</td>
+				<td align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td align="center" class="Estilo2">Sindicato al que pertenece</td>
+				<td align="center" class="Estilo2">Sindicato al que pertenece/td>
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">_______________________________________</td>
+				<td align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td align="center" class="Estilo2">Firma del Aval</td>
+				<td align="center" class="Estilo2">Firma del Aval</td>
+			</tr>
+			</table>
+			<table width="40%" align="center" border="0">
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="left">Importe del préstamo</td>
+				<td align="right">$ <com:TLabel Text="<%=$this->importeNeto%>" /></td>
+			</tr>
+			<tr>
+				<td align="left">Intereses</td>
+				<td align="right">$  <com:TLabel ID="lblIntereses" /></td>
+			</tr>
+			<tr>
+				<td align="left">Subtotal</td>
+				<td align="right">$  <com:TLabel ID="lblSubtotal" /></td>
+			</tr>
+			<tr>
+				<td align="left">Saldo Préstamo Anterior</td>
+				<td align="right">$ <com:TLabel ID="lblAnteriorAnt" /></td>
+			</tr>
+			<tr>
+				<td align="left">Importe del cheque</td>
+				<td align="right">$ <com:TLabel ID="lblImportecheque" /></td>
+			</tr>
+			<tr>
+				<td align="left">Descuento Quincenal</td>
+				<td align="right">$ <com:TLabel ID="lblDescQuin" /></td>
+			</tr>
+			<tr>
+				<td align="left">Liquido cheque Nº.</td>
+				<td align="right"> </td>
+			</tr>
+			
+		</table>
+		<table width="100%" align="center" border="0">
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"> Recibí cheque y copia del ________________________________________________</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"> Oaxaca de Juárez, Oax. a ______ de _________________________ de ___________</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center" >Acreditado</td>
+				<td align="center" >Directora de Pensiones</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">_______________________________________</td>
+				<td align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td align="center" class="Estilo1">C. <com:TLabel Text="<%=$this->NombreTitular%>" /></td>
+				<td align="center" class="Estilo1"><com:TLabel ID="lblDirector1" /></td>
+			</tr>
+		</table>
+</com:TContent>
