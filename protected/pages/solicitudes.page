@@ -4,6 +4,11 @@
 	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
 	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
 	<com:TClientScript ID="cscrPrompt">
+		function Mensaje(msg)
+		{
+			alert(msg);
+		}
+		
 		function busca(event, sufijo)
 		{
 			num = event.keyCode;
@@ -64,11 +69,10 @@
 					</tr>
 
 					<tr>
-						<td> Titular:</td>
-						<td><com:TTextBox ID="txtTitular" BackColor="white"/></td>
 						<td>Fecha:</td>
 						<td><com:TTextBox ID="txtFecha" ReadOnly="True" /></td>
-						<td>Estatus</td>
+						<td>Estatus:</td>
+						<td align="right"><com:TLabel ID="lblIntereses" ForeColor="red"/></td>
 					</tr>
 					<tr>
 						<td colspan="4">
@@ -83,30 +87,31 @@
 										</td>
 										<td>Antigüedad</td>
 										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="200px" ReadOnly="True" />
-										    <com:TActiveTextBox ID="txtAntiguedadNumTit" Width="40px" ReadOnly="True" /></td>
+										    <com:TActiveTextBox ID="txtAntiguedadNumTit" Width="40px" ReadOnly="True" Visible="False"/></td>
 									</tr>
 									<tr>
 										<td>Nombre</td>
 										<td colspan="3"><com:TActiveTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtMesTTit" Width="40px" ReadOnly="True" /></td>
+										<com:TActiveTextBox ID="txtMesTTit" Width="40px" ReadOnly="True" Visible="False"/></td>
 									</tr>
 									<tr>
 										<td>Tipo</td>
 										<td><com:TActiveTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtTipoNumTit" Width="20px" ReadOnly="True" /></td> 
+										<com:TActiveTextBox ID="txtTipoNumTit" Width="20px" ReadOnly="True" Visible="False"/></td> 
 										<td>Sindicato</td>
 										<td><com:TActiveTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtSindicatoNumTit" Width="20px" ReadOnly="True" /></td>
+										<com:TActiveTextBox ID="txtSindicatoNumTit" Width="20px" ReadOnly="True" Visible="False"/>
+										<com:TActiveTextBox ID="txtNoUnicoRespTit" Width="20px" ReadOnly="True" Visible="false"/></td>
 									</tr>
 									<tr>
-										<td colspan="5"><com:TActiveTextBox ID="txtNotaTit" Width="460px" ReadOnly="True" Visible="false" BackColor="yellow"/></td> 
-										
+										<strong><com:TActiveLabel ID="lblSolicitadasTit" ForeColor="red" Visible="true" Font.Size="12pt"/></strong>
+										<strong><com:TActiveLabel ID="lblAutorizadasTit" ForeColor="red" Visible="true" Font.Size="12pt"/></strong></td>
 									</tr>
 								</table>
 							</com:TPanel>
 						</td>
 						<td align="center">
-							<com:TImage ID="imgEstatusTit" ImageUrl="images/rojo.png" Visible="False" />
+							<com:TImage ID="imgEstatusTit" ImageUrl="images/rojo.png" Visible="false" />
 							<com:THiddenField ID="hidImporteTit" />
 							<com:THiddenField ID="hidPorcentajeTit" />
 						</td>
@@ -124,7 +129,7 @@
 										</td>
 										<td>Antigüedad</td>
 										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="200px" ReadOnly="True" />
-										    <com:TActiveTextBox ID="txtAntiguedadNumAval1" Width="35px" ReadOnly="True" /></td>
+										    <com:TActiveTextBox ID="txtAntiguedadNumAval1" Width="35px" ReadOnly="True" Visible="False"/></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
@@ -133,10 +138,15 @@
 									<tr>
 										<td>Tipo</td>
 										<td><com:TActiveTextBox ID="txtTipoAval1" Width="100px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtTipoNumAval1" Width="20px" ReadOnly="True" /></td>
+										<com:TActiveTextBox ID="txtTipoNumAval1" Width="20px" ReadOnly="True" Visible="False"/></td>
 										<td>Sindicato</td>
 										<td><com:TActiveTextBox ID="txtSindicatoAval1" Width="200px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtSindicatoNumAval1" Width="20px" ReadOnly="True" /></td>
+										<com:TActiveTextBox ID="txtSindicatoNumAval1" Width="20px" ReadOnly="True" Visible="False"/>
+										<com:TActiveTextBox ID="txtNoUnicoRespAval1" Width="20px" ReadOnly="True" Visible="false"/></td>
+									</tr>
+									<tr>
+										<strong><com:TActiveLabel ID="lblSolicitadasAval1" ForeColor="red" Visible="true" Font.Size="12pt"/></strong>
+										<strong><com:TActiveLabel ID="lblAutorizadasAval1" ForeColor="red" Visible="true" Font.Size="12pt"/></strong></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -160,7 +170,7 @@
 										</td>
 										<td>Antigüedad</td>
 										<td><com:TActiveTextBox ID="txtAntiguedadAval2" Width="200px" ReadOnly="True" />
-											<com:TActiveTextBox ID="txtAntiguedadNumAval2" Width="35px" ReadOnly="True" /></td>
+											<com:TActiveTextBox ID="txtAntiguedadNumAval2" Width="35px" ReadOnly="True" Visible="False"/></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
@@ -169,10 +179,15 @@
 									<tr>
 										<td>Tipo</td>
 										<td><com:TActiveTextBox ID="txtTipoAval2" Width="100px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtTipoNumAval2" Width="20px" ReadOnly="True" /></td>
+										<com:TActiveTextBox ID="txtTipoNumAval2" Width="20px" ReadOnly="True" Visible="False"/></td>
 										<td>Sindicato</td>
 										<td><com:TActiveTextBox ID="txtSindicatoAval2" Width="200px" ReadOnly="True" />
-										<com:TActiveTextBox ID="txtSindicatoNumAval2" Width="20px" ReadOnly="True" /></td>
+										<com:TActiveTextBox ID="txtSindicatoNumAval2" Width="20px" ReadOnly="True" Visible="False"/>
+										<com:TActiveTextBox ID="txtNoUnicoRespAval2" Width="20px" ReadOnly="True" Visible="false"/></td>
+									</tr>
+									<tr>
+										<strong><com:TActiveLabel ID="lblSolicitadasAval2" ForeColor="red" Visible="true" Font.Size="12pt"/></strong>
+										<strong><com:TActiveLabel ID="lblAutorizadasAval2" ForeColor="red" Visible="true" Font.Size="12pt"/></strong></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -196,7 +211,7 @@
 						<td><com:TTextBox ID="txtImporte" width="80px" Attributes.onchange="advertencia(this.value)" /></td>
 					</tr>
 					<tr>
-						<td>Plazo:</td>
+						<td>Plazo (meses):</td>
 						<td><com:TTextBox ID="txtPlazo"  width="80px" Attributes.onchange="advertencia(this.value)" /></td>
 					</tr>
 					<tr>
@@ -235,6 +250,9 @@
 						<td>Imp. Cheque:</td>
 						<td><com:TTextBox ID="txtImpCheque" width="80px" ReadOnly="True" /></td>
 					</tr>
+					<tr>
+					<strong><com:TActiveLabel ID="lblNotaVal" ForeColor="red" Visible="true" Font.Size="10pt"/></strong>
+					</tr>
 				</table>
 			</td>
 		</tr>
@@ -242,7 +260,8 @@
 		<!--Botón Guardar-->
 		<tr>
 			<td colspan="2" align="center">
-				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
+				<com:TActiveButton ID="btnGuardar" Text="Guardar" OnCallback="btnguardar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>		
+				<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
 				<com:TButton ID="btnModificar" Text="Actualizar" OnClick="btnModificar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
 			</td>
 		</tr>

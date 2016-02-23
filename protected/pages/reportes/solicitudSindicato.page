@@ -7,6 +7,10 @@
 	}
 	.Estilo1 {font-size: 12px}
 	.Estilo2 {font-size: 14px}
+	.rectangulo {
+     width: 736px; 
+     height: 369px; 
+     border: 1.5px solid #555;}
 </style>
 </com:TContent>
 <com:TContent ID="Main">
@@ -17,7 +21,7 @@
 		<br />
 		<strong>SOLICITUD DE PRESTAMO</strong>
 	</p>
-	
+	<div class="rectangulo">
 		<table width="100%" align="center" border="0">
 	
 			<tr>
@@ -85,4 +89,5 @@
 						<td colspan="2" align="center"><com:TLabel ID="lbldirector"/></td>
 					</tr>					
 		</table>
+	</div>
 </com:TContent>
