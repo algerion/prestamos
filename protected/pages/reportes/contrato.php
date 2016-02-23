@@ -59,7 +59,7 @@ class contrato extends TPage
 			$Varsaldoanterior = 0;
 			$VarImportecheque = 0;
 			$quincena = $rows["plazo"] * 2;
-			$VardescQuincenas =$Importe / $quincena; // descuento
+			$VardescQuincenas =$Importe / $quincena; 
 		}
 		$consultaDirec="SELECT Nombre_completo FROM cat_director WHERE anio = YEAR(NOW())";
 		$comando = $this->dbConexion->createCommand($consultaDirec);
@@ -70,7 +70,7 @@ class contrato extends TPage
 		}
 			$VarImporte = number_format($Importe,2); 
 			$intereses = number_format($inter,2);
-			$VardescQuincena = number_format($VardescQuincenas,2); // descuento
+			$VardescQuincena = number_format($VardescQuincenas,2);
 			$Varsubtotal = number_format($Varsubtotals,2);
 			
 			$this->lblTitular->Text = $VarTitular. " - " . $VarNombreTitular;
@@ -78,7 +78,7 @@ class contrato extends TPage
 			$this->lblDirector1->Text = $VarDirector;			
 			$this->lblContrato->Text = $VarContrato;	
 			$this->lblquincena->Text =$quincena;
-			$this->lbldescQuincena->Text =$VardescQuincena;	 // descuento
+			$this->lbldescQuincena->Text =$VardescQuincena;	
 			$this->importeNeto= $VarImporte;
 			$this->NombreTitular = $VarNombreTitular;
 			$this->ImporteLetras = $nal->ValorEnLetras($Importe, "pesos", " M.N.");
