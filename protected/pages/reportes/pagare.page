@@ -1,0 +1,135 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="pagare" %>
+<com:TContent ID="Cabeceras">
+<style>
+	.Estilo1 {font-size: 14px}
+	.Estilo2 {font-size: 11px}
+	.rectangulo {
+     width: 730px; 
+     height: 350px; 
+     border: 1.5px solid #555;
+}
+</style>
+
+</com:TContent>
+<com:TContent ID="Main" >	
+	<p align="center">
+		<strong>DIRECCION DE PENSIONES.</strong>
+		<br />
+		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
+		<br />
+		la 1a PRIVADA DE TRUJANO Nº 121
+	</p>
+	<div class="rectangulo">
+	    <table width="100%" align="center" border="0" >
+			<tr>
+				<td colspan="2" align="center"> <com:TLabel Text="<%=$this->FirmaAvales%>" /> </td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><strong>PAGARE UNICO</strong></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right">Numero:  <com:TLabel Text="<%=$this->Contrato%>"/> </td>
+			</tr>
+			<tr>
+				<td colspan="2" align="justify" class="Estilo1">Debo (hemo) y Pagare (mos) incondicionalmente por este pagare mercantil, en esta plaza (o en cualquier otro lugar a
+				elección del acreedor), a la orden de la DIRECCIÓN DE PENSIONES DEL MUNICIPIO DE OAXACA DE JUÁREZ, OAX., la
+				cantidad de $ <com:TLabel Text="<%=$this->importeNeto%>" /> (<com:TLabel Text="<%=$this->ImporteLetras%>" />) valor recibido a mi entera satisfacción.</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><strong>S U S C R I P T O R</strong></td>
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><com:TLabel Text="<%=$this->Titular%>"/></td>
+			</tr>
+			<tr>
+				<td align="center">A  V  A  L     1</td>
+				<td align="center">A  V  A  L     2</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">_______________________________________</td>
+				<td align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td align="center"><com:TLabel Text="<%=$this->Avall1%>"/></td>
+				<td align="center"><com:TLabel Text="<%=$this->Avall2%>"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="justify" class="Estilo2">Este pagaré si no fuera pagado a su vencimiento causará INTERESES a razón 1.00% MENSUAL por todo el tiempo que dure
+				insoluto y está sujeto a COBRO ANTICIPADO del saldo al no ser con PUNTUALIDAD cualquier abono especifico en las CONDICIONES
+				DEL CONTRATO.</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+		<p align="center">
+			<strong>DIRECCION DE PENSIONES.</strong>
+			<br />
+			<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
+			<br />
+			la 1a PRIVADA DE TRUJANO Nº 121
+		</p>
+	<div class="rectangulo">
+		<table width="100%" align="center" border="0">
+			<tr>
+				<td colspan="2" align="center"> <com:TLabel Text="<%=$this->FirmaAvales%>" /> </td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><strong>PAGARE UNICO</strong></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="right">Numero:  <com:TLabel Text="<%=$this->Contrato%>"/> </td>
+			</tr>
+			<tr>
+				<td colspan="2" align="justify" class="Estilo1">Debo (hemo) y Pagare (mos) incondicionalmente por este pagare mercantil, en esta plaza (o en cualquier otro lugar a
+				elección del acreedor), a la orden de la DIRECCIÓN DE PENSIONES DEL MUNICIPIO DE OAXACA DE JUÁREZ, OAX., la
+				cantidad de $ <com:TLabel Text="<%=$this->importeNeto%>" /> (<com:TLabel Text="<%=$this->ImporteLetras%>" />) valor recibido a mi entera satisfacción.</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><strong>S U S C R I P T O R</strong></td>
+			</tr>
+			 <tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td colspan="2" align="center"><com:TLabel Text="<%=$this->Titular%>"/></td>
+			</tr>
+			<tr>
+				<td align="center">A  V  A  L     1</td>
+				<td align="center">A  V  A  L     2</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="center">_______________________________________</td>
+				<td align="center">_______________________________________</td>
+			</tr>
+			<tr>
+				<td align="center"><com:TLabel Text="<%=$this->Avall1%>"/></td>
+				<td align="center"><com:TLabel Text="<%=$this->Avall2%>"/></td>
+			</tr>
+			<tr>
+				<td colspan="2" align="justify" class="Estilo2">Este pagaré si no fuera pagado a su vencimiento causará INTERESES a razón 1.00% MENSUAL por todo el tiempo que dure
+				insoluto y está sujeto a COBRO ANTICIPADO del saldo al no ser con PUNTUALIDAD cualquier abono especifico en las CONDICIONES
+				DEL CONTRATO.</td>
+			</tr>
+			<tr>
+				<td>&nbsp;</td>
+			</tr>
+		</table>
+	</div>
+</com:TContent>

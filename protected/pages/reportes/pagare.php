@@ -2,17 +2,23 @@
 include_once('../compartidos/clases/conexion.php');
 include_once('../compartidos/clases/numaletras.php');
 
-class contrato extends TPage 
+class pagare extends TPage 
 {
 	var $dbConexion;
 	var $NombreTitular;
 	var $ImporteLetras;
-	var $importeNeto;
+	var $importeNeto,$FirmaAvales,$Contrato,$Titular,$Avall1,$Avall2;
+	
+	
+	
 
 	public function onLoad($param)
 	{
 		parent::onLoad($param);
 		$nal = new NumALetras();
+		/*$lienzo = imagecreatetruecolor(200, 200);
+		$negro = imagecolorallocate($lienzo, 132, 135, 28);
+		$dibujo = imagerectangle($lienzo, 45, 60, 120, 100, $negro);*/
 		
 		$id_Contrato = $_REQUEST['id'];
 		
@@ -59,7 +65,7 @@ class contrato extends TPage
 			$Varsaldoanterior = 0;
 			$VarImportecheque = 0;
 			$quincena = $rows["plazo"] * 2;
-			$VardescQuincenas =$Importe / $quincena; // descuento
+			$VardescQuincenas =$Importe / $quincena; 
 		}
 		$consultaDirec="SELECT Nombre_completo FROM cat_director WHERE anio = YEAR(NOW())";
 		$comando = $this->dbConexion->createCommand($consultaDirec);
@@ -70,30 +76,20 @@ class contrato extends TPage
 		}
 			$VarImporte = number_format($Importe,2); 
 			$intereses = number_format($inter,2);
-			$VardescQuincena = number_format($VardescQuincenas,2); // descuento
+			$VardescQuincena = number_format($VardescQuincenas,2);
 			$Varsubtotal = number_format($Varsubtotals,2);
 			
-			$this->lblTitular->Text = $VarTitular. " - " . $VarNombreTitular;
-			$this->lblDirector->Text = $VarDirector;
-			$this->lblDirector1->Text = $VarDirector;			
-			$this->lblContrato->Text = $VarContrato;	
-			$this->lblquincena->Text =$quincena;
-			$this->lbldescQuincena->Text =$VardescQuincena;	 // descuento
-			$this->importeNeto= $VarImporte;
-			$this->NombreTitular = $VarNombreTitular;
-			$this->ImporteLetras = $nal->ValorEnLetras($Importe, "pesos", " M.N.");
-			$this->lblImporLetraQuin->Text =$nal->ValorEnLetras($VardescQuincenas, "pesos", " M.N.");
-			$this->lblAval1->Text = $Varaval1. " - " . $VarnombreAval1;
-			$this->lblAval2->Text = $Varaval2. " - " . $VarnombreAval2;
-			$this->lblAvall1->Text = $Varaval1. " - " . $VarnombreAval1;
-			$this->lblAvall2->Text = $Varaval2. " - " . $VarnombreAval2;
-			$this->lblAvallSindicato1->Text= $VarsindicatoAval1;
-			$this->lblAvallSindicato2->Text= $VarsindicatoAval2;
-			$this->lblIntereses->Text= $intereses;
-			$this->lblSubtotal->Text = $Varsubtotal;
-			$this->lblAnteriorAnt->Text = $Varsaldoanterior;
-			$this->lblImportecheque->Text = $VarImportecheque;
-			$this->lblDescQuin->Text = $VardescQuincena;
+			$this->Titular	= $VarTitular. " - " . $VarNombreTitular; 		
+			$this->Contrato= $VarContrato;
+			$this->importeNeto= $VarImporte; //
+			$this->ImporteLetras = $nal->ValorEnLetras($Importe, "pesos", " M.N."); //
+			$this->Avall1 = $Varaval1. " - " . $VarnombreAval1; //
+			$this->Avall2 = $Varaval2. " - " . $VarnombreAval2; //
+			$this->FirmaAvales = $VarFirmAvales;
+			
+			//$this->lienzo = imagecreatetruecolor(200, 200);
+			
+			
 	}
 				
 }
