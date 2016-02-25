@@ -107,8 +107,8 @@ class contrato extends TPage
 		$comando->execute();
 		
 		$contratos=$this->txtFoliosolicitudd->Text;
-				$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
-		  		"document.location.href='index.php?page=reportes.contratopdf&id=$contratos','_blank'; ");
+		$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
+				"open('index.php?page=reportes.contratopdf&id=$contratos', '_blank');");
 	}
 }
 
