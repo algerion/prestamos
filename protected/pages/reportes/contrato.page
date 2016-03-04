@@ -220,7 +220,7 @@
 			</tr>
 			<tr>
 				<td align="left">Liquido cheque Nº.</td>
-				<td align="right"> </td>
+				<td align="right"><com:TLabel ID="lblNumCheque" /></td>
 			</tr>
 			
 		</table>

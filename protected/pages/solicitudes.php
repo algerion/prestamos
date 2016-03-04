@@ -35,24 +35,36 @@ class solicitudes extends TPage
 	}
 	public function textChanged($sender,$param)
     {
-		$this->lblIntereses1->Text =  THttpUtility::htmlEncode(number_format((($this->txtImporte1->Text) * ($this->txtPlazo1->Text) * (1.00 / 100)),2));
+		$intereses =  THttpUtility::htmlEncode(round ((($this->txtImporte1->Text) * ($this->txtPlazo1->Text) * (1.00 / 100))));
+		$importe = $this->txtImporte1->Text;
+		$saldoAnterior = $this->lblSaldoAnterior->text;
+		$seguro =($this->lblSeguro->text = 0.0);
 		$descuento = ($this->txtPlazo1->Text * 2); 
-		$LItemp = ($this->txtImporte1->Text) / $descuento;
+		$LItemp = ($importe) / $descuento;
 		$LItemp = $LItemp * 100;
-		$importeDescuento = round($LItemp / 100);									  
+		$importeDescuento = $LItemp / 100;	
 		$importeADescontar = $descuento * $importeDescuento;			
-		$DescQuincena= $this->txtImporte1->Text  / $descuento;
-		$Redondeo = ($this->txtImporte1->Text) - $importeADescontar;
-		$this->lblSaldoAnterior->text = 0;
-		$this->lblSeguro->text = $this->txtImporte1->Text * 0.003;
+		$DescQuincena = $importe  / $descuento;
+		$Redondeo = ($importe) - $importeADescontar;
+		
+		$this->lblIntereses1->Text = number_format($intereses,2);
 		$this->lblDescuentos->text = number_format($descuento,2);
 		$this->lblImpDescuentos->text = number_format($importeDescuento,2);
 		$this->lblImpPrestamos->text =  number_format($importeADescontar,2);
 		$this->lblDiferencia->text = number_format($Redondeo,2);
-		$cheque = $this->txtImporte1->Text - ($this->lblIntereses1->Text + $this->lblSaldoAnterior->text + $this->lblSeguro->text + $Redondeo);
+		
+		$cheque = $importe - ($intereses + $saldoAnterior + $seguro);
 		$this->lblImpCheque->text = number_format($cheque,2);
 		
-		if ($this->lblSolicitadasTit->Text > 0 or $this->lblAutorizadasTit->Text > 0 or $this->lblSolicitadasAval1->Text > 0 or $this->lblAutorizadasAval1->Text > 0 or $this->lblSolicitadasAval2->Text > 0 or $this->lblAutorizadasAval2->Text > 0 )
+		if ($cheque  < 0 ){
+		$this->lblValImpSanAnterior->Text = "El importe: $" .number_format($this->txtImporte1->Text,2).'<br/>'."es menor al saldo anterior: $".number_format($saldoAnterior,2); //.'\n\n'.
+		}else{
+			$this->lblValImpSanAnterior->visible="false";
+		}
+		
+		
+	
+		if ($this->lblSolicitadasTit->Text > 0  or $this->lblSolicitadasAval1->Text > 0 or $this->lblAutorizadasAval1->Text > 0 or $this->lblSolicitadasAval2->Text > 0 or $this->lblAutorizadasAval2->Text > 0 )
 				{
 					$this->btnGuardar->visible="false";	
 			}else{
@@ -129,19 +141,25 @@ class solicitudes extends TPage
 		$comando->bindValue(":estatus","S");
 		$comando->bindValue(":msg31",4);
 		$comando->bindValue(":msg32",0);	
-		$comando->execute();
+		
+		if($comando->execute()){
+		   $this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')");
+		}
+		else{
+		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");
+		}
 			
 	}
 	 public function btnImprimir_onclick($sender,$param)
 		{
 		if($this->txtSindicatoNumTit->Text > 0){
 			$titular=$this->txtNoUnicoTit->Text;
-			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
+			$this->ClientScript->RegisterBeginScript("Mensaje","alert('La solicitud se está imprimiendo');" .
 				"open('index.php?page=reportes.solicitudSindicatopdf&id=$titular', '_blank');");
 				$this->Limpiar_Campos();
 		}else {
 			$titular=$this->txtNoUnicoTit->Text;		
-			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
+			$this->ClientScript->RegisterBeginScript("Mensaje","alert('La solicitud se está imprimiendo');" .
 			"open('index.php?page=reportes.solicitudespdf&id=$titular', '_blank');");
 				$this->Limpiar_Campos();
 			}
@@ -161,7 +179,6 @@ class solicitudes extends TPage
 		.", porcentaje_pa_aval2 = :porcentaje_pa_aval2, firma = :datFechaFirmaAvales ,observacion = :observacion, firma1 = :txtNombreAval1,firma2 = :txtNombreAval2, estatus = :estatus, id_usuario = :id_usuario"
 		.",  seguro = :seguro "
 		."where id_solicitud = :id_solicitud";
-		//$descuento = ($this->txtPlazo->Text * 2);
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":id_solicitud",$this ->txtFolio->text);
 		$comando->bindValue(":txtFecha",$this->txtFecha->Text);
@@ -177,8 +194,8 @@ class solicitudes extends TPage
 		$comando->bindValue(":txtAntiguedadAval2",$this->txtAntiguedadNumAval2->Text);
 		$comando->bindValue(":txtTipoAval2",$this->txtTipoAval2->Text);
 		$comando->bindValue(":txtSindicatoNumAval2",$this->txtSindicatoNumAval2->Text);
-		$comando->bindValue(":txtImporte",$this->txtImporte->Text);
-		$comando->bindValue(":txtPlazo",$this->txtPlazo->Text);
+		$comando->bindValue(":txtImporte",$this->txtImporte1->Text);
+		$comando->bindValue(":txtPlazo",$this->txtPlazo1->Text);
 		$comando->bindValue(":txtTasa",$this->txtTasa1->Text);
 		$comando->bindValue(":txtSaldoAnterior",$this->txtSaldoAnterior->Text);
 		$comando->bindValue(":id_contrato_ant",0);
@@ -196,7 +213,16 @@ class solicitudes extends TPage
 		$comando->bindValue(":estatus","A");
 		$comando->bindValue(":id_usuario",4);
 		$comando->bindValue(":seguro",0);
-
+		
+		
+		
+		if($comando->execute()){
+		   $this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE ACTUALIZADO CORRECTAMENTE')");
+		}
+		else{
+		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO ACTUALIZADO LOS DATOS');");
+		}
+	
 	}
 	public function txtNoUnico_CallBack($sender, $param)
 	{
@@ -215,13 +241,13 @@ class solicitudes extends TPage
 			
 			if($intervalo->format('%y') > 100){
 				$formato = 'Desconocida';
-				}
+			}
 			elseif($intervalo->format('%y') > 0){
 				$formato = '%y años ' . $formatoM ." ".$formatoD;
 				$mesLine = '%y'.'.'.'%m'.'%d';
 				$formatoANIO = '%y'; 
 				$formatoDIAS = $formatoDIAA;
-				}
+			}
 			$ant = "txtAntiguedad" . $sufijo;
 			$this->$ant->Text = $intervalo->format($formato);
 			$mesesTras = (($intervalo->format($formatoDIAS))/ 365.25)*12; 
@@ -233,8 +259,8 @@ class solicitudes extends TPage
 			
 			$MesTranscurrido = $intervalo->format($mesLine);
 			if ($MesTranscurrido < 0.61) {
-			$this->lblNotaVal->visible="true";
-			$note = 'No cumple con la Antigüedad mínima 6 mese 1 día para el prestamos';
+				$this->lblNotaVal->visible="true";
+				$note = 'No cumple con la Antigüedad mínima 6 mese 1 día para el prestamos';
 			}else {
 				$note = '';
 			}
@@ -259,6 +285,19 @@ class solicitudes extends TPage
 			$sin = "txtSindicato" . $sufijo;
 			$this->$sin->Text = $sindicato;
 			
+			$nominaEmp = Conexion::Retorna_Campo($this->dbConexion, "catempleado", "tipoNomina", array("cveEmpleado"=>$num_unico));
+			
+			switch ($nominaEmp) {
+				case ($nominaEmp == "Q"):
+					$TipNom = 'Quincena';					
+				break;
+                case ($nominaEmp == "S"):
+					$TipNom = 'Semanal';
+				break;
+			}
+			
+			$nomina = "txtNomina" . $sufijo;
+			$this->$nomina->Text = $TipNom;
 		}
 		
 		
@@ -281,6 +320,10 @@ class solicitudes extends TPage
 					}else {
 						$this->lblAutorizadasTit->visible="false";
 						$this->lblAutorizadasTit->Text = 0;
+					}
+					$SaldoAnterior = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "IFNULL(SUM(importe),0)", array("titular"=>$num_unico), " AND (estatus = 'A')");
+					if($SaldoAnterior > 0){
+						$this->lblSaldoAnterior->text = $SaldoAnterior;
 					}
                     break;
                 case ("txtNoUnico".$sufijo == "txtNoUnicoAval1"):
@@ -317,9 +360,9 @@ class solicitudes extends TPage
 					$resultAAval2 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval2)", array("aval2"=>$num_unico), " AND (estatus = 'A')");
 					if($resultAAval2 >= 3)
 						{
-						$this->btnGuardar->visible="false";	
-						$this->lblAutorizadasAval2->visible="true";
-						$this->lblAutorizadasAval2->Text = $resultAAval2;
+							$this->btnGuardar->visible="false";	
+							$this->lblAutorizadasAval2->visible="true";
+							$this->lblAutorizadasAval2->Text = $resultAAval2;
 						} else {
 							$this->lblAutorizadasAval2->visible="false";
 							$this->lblAutorizadasAval2->Text = 0;
@@ -330,11 +373,14 @@ class solicitudes extends TPage
 	
 	public function carga_solicitud($id_solicitud)
 	{
-		$consulta = "SELECT creada, estatus_p, 
+		$consulta = "SELECT creada, estatus_p, s.antiguedad as antiguedad,
 			t.numero as num_tit, t.nombre AS titular, st.cve_sindicato AS tit_cve_sind, st.sindicato AS tit_sind, TIMESTAMPDIFF(YEAR, t.fec_ingre, CURDATE()) AS tit_ant,
 			s.aval1, a1.nombre AS aval1_n, sa1.cve_sindicato AS aval1_cve_sind, sa1.sindicato AS aval1_sind, TIMESTAMPDIFF(YEAR, a1.fec_ingre, CURDATE()) AS aval1_ant,
 			s.aval2, a2.nombre AS aval2_n, sa2.cve_sindicato AS aval2_cve_sind, sa2.sindicato AS aval2_sind, TIMESTAMPDIFF(YEAR, a2.fec_ingre, CURDATE()) AS aval2_ant,
 			firma, importe, plazo, tasa, saldo_anterior, descuento,s.estatus as estatus
+			,(SELECT fec_ingre  FROM sujetos WHERE numero = t.numero) AS fechaIngresoTit
+			,(SELECT fec_ingre  FROM sujetos WHERE numero = s.aval1) AS fechaIngresoAval1
+			,(SELECT fec_ingre  FROM sujetos WHERE numero = s.aval2) AS fechaIngresoAval2
 			FROM Solicitud s
 			LEFT JOIN estatus_prestamo ep ON s.estatus = ep.id_estatus_p
 			LEFT JOIN sujetos AS t ON t.numero = s.titular
@@ -350,57 +396,89 @@ class solicitudes extends TPage
 		$result = $comando->query()->readAll();
 		if(count($result) > 0)
 		{
-					
-			//$this->txtTitular->Text = $result[0]["num_tit"];
+			$intereses = round($result[0]["importe"] * $result[0]["plazo"] * $result[0]["tasa"] / 100);
+			$descuento = ($result[0]["plazo"] * 2); 
+			$LItemp = ($result[0]["importe"]) / $descuento;
+			$LItemp = $LItemp * 100;
+			$importeDescuento = $LItemp / 100;	
+			$importeADescontar = $descuento * $importeDescuento;
+			$Redondeo = ($result[0]["importe"] - $importeADescontar);
+			$seguro = 0.0;
+			$cheque = $result[0]["importe"] - ($intereses +  $result[0]["saldo_anterior"] + $seguro);
+			
+			$creada = $result[0]["creada"];
+			$fechaIngresoTit = $result[0]["fechaIngresoTit"];
+			$fechaIngresoAval1 = $result[0]["fechaIngresoAval1"];
+			$fechaIngresoAval2 = $result[0]["fechaIngresoAval2"];
+		
 			$this->txtFolio->Text =$id_solicitud;
 			$this->txtFecha->Text = $result[0]["creada"];
 			$this->txtNoUnicoTit->Text = $result[0]["num_tit"];
-			$this->txtAntiguedadTit->Text = $result[0]["tit_ant"];
+			$this->txtAntiguedadNumTit->Text; // pendiente
+			$this->txtAntiguedadNumTit->Text = $result[0]["antiguedad"];
 			$this->txtNombreTit->Text = $result[0]["titular"];
 			$this->txtTipoTit->Text = "ACTIVO";
 			$this->txtSindicatoTit->Text = $result[0]["tit_sind"];
 			$this->txtNoUnicoAval1->Text = $result[0]["aval1"];
-			$this->txtAntiguedadAval1->Text = $result[0]["aval1_ant"];
 			$this->txtNombreAval1->Text = $result[0]["aval1_n"];
 			$this->txtTipoAval1->Text = "ACTIVO";
 			$this->txtSindicatoAval1->Text = $result[0]["aval1_sind"];
 			$this->txtNoUnicoAval2->Text = $result[0]["aval2"];
-			$this->txtAntiguedadAval2->Text = $result[0]["num_tit"];
 			$this->txtNombreAval2->Text = $result[0]["aval2_n"];
 			$this->txtTipoAval2->Text = "ACTIVO";
 			$this->txtSindicatoAval2->Text = $result[0]["aval2_sind"];
 			$this->datFechaFirmaAvales->Text = strtotime($result[0]["firma"]);
-			$this->txtImporte->Text = $result[0]["importe"];
-			$this->txtPlazo->Text = $result[0]["plazo"];
-			$this->txtTasa->Text = $result[0]["tasa"];
-			$this->txtInteres->Text = $result[0]["importe"] * $result[0]["plazo"] * $result[0]["tasa"] / 100;
-			$this->txtSaldoAnterior->Text = $result[0]["saldo_anterior"];
-			$this->txtDescuentos->Text = $result[0]["descuento"];
-			$this->txtImpDescuentos->Text = 0;
-			$this->txtImpPrestamos->Text = 0;
-			$this->txtSeguro->Text = 0;
-			$this->txtDiferencia->Text = 0;
-			$this->txtImpCheque->Text = $result[0]["importe"];
+			$this->txtImporte1->Text = $result[0]["importe"];
+			$this->txtPlazo1->Text = $result[0]["plazo"];
+			$this->txtTasa1->Text = $result[0]["tasa"];
+			$this->lblIntereses1->Text = number_format($intereses,2);	
+			$this->lblSaldoAnterior->Text = $result[0]["saldo_anterior"];
+			$this->lblDescuentos->Text = $descuento;
+			$this->lblImpDescuentos->Text = number_format($importeDescuento,2);
+			$this->lblImpPrestamos->Text = number_format($importeADescontar,2);
+			$this->lblSeguro->Text = $seguro;
+			$this->lblDiferencia->Text = number_format($Redondeo,2);
+			$this->lblImpCheque->Text = number_format($cheque,2); 
 			$status  = $result[0]["estatus"];
 			switch ($status) {
                 case "S":
-                  $this->lblIntereses->Text = "SOLICITADO"; 
+                  $this->lblEstatus->Text = "SOLICITADO"; 
+				  $this->btnGuardar->visible="false";
+				  $this->btnModificar->visible="true";
                     break;
                 case "A":
-                    $this->lblIntereses->Text =  'AUTORIZADO'; 
+                    $this->lblEstatus->Text =  'AUTORIZADO';
+					$this->btnGuardar->visible="false";	
+					$this->btnModificar->visible="false";	
                     break;
                 case "C":
-                    $this->lblIntereses->Text =  'CANCELADA'; 
+                    $this->lblEstatus->Text =  'CANCELADA'; 
+					$this->btnGuardar->visible="false";
+					$this->btnModificar->visible="false";	
                     break;
             	}
+			$fechaCreadaSolicitud = date_create($creada);
+			$IngresoTit = date_create($fechaIngresoTit);
+			$IngresoAval1 = date_create($fechaIngresoAval1);
+			$IngresoAval2 = date_create($fechaIngresoAval2);
 			
-			$this->btnModificar->visible="true";
+			$TitularFecha = date_diff($IngresoTit, $fechaCreadaSolicitud);
+			$TitularFecha = $TitularFecha->format('%Y Año %m Meses %d Dias');			
+			$AvalFecha1 = date_diff($IngresoAval1, $fechaCreadaSolicitud);
+			$AvalFecha1 = $AvalFecha1->format('%Y Año %m Meses %d Dias');
+			$AvalFecha2 = date_diff($IngresoAval2, $fechaCreadaSolicitud);
+			$AvalFecha2 = $AvalFecha2->format('%Y Año %m Meses %d Dias');
+			
+			$this->txtAntiguedadTit->Text = $TitularFecha; 
+			$this->txtAntiguedadAval1->text = $AvalFecha1;
+			$this->txtAntiguedadAval2->text = $AvalFecha2;
+			$comando->execute();				
+			//$this->btnModificar->visible="true";		
 		}
 	}
 	
 		public function Limpiar_Campos($campos = null)
 	{
-		//$this->txtTitular->Text = '';
 			$this->txtFolio->Text ='';
 			$this->txtFecha->Text = '';
 			$this->txtNoUnicoTit->Text = '';

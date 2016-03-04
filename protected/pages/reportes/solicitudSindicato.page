@@ -9,7 +9,7 @@
 	.Estilo2 {font-size: 14px}
 	.rectangulo {
      width: 736px; 
-     height: 369px; 
+     height: 410px; 
      border: 1.5px solid #555;}
 </style>
 </com:TContent>
@@ -48,6 +48,12 @@
 					<tr>
 						<td align="right">Sindicato:</td>
 						<td align="left" class="Estilo1"><com:TLabel ID="lblSindicato" /></td>
+						<td align="left"></td>
+						<td align="left"></td>
+					</tr>
+					<tr>
+						<td align="right">Tipo de Nomina:</td>
+						<td align="left" class="Estilo1"><com:TLabel ID="lblTipoNomina" /></td>
 						<td align="left"></td>
 						<td align="left"></td>
 					</tr>

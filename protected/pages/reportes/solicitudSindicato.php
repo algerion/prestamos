@@ -17,7 +17,12 @@ class solicitudSindicato extends TPage
 					aval1, a1.nombre AS aval1_n, sa1.cve_sindicato AS aval1_cve_sind, sa1.sindicato AS aval1_sind, TIMESTAMPDIFF(YEAR, a1.fec_ingre, CURDATE()) AS aval1_ant,
 					aval2, a2.nombre AS aval2_n, sa2.cve_sindicato AS aval2_cve_sind, sa2.sindicato AS aval2_sind, TIMESTAMPDIFF(YEAR, a2.fec_ingre, CURDATE()) AS aval2_ant,
 					(SELECT representante FROM CATSINDICATOS WHERE cve_sindicato = tit_cve_sind) as SindicatoRpre
-					,DATE_FORMAT(s.firma,'%d/%m/%Y') AS firma, importe, plazo, tasa, saldo_anterior, descuento,AntLetraTi
+					,DATE_FORMAT(s.firma,'%d/%m/%Y') AS firma, importe, plazo, tasa, saldo_anterior, descuento
+					,(SELECT CASE tipoNomina
+					  WHEN tipoNomina = 'S' THEN 'SEMANAL' 
+					  WHEN tipoNomina = 'Q' THEN 'QUINCENAL'
+					  ELSE 'NO HAY TIPO DE NOMINA' END AS mesto_utovara
+					FROM catempleado WHERE cveEmpleado = s.titular) as TipoNominaTit
 		-- FROM contrato c
 		FROM Solicitud s -- ON s.id_solicitud = c.id_solicitud
 		LEFT JOIN sujetos AS t ON t.numero = s.titular
@@ -49,6 +54,7 @@ class solicitudSindicato extends TPage
 			$VarPlazo=$rows['plazo'];
 			$Importe=$rows['importe'];
 			$creada=$rows['creada'];
+			$TipoNomina=$rows['TipoNominaTit'];
 		}
 		$VarImporte = number_format($Importe,2);
 
@@ -86,6 +92,7 @@ class solicitudSindicato extends TPage
 		$this->lblSolicitante->Text = $VarSolicitud . " - " . $Solicitud;
 		$this->lblFechadeIngreso->Text = $VarFechadeIngreso;
 		$this->lblAntiguedad->Text = $AntLetra;
+		$this->lblTipoNomina->Text = $TipoNomina;
 		$this->lblSindicato->Text = $VarSindicato;
 		$this->lblAval1->Text = $Aval1. " - " .$VarAval1;
 		$this->lblAval2->Text = $Aval2. " - " .$VarAval2;

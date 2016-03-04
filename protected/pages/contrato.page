@@ -4,7 +4,10 @@
 	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
 	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
 	<com:TClientScript ID="cscrPrompt">
-			
+	function Mensaje(msg)
+		{
+			alert(msg);
+		}	
 	function abrirVentana(url) 
 	{
     window.open(url, "nuevo", "directories=no, location=no, menubar=no, scrollbars=yes, statusbar=no, tittlebar=no, width=750, height=900");
@@ -46,13 +49,13 @@
 				<table border="0">
 					<tr>
 						<td>Buscar Titular/Solicitud:</td>
-						<td><com:TTextBox ID="txtFoliosolicitud" BackColor="yellow" />
+						<td colspan="5"><com:TTextBox ID="txtFoliosolicitud" BackColor="yellow" />
 							
 							<com:TRequiredFieldValidator
 							ValidationGroup="Guardar1"
 							ControlToValidate="txtFoliosolicitud"
-							Text="Campo requerido" /></td>
-						<td><com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true" ValidationGroup="Guardar1" /></td>
+							Text="Campo requerido" />
+							<com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true" ValidationGroup="Guardar1" /></td>
 					</tr>
 					<tr>
 						<td>Titular:</td>
@@ -60,6 +63,7 @@
 						<td>Folio Solicitud:</td>
 						<td><com:TTextBox ID="txtFoliosolicitudd" /></td>
 						<td>Estatus</td>
+						<td align="right"><com:TActiveLabel ID="lblEstatus" ForeColor="red" visible="true"/></td>
 					</tr>
 
 					<tr>
@@ -143,7 +147,8 @@
 						</tr>
 						<tr>
 						<td>Número De Cheque</td>
-										<td><com:TTextBox ID="txtNumeroDeCheque" Width="100px" /></td>				
+										<td><com:TActiveTextBox ID="txtCheque" width="80px" AutoPostBack="true" OnTextChanged="textChanged" visible ="true"/>
+											<com:TActiveLabel Text="" ID="lblNumCheque" ForeColor="red" /></td>										
 						</tr>
 				</table>
 			</td>
@@ -200,7 +205,10 @@
 		<!--Botón Guardar-->
 		<tr>
 			<td colspan="2" align="center">
-				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" ValidationGroup="Guardar1" />
+				<com:TButton ID="btnGuardarAntes" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" ValidationGroup="Guardar1" visible="false"/>
+				<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
+				<com:TActiveButton ID="btnGuardar" Text="Guardar" OnCallback="btnguardar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
+				
 			</td>
 		</tr>
 	</table>

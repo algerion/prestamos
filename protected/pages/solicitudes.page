@@ -41,6 +41,7 @@
 			opener.document.getElementById('ctl0_Main_txtTipoNum' + sufijo).value = '';
 			opener.document.getElementById('ctl0_Main_txtMesT' + sufijo).value = '';
 			opener.document.getElementById('ctl0_Main_txtNota' + sufijo).value = '';
+			opener.document.getElementById('ctl0_Main_txtNomina' + sufijo).value = '';
 		}
 		
 		
@@ -72,7 +73,7 @@
 						<td>Fecha:</td>
 						<td><com:TTextBox ID="txtFecha" ReadOnly="True" /></td>
 						<td>Estatus:</td>
-						<td align="right"><com:TLabel ID="lblIntereses" ForeColor="red"/></td>
+						<td align="right"><com:TLabel ID="lblEstatus" ForeColor="red"/></td>
 					</tr>
 					<tr>
 						<td colspan="4">
@@ -87,13 +88,14 @@
 										</td>
 										<td>Antigüedad</td>
 										<td><com:TActiveTextBox ID="txtAntiguedadTit" Width="200px" ReadOnly="True" />
-										    <com:TActiveTextBox ID="txtAntiguedadNumTit" Width="40px" ReadOnly="True" Visible="true"/></td>
+										    <com:TActiveTextBox ID="txtAntiguedadNumTit" Width="40px" ReadOnly="true" Visible="false"/></td>
 									</tr>
 									<tr>
 										<td>Nombre</td>
 										<td colspan="3"><com:TActiveTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" />
 										<com:TActiveTextBox ID="txtMesTTit" Width="40px" ReadOnly="True" Visible="false"/></td>
 									</tr>
+									
 									<tr>
 										<td>Tipo</td>
 										<td><com:TActiveTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" />
@@ -106,6 +108,10 @@
 									<tr>
 										SOLICITADOS: <strong><com:TActiveLabel ID="lblSolicitadasTit" ForeColor="red" Visible="true" Font.Size="12pt"/></strong>
 										AUTORIZADOS: <strong><com:TActiveLabel ID="lblAutorizadasTit" ForeColor="red" Visible="true" Font.Size="12pt"/></strong></td>
+									</tr>
+									<tr>
+										<td>Tipo de nomina</td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNominaTit" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -129,7 +135,7 @@
 										</td>
 										<td>Antigüedad</td>
 										<td><com:TActiveTextBox ID="txtAntiguedadAval1" Width="200px" ReadOnly="True" />
-										    <com:TActiveTextBox ID="txtAntiguedadNumAval1" Width="35px" ReadOnly="True" Visible="true"/></td>
+										    <com:TActiveTextBox ID="txtAntiguedadNumAval1" Width="35px" ReadOnly="true" Visible="false"/></td>
 									</tr>
 									<tr>
 										<td>Dirección</td>
@@ -147,6 +153,10 @@
 									<tr>
 										SOLICITADOS: <strong><com:TActiveLabel ID="lblSolicitadasAval1" ForeColor="red" Visible="true" Font.Size="12pt"/></strong>
 										AUTORIZADOS: <strong><com:TActiveLabel ID="lblAutorizadasAval1" ForeColor="red" Visible="true" Font.Size="12pt"/></strong></td>
+									</tr>
+									<tr>
+										<td>Tipo de nomina</td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNominaAval1" Width="200px" ReadOnly="True" /></td>
 									</tr>
 								</table>
 							</com:TPanel>
@@ -189,6 +199,10 @@
 										SOLICITADOS: <strong><com:TActiveLabel ID="lblSolicitadasAval2" ForeColor="red" Visible="true" Font.Size="12pt"/></strong>
 										AUTORIZADOS: <strong><com:TActiveLabel ID="lblAutorizadasAval2" ForeColor="red" Visible="true" Font.Size="12pt"/></strong></td>
 									</tr>
+									<tr>
+										<td>Tipo de nomina</td>
+										<td colspan="3"><com:TActiveTextBox ID="txtNominaAval2" Width="200px" ReadOnly="True" /></td>
+									</tr>
 								</table>
 							</com:TPanel>
 						</td>
@@ -207,8 +221,7 @@
 			<td>
 				<table width="100%" border="0">
 					<tr>
-						<td>meses: </td>
-						<td><com:TActiveLabel Text="" ID="lblMesesTr" ForeColor="red" /></td>
+						<td colspan="2"><com:TActiveLabel Text="" ID="lblValImpSanAnterior" ForeColor="red" /></td>
 					</tr>
 					
 					<tr>

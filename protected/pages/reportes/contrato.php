@@ -21,7 +21,7 @@ class contrato extends TPage
 		$consulta="SELECT c.id_contrato as contrato ,s.id_solicitud AS solicitud,s.titular AS titularr ,s.antiguedad AS antiguedad,s.creada AS creada,t.numero AS num_tit, t.nombre AS titular, st.cve_sindicato AS tit_cve_sind, st.sindicato AS tit_sind, TIMESTAMPDIFF(YEAR, t.fec_ingre, CURDATE()) AS tit_ant,
 			s.aval1, a1.nombre AS aval1_n, sa1.cve_sindicato AS aval1_cve_sind, sa1.sindicato AS aval1_sind, TIMESTAMPDIFF(YEAR, a1.fec_ingre, CURDATE()) AS aval1_ant,
 			s.aval2, a2.nombre AS aval2_n, sa2.cve_sindicato AS aval2_cve_sind, sa2.sindicato AS aval2_sind, TIMESTAMPDIFF(YEAR, a2.fec_ingre, CURDATE()) AS aval2_ant,
-			DATE_FORMAT(s.firma,'%d/%m/%Y') AS firma, importe, plazo, tasa, saldo_anterior, descuento
+			DATE_FORMAT(s.firma,'%d/%m/%Y') AS firma, importe, plazo, tasa, saldo_anterior, descuento,c.num_cheque
 			,(SELECT fec_ingre FROM empleados WHERE numero = s.aval1) AS AntiAval1
 			,(SELECT fec_ingre FROM empleados WHERE numero = s.aval2) AS AntiAval2
 			FROM contrato c
@@ -60,6 +60,7 @@ class contrato extends TPage
 			$VarImportecheque = 0;
 			$quincena = $rows["plazo"] * 2;
 			$VardescQuincenas =$Importe / $quincena; // descuento
+			$numCheque =$rows["num_cheque"];
 		}
 		$consultaDirec="SELECT Nombre_completo FROM cat_director WHERE anio = YEAR(NOW())";
 		$comando = $this->dbConexion->createCommand($consultaDirec);
@@ -94,6 +95,7 @@ class contrato extends TPage
 			$this->lblAnteriorAnt->Text = $Varsaldoanterior;
 			$this->lblImportecheque->Text = $VarImportecheque;
 			$this->lblDescQuin->Text = $VardescQuincena;
+			$this->lblNumCheque->text = $numCheque;
 	}
 				
 }
