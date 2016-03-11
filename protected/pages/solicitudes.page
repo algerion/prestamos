@@ -223,10 +223,12 @@
 					<tr>
 						<td colspan="2"><com:TActiveLabel Text="" ID="lblValImpSanAnterior" ForeColor="red" /></td>
 					</tr>
-					
+					<tr>
+						<td colspan="2"><com:TActiveLabel Text="" ID="lblJubilado" ForeColor="red" /></td>
+					</tr>
 					<tr>
 						<td>Importe:</td>
-						<td><com:TTextBox ID="txtImporte1" width="80px"/></td>
+						<td><com:TActiveTextBox ID="txtImporte1" width="80px" AutoPostBack="true" OnTextChanged="textChangedImporte"/></td>
 					</tr>
 					<tr>
 						<td>Plazo (meses):</td>
@@ -279,10 +281,9 @@
 		<tr>
 			<td colspan="2" align="center">
 				<com:TActiveButton ID="btnGuardar" Text="Guardar" OnCallback="btnguardar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
-				<com:TActiveButton ID="btnImprimir1" Text="Imprimir" OnCallback="btnImprimir1_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
-				
-				<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
 				<com:TButton ID="btnModificar" Text="Actualizar" OnClick="btnModificar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
+				<com:TActiveButton ID="btnCancelar" Text="Cancelar" OnCallback="btncancelar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
+				<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
 			</td>
 		</tr>
 	</table>

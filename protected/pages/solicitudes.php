@@ -21,6 +21,7 @@ class solicitudes extends TPage
 		Conexion::createConfiguracion();
 		if(!$this->IsPostBack)
 		{
+			$this->btnGuardar->visible="false";	
 			$this->txtFecha->Text = date("Y-m-d");
 			$opcion=$this->request["opcion"];
 			$this ->txtPrueba->text=$opcion;
@@ -28,10 +29,16 @@ class solicitudes extends TPage
 			{
 				$this->btnBuscar->visible="true";
 				$this->btnGuardar->visible="false";
-				$this->txtFolio->BackColor="yellow";
+				$this->btnCancelar->visible="false";
+				$this->txtFolio->BackColor="yellow";	
 			}
 		}
 	
+	}
+	public function textChangedImporte($sender,$param)
+    {
+		if ($this->txtImporte1->Text == "")
+			$this->txtPlazo1->Text='';
 	}
 	public function textChanged($sender,$param)
     {
@@ -70,32 +77,45 @@ class solicitudes extends TPage
 			}else{
 					$this->btnGuardar->visible="true";	
 				}
-			
-		$MesesTrabajo = $this->txtAntiguedadNumTit->Text;	
-		switch ($MesesTrabajo) 
-		{
-            case ($MesesTrabajo  >= 0.61 and $MesesTrabajo  < 15.0):
-                if($this->txtImporte1->Text  >= 7000.00  and $this->txtImporte1->Text  <= 50000.00  )
-				{
+		if ($this->txtTipoTit->Text == "JUBILADO" ){
+			if($this->txtImporte1->Text > 0){
 					$this->lblNotaVal->visible="false";
-				}else{
+					$this->btnImprimir->visible="true";
+					$this->btnGuardar->visible="true";
+			}else{
 					$this->btnImprimir->visible="false";
 					$this->lblNotaVal->visible="true";
-					$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de: $'.$this->txtImporte1->Text;
-				}
-            break;
-            case ($MesesTrabajo >= 15.00):
-                   if($this->txtImporte1->Text  >= 7000.00  and $this->txtImporte1->Text  <= 100000.00    )
-					{
-						$this->lblNotaVal->visible="false";
-						$this->btnImprimir->visible="true";
-					}else{
-						$this->btnImprimir->visible="false";
-						$this->lblNotaVal->visible="true";
-						$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de: $'.$this->txtImporte1->Text;
-					}	 
-            break;
-        }
+					$this->lblNotaVal->Text = 'El importe tiene que ser mayor a:'.$this->txtImporte1->Text;
+			}
+		}else
+		{
+			$MesesTrabajo = $this->txtAntiguedadNumTit->Text;	
+			switch ($MesesTrabajo) 
+			{
+				case ($MesesTrabajo  >= 0.61 and $MesesTrabajo  < 15.0):		
+						if($this->txtImporte1->Text  >= 7000.00  and $this->txtImporte1->Text  <= 50000.00  )
+						{
+							$this->lblNotaVal->visible="false";
+						}else{
+							$this->btnImprimir->visible="false";
+							$this->lblNotaVal->visible="true";
+							$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de 50000: $'.$this->txtImporte1->Text;
+						}
+				break;
+				case ($MesesTrabajo >= 15.00):
+					   if($this->txtImporte1->Text  >= 7000.00  and $this->txtImporte1->Text  <= 100000.00    )
+						{
+							$this->lblNotaVal->visible="false";
+							$this->btnImprimir->visible="true";
+						}else{
+							$this->btnImprimir->visible="false";
+							$this->btnGuardar->visible="false";	
+							$this->lblNotaVal->visible="true";
+							$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de 100000: $'.$this->txtImporte1->Text;
+						}
+				break;
+			}
+		}
     }
 	
 	public function btnguardar_callback($sender, $param)
@@ -148,7 +168,7 @@ class solicitudes extends TPage
 		else{
 		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");
 		}
-			
+		
 	}
 	 public function btnImprimir_onclick($sender,$param)
 		{
@@ -224,6 +244,25 @@ class solicitudes extends TPage
 		}
 	
 	}
+	public function btncancelar_callback($sender,$param)
+	{
+		$consulta="UPDATE  solicitud SET estatus = 'C' where id_solicitud = :id_solicitud";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_solicitud",$this ->txtFolio->text);
+		if($comando->execute()){
+			
+			$this->lblEstatus->Text = "CANCELADA"; 
+			$this->btnGuardar->visible="false";
+		    $this->btnModificar->visible="false";	
+			$this->btnCancelar->visible="false";
+			
+			$this->Limpiar_Campos();
+			$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LA SOLICITUD HA SIDO CANCELADA')");
+		}
+		else{
+		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error -LA SOLICITUD NO HA SIDO CANCELADA');");
+		}
+	}
 	public function txtNoUnico_CallBack($sender, $param)
 	{
 		$this->Rellena_Datos($sender->Text, str_replace("txtNoUnico", "", $sender->ID));
@@ -275,17 +314,30 @@ class solicitudes extends TPage
 			$TipoNum = "txtTipoNum" . $sufijo;
 			$this->$TipoNum->Text = $result[0]["tipo"];
 		    
-			$RespUnico = "txtNoUnicoResp". $sufijo;;
+			$RespUnico = "txtNoUnicoResp". $sufijo;
 			$this->$RespUnico->Text =$result[0]["numero"];
+			
+			$jubiladoTipo = $result[0]["tipo"];
+			if ($jubiladoTipo == "J") {
+				
+				$tipoJU = Conexion::Retorna_Campo($this->dbConexion, "pensionados", "importe_pension", array("numero"=>$num_unico));
+				$ImpJUb = ($tipoJU * 3);
+				$Jubilado = $ImpJUb;
+			}else{
+				$Jubilado ='';
+			}
+			$TipoJubilado = "txtImporte1";
+			$this->$TipoJubilado->Text =$Jubilado; 
 			
 			$tipo = Conexion::Retorna_Campo($this->dbConexion, "tipo_empleado", "texto", array("tipo_empleado"=>$result[0]["tipo"]));
 			$tip = "txtTipo" . $sufijo;
 			$this->$tip->Text = $tipo;
+			
 			$sindicato = Conexion::Retorna_Campo($this->dbConexion, "catsindicatos", "sindicato", array("cve_sindicato"=>$result[0]["sindicato"]));
 			$sin = "txtSindicato" . $sufijo;
 			$this->$sin->Text = $sindicato;
 			
-			$nominaEmp = Conexion::Retorna_Campo($this->dbConexion, "catempleado", "tipoNomina", array("cveEmpleado"=>$num_unico));
+			$nominaEmp = Conexion::Retorna_Campo($this->dbConexion, "empleados", "tipo_nomi", array("numero"=>$num_unico));
 			
 			switch ($nominaEmp) {
 				case ($nominaEmp == "Q"):
@@ -308,9 +360,15 @@ class solicitudes extends TPage
 						$this->lblSolicitadasTit->visible="true";
 						$this->lblSolicitadasTit->Text = $resultSTit;
 						$this->btnGuardar->visible="false";	
+						
 					}else {
 						$this->lblSolicitadasTit->visible="false";
 						$this->lblSolicitadasTit->Text = 0;
+						if ($jubiladoTipo == "J") {
+							$this->btnGuardar->visible="true";	
+						}else{
+							$this->btnGuardar->visible="false";
+						}
 					}
 					$resultATit = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(titular)", array("titular"=>$num_unico), " AND (estatus = 'A')");
 					if($resultATit >= 1){
@@ -324,6 +382,8 @@ class solicitudes extends TPage
 					$SaldoAnterior = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "IFNULL(SUM(importe),0)", array("titular"=>$num_unico), " AND (estatus = 'A')");
 					if($SaldoAnterior > 0){
 						$this->lblSaldoAnterior->text = $SaldoAnterior;
+					}else{
+						$this->lblSaldoAnterior->text = '';
 					}
                     break;
                 case ("txtNoUnico".$sufijo == "txtNoUnicoAval1"):
@@ -445,16 +505,19 @@ class solicitudes extends TPage
                   $this->lblEstatus->Text = "SOLICITADO"; 
 				  $this->btnGuardar->visible="false";
 				  $this->btnModificar->visible="true";
+				  $this->btnCancelar->visible="true";
                     break;
                 case "A":
                     $this->lblEstatus->Text =  'AUTORIZADO';
 					$this->btnGuardar->visible="false";	
-					$this->btnModificar->visible="false";	
+					$this->btnModificar->visible="false";
+					$this->btnCancelar->visible="false";					
                     break;
                 case "C":
                     $this->lblEstatus->Text =  'CANCELADA'; 
 					$this->btnGuardar->visible="false";
 					$this->btnModificar->visible="false";	
+					$this->btnCancelar->visible="false";
                     break;
             	}
 			$fechaCreadaSolicitud = date_create($creada);
@@ -508,8 +571,16 @@ class solicitudes extends TPage
 			$this->lblSeguro->Text = '';
 			$this->lblDiferencia->Text = '';
 			$this->lblImpCheque->Text = '';
-			
+			$this->lblSolicitadasTit->Text = '';
+			$this->lblAutorizadasTit->Text = '';
+			$this->lblSolicitadasAval1->Text = '';
+			$this->lblAutorizadasAval1->Text = '';
+			$this->lblSolicitadasAval2->Text = '';
+			$this->lblAutorizadasAval2->Text = '';
+			$this->lblEstatus->Text = '';
+
 			$this->btnGuardar->visible="false";	
+			$this->btnCancelar->visible="false";	
 			//$this->btnImprimir->visible="false";
 	}
 	

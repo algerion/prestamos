@@ -1,0 +1,116 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Movimientos de empleados" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+<div style="width:500px">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">EMPLEADOS</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="subtitulo">EMPLEADO</p>
+			</td>
+		</tr>
+		<tr>
+		<td colspan="2" align="center" width="100%">
+			<table width="100%" border="0">
+					<tr>
+						<td>No. Único</td>
+						<td>
+							<com:TTextBox ID="txtNoUnicoTit" Width="80px"  AutoPostBack="True" />		
+						</td>
+							<td>Antigüedad</td>
+						<td><com:TTextBox ID="txtAntiguedadTit" Width="200px" ReadOnly="True" /></td>
+					</tr>
+					<tr>
+						<td>Nombre</td>
+						<td colspan="3"><com:TTextBox ID="txtNombreTit" Width="400px" ReadOnly="True" />
+										<com:TTextBox ID="txtMesTTit" Width="40px" ReadOnly="True" Visible="false"/></td>
+					</tr>				
+					<tr>
+						<td>estatus</td>
+						<td><com:TTextBox ID="txtTipoTit" Width="100px" ReadOnly="True" /></td> 
+						<td>Sindicato</td>
+						<td><com:TTextBox ID="txtSindicatoTit" Width="200px" ReadOnly="True" />
+						<com:TTextBox ID="txtSindicatoNumTit" Width="20px" ReadOnly="True" Visible="False"/>
+						<com:TTextBox ID="txtNoUnicoRespTit" Width="20px" ReadOnly="false" Visible="false"/></td>
+					</tr>
+					<tr>
+						<td>Tipo de nomina</td>
+						<td colspan="3"><com:TTextBox ID="txtNominaTit" Width="200px" ReadOnly="True" /></td>
+					</tr>
+					<tr>
+						<td>fecha de firma de cheque</td>
+						<td colspan="3"><com:TTextBox ID="txtFirmaCheque" Width="200px" ReadOnly="True" /></td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<table border="0" align="center">
+					<tr>
+					<!--TDataGrid-->
+					<tr>
+						<td colspan="6" align="center">
+							<com:TDataGrid     ID="DataGrid"
+							    DataKeyField="id_solicitud"
+								AllowPaging="true"
+								PageSize="20"
+								PagerStyle.Mode="Numeric"
+								PagerStyle.HorizontalAlign="Right"
+								Width="100%"
+								CellPadding="2"
+								HeaderStyle.BackColor="black"
+								HeaderStyle.ForeColor="white"
+								ItemStyle.BackColor="#BFCFFF"
+								ItemStyle.Font.Italic="true"
+								AlternatingItemStyle.BackColor="#E6ECFF"
+								OnPageIndexChanged="changePage"
+								OnPagerCreated="pagerCreated"
+								Font.Size="12px" 
+								AutoGenerateColumns="False" 
+								GridLines="Both"
+								OnItemCreated="itemCreated"
+								OnEditCommand="editItem"
+								OnUpdateCommand="saveItem"
+								OnCancelCommand="cancelItem">
+								<com:TBoundColumn ID="id_solicitud" HeaderText="No. Solicitud" DataField="id_solicitud" />
+								<com:TBoundColumn ID="numero" HeaderText="No Unico" DataField="numero" />
+								<com:TBoundColumn ID="aval1" HeaderText="No Aval 1" DataField="aval1" />
+								<com:TBoundColumn ID="aval2" HeaderText="No Aval 2" DataField="aval2" />
+								<com:TBoundColumn ID="importe" HeaderText="Importe" DataField="importe" />
+								<com:TBoundColumn ID="plazo" HeaderText="plazo" DataField="plazo" />
+								<com:TBoundColumn ID="tasa" HeaderText="Tasa" DataField="tasa" />
+								<com:TBoundColumn ID="importe_pa_aval1" HeaderText="Importe Aval1" DataField="importe_pa_aval1" />
+								<com:TBoundColumn ID="porcentaje_pa_aval1" HeaderText="Porcentaje Aval1" DataField="porcentaje_pa_aval1" />
+								<com:TBoundColumn ID="importe_pa_aval2" HeaderText="Importe Aval2" DataField="importe_pa_aval2" />
+								<com:TBoundColumn ID="porcentaje_pa_aval2" HeaderText="Porcentaje Aval 2" DataField="porcentaje_pa_aval2" />
+								<com:TBoundColumn ID="observacion" HeaderText="Observaciones" DataField="observacion" />
+								<com:TBoundColumn ID="estatus" HeaderText="Estatus" DataField="estatus" />
+			
+								<com:TEditCommandColumn
+									HeaderText="Edit"
+									HeaderStyle.Width="100px"
+									UpdateText="Save"
+									ItemStyle.HorizontalAlign="Center"
+									ItemStyle.Font.Italic="false"
+									/>
+							</com:TDataGrid>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>

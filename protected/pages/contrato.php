@@ -163,13 +163,25 @@ class contrato extends TPage
 		$comando->bindValue(":seguro",0);
 				
 		if($comando->execute()){
-		   $this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')");
 		   $consulta="UPDATE solicitud SET estatus = :estatus WHERE id_solicitud = :id_solicitud";
 			$comando = $this->dbConexion->createCommand($consulta);
 			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
 			$comando->bindValue(":estatus",'A');
 			$comando->execute();
 		
+			$consulta="UPDATE solicitud SET estatus = 'C' WHERE titular = :Titular and id_solicitud < :id_solicitud";
+			$comando = $this->dbConexion->createCommand($consulta);
+			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
+			$comando->bindValue(":Titular",$this->txtBuscarTitularr->Text);
+			$comando->execute();
+			
+			$consulta="UPDATE contrato SET estatus = 'C' WHERE  id_solicitud IN (SELECT id_solicitud FROM solicitud WHERE titular=:Titular) AND id_solicitud < :id_solicitud ORDER BY id_solicitud DESC";
+			$comando = $this->dbConexion->createCommand($consulta);
+			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
+			$comando->bindValue(":Titular",$this->txtBuscarTitularr->Text);
+			$comando->execute();
+			
+			$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')");
 		}
 		else{
 		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");

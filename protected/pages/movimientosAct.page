@@ -1,0 +1,81 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Movimientos de empleados" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+<div style="width:500px">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">EMPLEADOS</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="subtitulo">ESTATUS DE EMPLEADOS</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				Estatus de los empleados: <com:TDropDownList ID="ddlEstadostado">
+					<com:TListItem Text="Activos" Value="1" />
+					<com:TListItem Text="Bajas" Value="2" />
+					<com:TListItem Text="Permiso Temporal" Value="0" />
+				</com:TDropDownList>
+				<com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
+			</td>
+		</tr>
+		<tr>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<table border="0" align="center">
+					<tr>
+					<!--TDataGrid-->
+					<tr>
+						<td colspan="6" align="center">
+							<com:TDataGrid     ID="DataGrid"
+								AllowPaging="true"
+								PageSize="10"
+								PagerStyle.Mode="Numeric"
+								PagerStyle.HorizontalAlign="Right"
+								Width="100%"
+								CellPadding="2"
+								HeaderStyle.BackColor="black"
+								HeaderStyle.ForeColor="white"
+								ItemStyle.BackColor="#BFCFFF"
+								ItemStyle.Font.Italic="true"
+								AlternatingItemStyle.BackColor="#E6ECFF"
+								OnPageIndexChanged="changePage"
+								OnPagerCreated="pagerCreated"
+								Font.Size="12px" 
+								AutoGenerateColumns="False" 
+								GridLines="Both">
+						
+								<com:TBoundColumn HeaderText="No. Unico" DataField="num_Unico" />
+								<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+								<com:TBoundColumn HeaderText="Tipo nómina" DataField="TipoNomina" />
+								<com:TBoundColumn HeaderText="Estatus" DataField="TipoEstatus" />
+								<com:TBoundColumn HeaderText="Autorizadas" DataField="Autorizadas" />
+								<com:TBoundColumn HeaderText="Solicitadas" DataField="Solicitadas" />
+								<com:THyperLinkColumn
+									HeaderText="Ver mas"
+									DataTextField="num_Unico"
+									DataNavigateUrlField="num_Unico"
+									DataNavigateUrlFormatString="index.php?page=movimientosEmpleado&id=%s"
+									Target="_blank"
+									/>
+							</com:TDataGrid>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
+</com:TContent>
