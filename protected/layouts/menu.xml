@@ -8,8 +8,9 @@
 		<MenuItem ID="smMovEdtSol" Title="Movimientos" Url="index.php?page=movimientos" Description="Movimientos" />
 		<MenuItem ID="smSolDesno" Title="Archivo de nómina" Url="index.php?page=descuentos" Description="Archivo de nómina" />
 	</MenuItem>
-		<MenuItem ID="smTramites" Title="Tramites">
-		<MenuItem ID="smPrestamos" Title="Prestamos" Url="index.php?page=movimientosAct" Description="estatus de los tramites" />
+		<MenuItem ID="smTramites" Title="Empleados">
+		<MenuItem ID="smPrestamos" Title="Agregar empleado" Url="index.php?page=catalogo_empleado" Description="agregar empleado" />
+		<MenuItem ID="smPrestamos" Title="Historial Prestamos" Url="index.php?page=movimientosAct" Description="Historial Prestamos" />
 	</MenuItem>
 	<MenuItem ID="smCatalogos" Title="Catálogos">
 		<MenuItem ID="smCatJefes" Title="Modificar datos de jefes" Url="index.php?page=jefes&amp;popup=1" Description="Modificar el nombre del jefe de un área y el nombre de su puesto" Target="_blank" IdPag="jefe" />

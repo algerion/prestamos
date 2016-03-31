@@ -82,8 +82,7 @@
 								GridLines="Both"
 								OnItemCreated="itemCreated"
 								OnEditCommand="editItem"
-								OnUpdateCommand="saveItem"
-								OnCancelCommand="cancelItem">
+								OnUpdateCommand="saveItem">
 								<com:TBoundColumn ID="id_solicitud" HeaderText="No. Solicitud" DataField="id_solicitud" />
 								<com:TBoundColumn ID="numero" HeaderText="No Unico" DataField="numero" />
 								<com:TBoundColumn ID="aval1" HeaderText="No Aval 1" DataField="aval1" />
@@ -97,14 +96,12 @@
 								<com:TBoundColumn ID="porcentaje_pa_aval2" HeaderText="Porcentaje Aval 2" DataField="porcentaje_pa_aval2" />
 								<com:TBoundColumn ID="observacion" HeaderText="Observaciones" DataField="observacion" />
 								<com:TBoundColumn ID="estatus" HeaderText="Estatus" DataField="estatus" />
-			
 								<com:TEditCommandColumn
 									HeaderText="Edit"
 									HeaderStyle.Width="100px"
-									UpdateText="Save"
+									UpdateText="Guardar"
 									ItemStyle.HorizontalAlign="Center"
-									ItemStyle.Font.Italic="false"
-									/>
+									ItemStyle.Font.Italic="false"/>
 							</com:TDataGrid>
 						</td>
 					</tr>

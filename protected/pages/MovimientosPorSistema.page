@@ -1,0 +1,50 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="Movimientos por sistema" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+	
+</com:TContent>
+<com:TContent ID="Main">
+	<table width="100%">
+		<tr>
+			<td>Tipo movimiento
+				<com:TDropDownList ID="ddlMovimiento">
+				<com:TListItem Value="1" Text="importe de prestamo" />                        
+				<com:TListItem Value="2" Text="abono realizado via nomina" />                   
+				<com:TListItem Value="3" Text="baja de prestamo" />                             
+				<com:TListItem Value="4" Text="saldo a septiembre 2007" />                    
+				<com:TListItem Value="5" Text="NO se realizo abono (temporal)" />               
+				<com:TListItem Value="6" Text="cancelacion de solicitud (temporal)" />          
+				<com:TListItem Value="7" Text="cambio de importe" />                            
+				<com:TListItem Value="8" Text="movimiento por sistema" />                        				
+				</com:TDropDownList>
+			Cargo ó Abono? 
+				<com:TDropDownList ID="ddlCargoAbono">
+				<com:TListItem Value="1" Text="Cargo" />
+				<com:TListItem Value="2" Text="Abono" />
+				</com:TDropDownList>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+		</tr>
+		
+		<tr>
+			<td>No Abonos     <com:TTextBox ID="txtAbonos" />
+			
+			Cantidad $ <com:TTextBox ID="txtCantidad"  />
+			</td>
+		</tr>
+		<tr>
+			<td>Justificacion</td>
+		</tr>	
+		<tr>
+			<td><com:TTextBox ID="txtjustificacion" Width="500px"/></td>
+		</tr>
+		<tr>
+			<td align="center" ><com:TButton ID="btnAceptar" OnClick="btnGenerar_Click" Text="Aceptar" /></td>
+		</tr>
+		<tr>
+	</table>
+</com:TContent>

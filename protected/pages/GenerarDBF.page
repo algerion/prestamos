@@ -1,0 +1,30 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="generas dbf" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+	
+</com:TContent>
+<com:TContent ID="Main">
+	<table width="100%">
+		<tr>
+			<td>
+				<com:TDropDownList ID="ddlTipo">
+				<com:TListItem Value="1" Text="Activos" />
+				<com:TListItem Value="2" Text="bajas" />
+				<com:TListItem Value="0" Text="permiso temporal" />
+				</com:TDropDownList>
+			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+				<com:TButton ID="btnGenerar" OnClick="btnGenerar_Click" Text="Generar" />
+			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+				<com:TButton ID="btnGenerar_Angel" OnClick="btnGenerar_Angel_Click" Text="La competencia" />
+			</td>
+		</tr>
+	</table>
+</com:TContent>

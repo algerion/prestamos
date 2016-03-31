@@ -86,22 +86,26 @@ class movimientosAct extends TPage
         $this->DataGrid->dataBind();
     }
       public function mostrarDatosGrid () {
+		
 		$consulta = "SELECT c.numero AS num_Unico, CONCAT(c.nombre,' ', c.paterno,' ', c.materno) AS nombre
-					,(SELECT CASE tipo_nomi
+					,CASE tipo_nomi
 								  WHEN 'S' THEN 'SEMANAL' 
 								  WHEN 'Q' THEN 'QUINCENAL'
 								  ELSE 'NO HAY TIPO DE NOMINA' END
-					FROM empleados cat WHERE cat.numero = c.numero) AS TipoNomina
-					,(SELECT CASE cat.status
+					AS TipoNomina
+					,CASE c.status
 								  WHEN '0' THEN 'PERMISO TEMPORAL' 
 								  WHEN '1' THEN 'ACTIVO' 
 								  WHEN '2' THEN 'BAJAS' END
-					FROM empleados cat WHERE cat.numero = c.numero) AS TipoEstatus
-					,(SELECT COUNT(id_solicitud) AS autorizados FROM solicitud WHERE estatus = 'A' AND titular = c.numero) AS Autorizadas
-					,(SELECT COUNT(id_solicitud) AS autorizados FROM solicitud WHERE estatus = 'S' AND titular = c.numero) AS Solicitadas
-					FROM empleados c where c.status = :estatus ORDER BY c.numero ASC";
+					AS TipoEstatus
+					,COUNT(a.id_solicitud) AS Autorizadas
+					,COUNT(s.id_solicitud) AS Solicitadas
+					FROM empleados c JOIN solicitud a ON a.titular = c.numero JOIN solicitud s ON s.titular = c.numero WHERE c.status = :estatu
+					AND a.estatus = 'A' AND s.estatus = 'S' 
+					GROUP BY c.numero, CONCAT(c.nombre,' ', c.paterno,' ', c.materno), tipo_nomi, c.status
+					ORDER BY c.numero ASC ";
 		$comando = $this->dbConexion->createCommand($consulta);
-		$comando->bindValue(":estatus",$this ->ddlEstadostado->SelectedValue);
+		$comando->bindValue(":estatu",$this ->ddlEstadostado->SelectedValue);
 		$resultado = $comando->query()->readAll();
 		$this->DataGrid->DataSource = $resultado;
 		$this->DataGrid->dataBind();
@@ -109,24 +113,6 @@ class movimientosAct extends TPage
 		 }
 	public function btnBuscar_onclick($sender,$param)
 	{
-		$consulta = "SELECT c.numero AS num_Unico, CONCAT(c.nombre,' ', c.paterno,' ', c.materno) AS nombre
-					,(SELECT CASE tipo_nomi
-								  WHEN 'S' THEN 'SEMANAL' 
-								  WHEN 'Q' THEN 'QUINCENAL'
-								  ELSE 'NO HAY TIPO DE NOMINA' END
-					FROM empleados cat WHERE cat.numero = c.numero) AS TipoNomina
-					,(SELECT CASE cat.status
-								  WHEN '0' THEN 'PERMISO TEMPORAL' 
-								  WHEN '1' THEN 'ACTIVO' 
-								  WHEN '2' THEN 'BAJAS' END
-					FROM empleados cat WHERE cat.numero = c.numero) AS TipoEstatus
-					,(SELECT COUNT(id_solicitud) AS autorizados FROM solicitud WHERE estatus = 'A' AND titular = c.numero) AS Autorizadas
-					,(SELECT COUNT(id_solicitud) AS autorizados FROM solicitud WHERE estatus = 'S' AND titular = c.numero) AS Solicitadas
-					FROM empleados c where c.status = :estatus ORDER BY c.numero ASC";
-		$comando = $this->dbConexion->createCommand($consulta);
-        $comando->bindValue(":estatus",$this ->ddlEstadostado->SelectedValue);
-		$resultado=$comando->query();
-		$row=$resultado->read();
 		$this->mostrarDatosGrid ();
 
 	}

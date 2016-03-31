@@ -158,6 +158,3 @@ GROUP BY id_contrato)
 		return $comando->query()->readAll();
 	}
 }
-	
-?>
-     

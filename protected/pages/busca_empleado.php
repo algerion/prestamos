@@ -30,21 +30,20 @@ class busca_empleado extends TPage
 	public function btnBuscar_Click($sender, $param)
 	{
 		$sind = ($this->ddlSindicato->SelectedValue != "T" ? $this->ddlSindicato->SelectedValue : null);
-		//$resultado = Busquedas::empleados($this->dbConexion, $this->ddlTipo->SelectedValue, $this->txtNombre->Text, $sind);
-		$resultado = Conexion::Retorna_Registro($this->dbConexion, "sujetos", 
+		$resultado = Busquedas::empleados($this->dbConexion, $this->ddlTipo->SelectedValue, $this->txtNombre->Text, $sind);
+	//	$resultado = Conexion::Retorna_Registro($this->dbConexion, "sujetos", 
 		for($i = 0; $i < count($resultado); $i++)
 		{
 			$campos = "'" . $this->Request["sufijo"] . "', '" . $resultado[$i]["numero"] . "', '" . 
-					$resultado[$i]["nombre"] . " " . $resultado[$i]["paterno"] . " " . 
-					$resultado[$i]["materno"] . "', '" . $resultado[$i]["sindicato"] . "', '" . 
-					$resultado[$i]["antiguedad"] . "', '" . $resultado[$i]["tipo"] . "', '" .
-					$resultado[$i]["importe"] . "', '" . $resultado[$i]["porcentaje"] . "'";
+					$resultado[$i]["nombre"] . " " . $resultado[$i]["fec_ingre"] . " " . 
+					$resultado[$i]["sindicato"] . "', '" . $resultado[$i]["tipo"] . "'"; 
+					//$resultado[$i]["importe"] . "', '" . $resultado[$i]["porcentaje"] . "'";
 					
 			$resultado[$i]["numero"] = "<a href='#' onclick=\"regresa(" . $campos . ")\">" . $resultado[$i]["numero"] . "</a>";
 		}
 		$this->dgEmpleados->DataSource = $resultado;
 		$this->dgEmpleados->dataBind();
+		//numero  nombre                                     fec_ingre            sindicato  tipo    status 
 	}
 }
-
 ?>

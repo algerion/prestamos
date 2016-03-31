@@ -19,27 +19,45 @@
 				<table border="0">
 					<tr>
 						<td>Clave de empleado</td>
-						<td><com:TTextBox ID="ddlclaveempleado" Width="150px" /></td>
+						<td><com:TTextBox ID="txtclaveempleado" Width="150px" ReadOnly="True" /></td>
 						<td>Estatus</td>
-						<td><com:TTextBox ID="ddlEstatus9" Width="150px" /></td>				
+						<td><com:TTextBox ID="txtEstatus" Width="150px" /></td>	
+					<td colspan="2">Tipo empleado: <com:TDropDownList ID="txtTipoEmpleado">
+						  <com:TListItem Value="E" Text="Externo" />
+						  <com:TListItem Value="S" Text="Sindicato" />
+						</com:TDropDownList></td>						
 					</tr>
 					<tr>
 						<td>Apellido paterno</td>
-						<td><com:TTextBox ID="ddlApellidoPaterno" Width="150px" /></td>
+						<td><com:TTextBox ID="txtApellidoPaterno" Width="150px" /></td>
 						<td>Apellido materno</td>
-						<td><com:TTextBox ID="ddlApellidoMaterno" Width="150px" /></td>
+						<td><com:TTextBox ID="txtApellidoMaterno" Width="150px" /></td>
 						<td>Nombre</td>
-						<td><com:TTextBox ID="ddlNombre9" Width="150px" /></td>				
+						<td><com:TTextBox ID="txtNombre" Width="150px" /></td>				
+					</tr>
+					<tr>
+					<td>Dirección</td>
+						<td colspan="3" ><com:TTextBox ID="txtdireccion" Width="400px" /></td>
+						<td>CURP</td>
+						<td><com:TTextBox ID="txtCurp" Width="150px" /></td>
 					</tr>
 						<td>Fecha de ingreso</td>
-						<td><com:TTextBox ID="ddlFechadeingreso9" Width="50px" /></td>
-						<td>Sindiato</td>
-						<td><com:TTextBox ID="ddlSindicato9" Width="80px" /></td>
+						<td><com:TDatePicker ID="datFechadeingreso" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td>
+						<td>Genero</td>
+						<td><com:TDropDownList ID="txtGenero">
+						  <com:TListItem Value="M" Text="Masculino" />
+						  <com:TListItem Value="F" Text="Femenino" />
+						</com:TDropDownList></td>
 						<td>Categoria</td>
 						<td><com:TTextBox ID="Categoria"" Width="50px" /></td>
 					
 				</table>
 			</td>
+			<tr>
+			<td colspan="2" align="center">
+				<com:TButton ID="btnGuardar" Text="Guardar" OnClick="btnaceptar_onclick"/>
+			</td>
+		</tr>
 		</tr>
 		
 	</table>

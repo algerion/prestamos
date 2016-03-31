@@ -42,9 +42,7 @@
 			opener.document.getElementById('ctl0_Main_txtMesT' + sufijo).value = '';
 			opener.document.getElementById('ctl0_Main_txtNota' + sufijo).value = '';
 			opener.document.getElementById('ctl0_Main_txtNomina' + sufijo).value = '';
-		}
-		
-		
+		}		
 	</com:TClientScript>
 </com:TContent>
 <com:TContent ID="Main">
@@ -228,7 +226,7 @@
 					</tr>
 					<tr>
 						<td>Importe:</td>
-						<td><com:TActiveTextBox ID="txtImporte1" width="80px" AutoPostBack="true" OnTextChanged="textChangedImporte"/></td>
+						<td><com:TActiveTextBox ID="txtImporte1" width="80px" AutoPostBack="true" OnTextChanged="textChangedImporte" /></td>
 					</tr>
 					<tr>
 						<td>Plazo (meses):</td>
@@ -267,11 +265,12 @@
 						<td><com:TActiveLabel Text="" ID="lblDiferencia" ForeColor="red" /></td>
 					</tr>
 					<tr>
-						<td>Imp. Cheque:</td>
-						<td><com:TActiveLabel Text="" ID="lblImpCheque" ForeColor="red" /></td>
+						<td><com:TActiveLabel Text="" ID="lblContratoAnterior" ForeColor="red" Visible="false"/></td>
 					</tr>
 					<tr>
-					<strong><com:TActiveLabel ID="lblNotaVal" ForeColor="red" Visible="true" Font.Size="10pt"/></strong>
+						<td>Imp. Cheque:</td>
+						<td><com:TActiveLabel Text="" ID="lblImpCheque" ForeColor="red" /></td>
+						<td><com:TActiveLabel Text="" ID="lblImpChequeResp" ForeColor="red" Visible="false"/></td> 
 					</tr>
 				</table>
 			</td>
@@ -287,5 +286,15 @@
 			</td>
 		</tr>
 	</table>
+		<com:TPanel GroupingText="Alerta">
+			<table width="100%" border="0">
+				<tr>
+			    <td>
+				<strong><com:TActiveLabel ID="lblNotaVal" ForeColor="red" Visible="true" Font.Size="10pt"/></strong>
+				<strong><com:TActiveLabel ID="lblNotaValCamposVacios" ForeColor="red" Visible="true" Font.Size="10pt"/></strong>
+				</td>
+			  </tr>
+			</table>
+		</com:TPanel>
 	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
 </com:TContent>

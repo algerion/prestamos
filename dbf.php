@@ -52,8 +52,10 @@
 		foreach($contenido as $cont)
 		{
 			$bin .= pack("C", 32);
-			for($i = 0; $i < $long_estruc; $i++)
+			for($i = 0; $i < $long_estruc; $i++){
+				echo $i . " <br />";
 				$bin .= pack("A" . $estructura[$i]['longitud'], $cont[$i]);
+			}
 		}
 
 		$bin .= pack("C", 26);

@@ -15,7 +15,7 @@ class descuentos extends TPage
 		Conexion::createConfiguracion();
 		if(!$this->IsPostBack)
 		{
-			$estatus = Conexion::Retorna_Registro($this->dbConexion, "estatus", array(), " id_estatus > 0");
+			$estatus = Conexion::Retorna_Registro($this->dbConexion, "estatus", array(), " where id_estatus > 0");
 			$this->ddlEstatus->DataSource = $estatus;
 			$this->ddlEstatus->dataBind();
 		}
@@ -63,7 +63,7 @@ class descuentos extends TPage
 		$regsdesno = $this->descarga_dbf($archivo);
 		if($regsdesno)
 		{
-			$parametros = array("origen"=>"N", "creado"=>date("Ymd H:i:s"), "modificado"=>date("Ymd H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3,
+			$parametros = array("origen"=>"N", "creado"=>date("Y-m-d H:i:s"), "modificado"=>date("Y-m-d H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3,
 					"observaciones"=>"desno recibido exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), 
 					"pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>$this->txtPeriodo->Text);
 			Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);

@@ -26,6 +26,7 @@ class contrato extends TPage
 		}
 	
 	}
+
 	public function btnBuscar_onclick($sender,$param)
 	{
 		
@@ -138,11 +139,16 @@ class contrato extends TPage
 	}
 	public function textChanged($sender,$param) // cheque
     {
-		$this->lblEstatus->text =  'AUTORIZADO';
-		if ($this->lblEstatus->text =  'AUTORIZADO')
-			$this->btnGuardar->visible="true";
-		else
+		if ($this->txtCheque->Text == ""){
+			$this->lblEstatus->text =  'SOLICITADO';
 			$this->btnGuardar->visible="false";
+		}ELSE{
+		$this->lblEstatus->text =  'AUTORIZADO';
+			if ($this->lblEstatus->text =  'AUTORIZADO')
+				$this->btnGuardar->visible="true";
+			else
+				$this->btnGuardar->visible="false";
+		}
 	}		
 	public function btnguardar_callback($sender, $param) 
 	{

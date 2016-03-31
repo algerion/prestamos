@@ -9,7 +9,6 @@ class solicitudes extends TPage
 	{
 		parent::onLoad($param);
 		$idSolicitud = $_REQUEST['id'];
-		//$idSolicitud = 41166; //$_REQUEST['id'];
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
 
@@ -18,11 +17,11 @@ class solicitudes extends TPage
 					aval2, a2.nombre AS aval2_n, sa2.cve_sindicato AS aval2_cve_sind, sa2.sindicato AS aval2_sind, TIMESTAMPDIFF(YEAR, a2.fec_ingre, CURDATE()) AS aval2_ant,
 					(SELECT representante FROM CATSINDICATOS WHERE cve_sindicato = tit_cve_sind) as SindicatoRpre
 					,DATE_FORMAT(s.firma,'%d/%m/%Y') AS firma, importe, plazo, tasa, saldo_anterior, descuento
-					,(SELECT CASE tipoNomina
-              WHEN tipoNomina = 'S' THEN 'SEMANAL' 
-              WHEN tipoNomina = 'Q' THEN 'QUINCENAL'
+					,(SELECT CASE tipo_nomi
+              WHEN tipo_nomi = 'S' THEN 'SEMANAL' 
+              WHEN tipo_nomi = 'Q' THEN 'QUINCENAL'
               ELSE 'NO HAY TIPO DE NOMINA' END AS mesto_utovara
-			FROM catempleado WHERE cveEmpleado = s.titular) as TipoNominaTit
+			FROM empleados WHERE numero = s.titular) as TipoNominaTit
 					
 		FROM Solicitud s 
 		LEFT JOIN sujetos AS t ON t.numero = s.titular
