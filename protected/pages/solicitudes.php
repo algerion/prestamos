@@ -438,30 +438,23 @@ class solicitudes extends TPage
 						$this->lblSolicitadasAval1->visible="false";
 						$this->lblSolicitadasAval1->Text = 0;
 					}
-					/*$consulta ="SELECT COUNT(id_contrato) AS pendiente   // 
-					FROM contrato WHERE id_contrato IN (SELECT m.id_contrato 
-					FROM solicitud AS s 
-					INNER JOIN contrato AS c	ON	s.id_solicitud = c.id_solicitud 
-					INNER JOIN movimientos AS m 	ON 	m.id_contrato = c.id_contrato 
-					WHERE s.aval1 = :aval1 
-					GROUP BY m.id_contrato HAVING (SUM(m.cargo) - SUM(m.abono)) > 0 )";
-			
-						$comando = $this->dbConexion->createCommand($consulta); 
-						$comando->bindValue(":aval1",$num_unico);
-						$result = $comando->query()->readAll();
-						$resultAAval1B = $result[0]["pendiente"];
-
-					$this->lblAutorizadasAval1->visible="true";
-					$this->lblAutorizadasAval1->Text = $resultAAval1B;*/
-					/*$resultAAval1 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval1)", array("aval1"=>$num_unico), " AND (estatus = 'A')");
+					$consulta = "SELECT IFNULL(COUNT(contrato),0)  AS pendientes FROM descuento_detalle 
+								WHERE aval1 = :aval1 AND EXISTS (SELECT * FROM movimientos 
+								WHERE id_contrato = contrato HAVING (SUM(cargo) - SUM(abono)) > 0.00 )"; 
+					
+					$comando = $this->dbConexion->createCommand($consulta); 
+					$comando->bindValue(":aval1",$num_unico);
+					$result = $comando->query()->readAll();
+					$resultAAval1 = $result[0]["pendientes"];
+				
 					if($resultAAval1 >= 3){
 						$this->btnGuardar->visible="false";	
 						$this->lblAutorizadasAval1->visible="true";
-						$this->lblAutorizadasAval1->Text = $resultAAval1;
+					$this->lblAutorizadasAval1->Text = $resultAAval1;
 					}else {
 						$this->lblAutorizadasAval1->visible="false";
 						$this->lblAutorizadasAval1->Text = 0;							
-					}*/
+					}
                     break;
                 case ("txtNoUnico".$sufijo == "txtNoUnicoAval2"):
 				
@@ -474,7 +467,14 @@ class solicitudes extends TPage
 						$this->lblSolicitadasAval2->visible="false";
 						$this->lblSolicitadasAval2->Text = 0;
 					}
-					$resultAAval2 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval2)", array("aval2"=>$num_unico), " AND (estatus = 'A')");
+					$consulta = "SELECT IFNULL(COUNT(contrato),0)  AS pendientes FROM descuento_detalle 
+								WHERE aval2 = :aval2 AND EXISTS (SELECT * FROM movimientos 
+								WHERE id_contrato = contrato HAVING (SUM(cargo) - SUM(abono)) > 0.00 )"; 
+								
+					$comando = $this->dbConexion->createCommand($consulta); 
+					$comando->bindValue(":aval2",$num_unico);
+					$result = $comando->query()->readAll();
+					$resultAAval2 = $result[0]["pendientes"];
 					if($resultAAval2 >= 3)
 						{
 							$this->btnGuardar->visible="false";	
