@@ -148,7 +148,9 @@
 						<tr>
 						<td>Número De Cheque</td>
 										<td><com:TActiveTextBox ID="txtCheque" width="80px" AutoPostBack="true" OnTextChanged="textChanged" visible ="true"/>
-											<com:TActiveLabel Text="" ID="lblNumCheque" ForeColor="red" /></td>										
+											<com:TActiveLabel Text="" ID="lblNumCheque" ForeColor="red" />
+											<com:TActiveLabel Text="" ID="lblNumContrato" ForeColor="red" />
+											<com:TActiveLabel Text="" ID="lblSaldoAnterior" ForeColor="red" /></td>										
 						</tr>
 				</table>
 			</td>

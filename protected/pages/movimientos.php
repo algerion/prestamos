@@ -105,7 +105,7 @@ class movimientos extends TPage
 				 break;  
 			 }
 			$comando->bindValue(":id_usuario",0);
-			$comando->bindValue(":aplicacion",$fecha);
+			$comando->bindValue(":aplicacion",'');
 			$comando->bindValue(":id_descuento",0);
 			$comando->bindValue(":activo",1);
 			

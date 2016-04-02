@@ -40,7 +40,7 @@ class contrato extends TPage
 			t.numero as num_tit, t.nombre AS titular, st.cve_sindicato AS tit_cve_sind, st.sindicato AS tit_sind, TIMESTAMPDIFF(YEAR, t.fec_ingre, CURDATE()) AS tit_ant,
 			s.aval1, a1.nombre AS aval1_n, sa1.cve_sindicato AS aval1_cve_sind, sa1.sindicato AS aval1_sind, TIMESTAMPDIFF(YEAR, a1.fec_ingre, CURDATE()) AS aval1_ant,
 			s.aval2, a2.nombre AS aval2_n, sa2.cve_sindicato AS aval2_cve_sind, sa2.sindicato AS aval2_sind, TIMESTAMPDIFF(YEAR, a2.fec_ingre, CURDATE()) AS aval2_ant,
-			firma, importe, plazo, tasa, saldo_anterior, descuento
+			firma, importe, plazo, tasa, saldo_anterior, descuento, s.id_contrato_ant as id_contrato_ant,s.saldo_anterior as saldo_anterior
 			,(SELECT num_cheque FROM contrato WHERE id_solicitud = s.id_solicitud AND estatus <> 'C') AS num_cheque
 			,(SELECT fec_ingre  FROM sujetos WHERE numero = t.numero) AS fechaIngresoTit
 			,(SELECT fec_ingre  FROM sujetos WHERE numero = s.aval1) AS fechaIngresoAval1
@@ -100,6 +100,8 @@ class contrato extends TPage
 			$this->txtSeguro->Text = $seguro;
 			$this->txtDiferencia->Text = number_format($Redondeo,2);
 			$this->txtImpCheque->Text = number_format($cheque,2); 
+			$this->lblNumContrato->Text = $result[0]["id_contrato_ant"];
+			$this->lblSaldoAnterior->Text = $result[0]["saldo_anterior"];
 			
 			$status  = $result[0]["estatus"];
 			switch ($status) {
@@ -186,7 +188,23 @@ class contrato extends TPage
 			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
 			$comando->bindValue(":Titular",$this->txtBuscarTitularr->Text);
 			$comando->execute();
-			
+			if ($this->lblNumContrato->Text <> '')
+			{
+				$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
+						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
+				$comando = $this->dbConexion->createCommand($consulta);
+				$comando->bindValue(":id_contrato",$this->lblNumContrato->Text);
+				$comando->bindValue(":creacion",$this->txtfecha->Text);
+				$comando->bindValue(":id_tipo_movto",3);
+				$comando->bindValue(":descripcion",'baja de prestamo');
+				$comando->bindValue(":cargo",0.00);
+				$comando->bindValue(":abono",$this->lblSaldoAnterior->Text);
+				$comando->bindValue(":id_usuario",0);
+				$comando->bindValue(":aplicacion",'');
+				$comando->bindValue(":id_descuento",0);
+				$comando->bindValue(":activo",1);
+				$comando->execute();
+			}
 			$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')");
 		}
 		else{

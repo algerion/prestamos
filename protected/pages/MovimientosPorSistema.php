@@ -38,9 +38,9 @@ class MovimientosPorSistema extends TPage
 		$comando->bindValue(":cargo",$this->txtNoUnicoAval1->Text);
 		$comando->bindValue(":abono",$this->txtTipoNumTit->Text);
 		$comando->bindValue(":id_usuario",$this->txtTipoNumTit->Text);
-		$comando->bindValue(":aplicacion",$this->txtSindicatoNumTit->Text);
-		$comando->bindValue(":id_descuento",$this->txtSindicatoNumTit->Text);
-		$comando->bindValue(":activo",$this->txtNoUnicoAval1->Text);
+		$comando->bindValue(":aplicacion",'');
+		$comando->bindValue(":id_descuento",0);
+		$comando->bindValue(":activo"1);
 		
 		if($comando->execute()){
 		   $this->ClientScript->RegisterBeginScript("Mensaje","alert('El movimiento fue insertado correctamente');");
