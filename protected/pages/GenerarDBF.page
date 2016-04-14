@@ -9,10 +9,15 @@
 	<table width="100%">
 		<tr>
 			<td>
-				<com:TDropDownList ID="ddlTipo">
-				<com:TListItem Value="1" Text="Activos" />
-				<com:TListItem Value="2" Text="bajas" />
-				<com:TListItem Value="0" Text="permiso temporal" />
+				<com:TDropDownList ID="ddlEmpleado">
+				<com:TListItem Value="A" Text="ACTIVO" />
+				<com:TListItem Value="J" Text="JUBILADO" />
+				</com:TDropDownList>
+			</td>
+			<td>
+				<com:TDropDownList ID="ddlNomina">
+				<com:TListItem Value="Q" Text="QUINCENAL" />
+				<com:TListItem Value="S" Text="SEMANAL" />
 				</com:TDropDownList>
 			</td>
 		</tr>
@@ -26,5 +31,6 @@
 				<com:TButton ID="btnGenerar_Angel" OnClick="btnGenerar_Angel_Click" Text="La competencia" />
 			</td>
 		</tr>
+		
 	</table>
 </com:TContent>

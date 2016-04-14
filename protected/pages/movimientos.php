@@ -25,7 +25,7 @@ class movimientos extends TPage
 					,(SELECT sindicato FROM catsindicatos WHERE cve_sindicato = t.sindicato) AS Sindicato
 					,(SELECT COUNT(*) AS movimientos FROM movimientos WHERE id_tipo_movto = 2 and id_contrato = c.id_contrato) AS AbonosRealizados
 					,(SELECT COUNT(*) AS movimientos FROM movimientos WHERE id_contrato = c.id_contrato) AS MovimientosRealizados
-					,(SELECT (s.importe - SUM(abono) ) AS saldo FROM movimientos WHERE id_tipo_movto = 2 AND id_contrato = c.id_contrato) AS SaldoActual
+					,(SELECT (SUM(cargo) - SUM(abono) ) AS saldo FROM movimientos WHERE  id_contrato = c.id_contrato) AS SaldoActual
 					,s.descuento as descuento
 					FROM contrato AS c
 					LEFT JOIN solicitud AS s	ON c.id_solicitud = s.id_solicitud
@@ -44,14 +44,26 @@ class movimientos extends TPage
 			$this->txtAbonosRealizados4->Text = $result[0]["AbonosRealizados"];
 			$this->txtDescuentoQuincenal4->Text = $result[0]["descuento"];
 			$this->txtTotalDeMovimiento2->Text = $result[0]["MovimientosRealizados"];
-			$this->txtSaldo4->Text = $result[0]["SaldoActual"];
+			if ( $result[0]["SaldoActual"] > 0){
+				$this->txtSaldo4->Text = $result[0]["SaldoActual"];
+			}else{
+				$this->txtSaldo4->Text = $result[0]["ImporteDeCheque"];
+			}
 			$this->txtdescuento->Text = $result[0]["descuento"];
-		}			
+		}
+		$consulta = "SELECT SUM(cargo) AS cargo,  SUM(abono) AS abono  FROM movimientos WHERE id_contrato = :id_contrato";	
+		$comando = $this->dbConexion->createCommand($consulta); 
+		$comando->bindValue(":id_contrato",$id_contrato);
+		$result = $comando->query()->readAll();
+		if(count($result) > 0)
+		{
+			$this->txtTotalDeMovimiento2->Text = $result[0]["cargo"];
+			$this->txtTotalDeMovimiento3->Text = $result[0]["abono"];
+		}	
 	}
 
 	 public function mostrarDatosGrid () 
 	 { 
-		//$contrato=$this->txtContrato2->Text;
 		$consulta = "SELECT id_movimiento, creacion, descripcion, cargo, abono FROM movimientos where id_contrato = :id_contrato";
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":id_contrato",$this->txtContrato2->Text);

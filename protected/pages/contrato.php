@@ -22,6 +22,12 @@ class contrato extends TPage
 		{
 			$this->txtfecha->Text = date("Y-m-d");
 			//$this->carga_solicitud();
+			$consultaCon="SELECT MAX(id_contrato)+1 AS contrato FROM contrato"; 
+				$comando = $this->dbConexion->createCommand($consultaCon); 
+				$result = $comando->query()->readAll();
+				$this->txtFoliocontrato->Text = $result[0]["contrato"];
+				
+	
 			
 		}
 	
@@ -100,6 +106,7 @@ class contrato extends TPage
 			$this->txtSeguro->Text = $seguro;
 			$this->txtDiferencia->Text = number_format($Redondeo,2);
 			$this->txtImpCheque->Text = number_format($cheque,2); 
+			$this->txtImpChequeCan->Text = $cheque;
 			$this->lblNumContrato->Text = $result[0]["id_contrato_ant"];
 			$this->lblSaldoAnterior->Text = $result[0]["saldo_anterior"];
 			
@@ -154,10 +161,12 @@ class contrato extends TPage
 	}		
 	public function btnguardar_callback($sender, $param) 
 	{
-		$consulta="insert into contrato (id_solicitud,creado,entrega_cheque,num_cheque, observacion, estatus, id_usuario, entrega_real, autorizado, congelado, seguro )"
-				  ." values (:txtFoliosolicitud,:txtFechaAutorizasioon,:txtFechaEntrgaCheque,:txtNumeroDeCheque,:observacion,:estatus,:id_usuario,:txtfecha,:txtFechaContrato,:congelado, :seguro)";
+		$consulta="insert into contrato (id_contrato,id_solicitud,creado,entrega_cheque,num_cheque, observacion, estatus, id_usuario, entrega_real, autorizado, congelado, seguro )"
+				  ." values (:id_contrato,:txtFoliosolicitud,:txtFechaAutorizasioon,:txtFechaEntrgaCheque,:txtNumeroDeCheque,:observacion,:estatus,:id_usuario,:txtfecha,:txtFechaContrato,:congelado, :seguro)";
 
 		$comando = $this->dbConexion->createCommand($consulta);
+		//$this->txtFoliocontrato->Text
+		$comando->bindValue(":id_contrato",$this->txtFoliocontrato->Text);
 		$comando->bindValue(":txtFoliosolicitud",$this->txtFoliosolicitudd->Text);
 		$comando->bindValue(":txtFechaAutorizasioon",$this->txtFechaAutorizasioon->Text);
 		$comando->bindValue(":txtFechaEntrgaCheque",$this->datFechaEntrgaCheque->Text);
@@ -188,7 +197,7 @@ class contrato extends TPage
 			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
 			$comando->bindValue(":Titular",$this->txtBuscarTitularr->Text);
 			$comando->execute();
-			if ($this->lblNumContrato->Text <> '')
+			if ($this->lblNumContrato->Text >  0)
 			{
 				$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
 						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
@@ -204,11 +213,31 @@ class contrato extends TPage
 				$comando->bindValue(":id_descuento",0);
 				$comando->bindValue(":activo",1);
 				$comando->execute();
+					
+				
+			}else{
+			
+				$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
+						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
+				$comando = $this->dbConexion->createCommand($consulta);
+				$comando->bindValue(":id_contrato",$this->txtFoliocontrato->Text);
+				$comando->bindValue(":creacion",$this->txtfecha->Text);
+				$comando->bindValue(":id_tipo_movto",1);
+				$comando->bindValue(":descripcion",'importe de prestamo');
+				$comando->bindValue(":cargo",$this->txtImpChequeCan->Text);
+				$comando->bindValue(":abono",0.00);
+				$comando->bindValue(":id_usuario",0);
+				$comando->bindValue(":aplicacion",'');
+				$comando->bindValue(":id_descuento",0);
+				$comando->bindValue(":activo",1);
+				$comando->execute();
+		
 			}
-			$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')");
+			$contratoSig = $this->txtFoliocontrato->Text;
+			$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')\n\n"."Num. contrato:".$contratoSig); 											   
 		}
 		else{
-		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");
+			$this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");
 		}
 		
 	}
@@ -257,6 +286,7 @@ class contrato extends TPage
 			$this->txtSeguro->Text = '';
 			$this->txtDiferencia->Text = '';
 			$this->txtImpCheque->Text = '';
+			$this->txtImpChequeCan->Text = '';
 			$this->lblEstatus->Text = '';
 			$this->txtCheque->Text = '';
 	}

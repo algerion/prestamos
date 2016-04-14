@@ -199,7 +199,7 @@ class solicitudes extends TPage
 		$titularTit = $this->txtNoUnicoTit->Text;
 		if($comando->execute()){
 		   $TitId= $this->solicitud($titularTit);	
-		   //$this->Imprimir($titularTit);
+		  // $this->Imprimir($titularTit);
 		   $this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')\n\n"."Num. Solicitud: ".$TitId );
 		}
 		else{
@@ -412,21 +412,21 @@ class solicitudes extends TPage
 						}
 					}
 					
-					$idContrato = Conexion::Retorna_Campo($this->dbConexion, "descuento_detalle", "contrato", array("num_empleado"=>$num_unico));
-					$cargo =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(cargo)", array("id_contrato"=>$idContrato));
-					$abono =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(abono)", array("id_contrato"=>$idContrato));
-					$adeudo = $cargo - $abono;
-					
-					if ($adeudo == 0)
-					{
-						$this->lblSaldoAnterior->text = 0;	
-						$this->lblContratoAnterior->text = "";
-						$this->lblAutorizadasTit->Text = "";
-					}else{
-						$this->lblSaldoAnterior->text = $adeudo;	
-						$this->lblContratoAnterior->text = $idContrato;
-						$this->lblAutorizadasTit->Text = 1;
-					}
+						$idContrato = Conexion::Retorna_Campo($this->dbConexion, "descuento_detalle", "contrato", array("num_empleado"=>$num_unico));
+						$cargo =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(cargo)", array("id_contrato"=>$idContrato));
+						$abono =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(abono)", array("id_contrato"=>$idContrato));
+						$adeudo = $cargo - $abono;
+						
+						if ($adeudo <= 0 or $idContrato == '')
+						{
+							$this->lblSaldoAnterior->text = 0;	
+							$this->lblContratoAnterior->text = "";
+							$this->lblAutorizadasTit->Text = "";
+						}else{
+							$this->lblSaldoAnterior->text = $adeudo;	
+							$this->lblContratoAnterior->text = $idContrato;
+							$this->lblAutorizadasTit->Text = 1;
+						}
                     break;
                 case ("txtNoUnico".$sufijo == "txtNoUnicoAval1"):
 					$resultSAval1 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval1)", array("aval1"=>$num_unico), " AND (estatus = 'S')");

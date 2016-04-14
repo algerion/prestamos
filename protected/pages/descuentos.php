@@ -26,37 +26,110 @@ class descuentos extends TPage
 		//$this->getPage()->getCallbackClient()->callClientFunction("reemplaza_desno", array());
 		//SELECT id_descuento FROM descuento WHERE id_estatus = 1 ORDER BY creado LIMIT 1
 		$id_descuento = Conexion::Retorna_Campo($this->dbConexion, "descuento", "id_descuento", array("id_estatus"=>1));
-		if($id_descuento != "")
-			$this->ClientScript->registerEndScript("reemplaza_desno_genera",
+		if($id_descuento != ""){
+			
+			// $this->ClientScript->registerEndScript("reemplaza_desno_genera",00	"reemplaza_desno('Ya existe un desno generado. ¿Reemplazar?', 1);\n");
+				$this->ClientScript->registerEndScript("reemplaza_desno_genera",
 				"reemplaza_desno('Ya existe un desno generado. ¿Reemplazar?', 1);\n");
-		else
+			/*$Tiposujeto= $this->ddlTipo->SelectedValue;
+			if ($Tiposujeto = 'RH'){
+				$Sujeto = 'A';
+			}else{
+				$sujeto = 'J';
+			}
+			$this->Generar_desno($sujeto);	*/
+			
+			$this->Generar_desno($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A");
+		}else{
 			$this->ClientScript->registerEndScript("reemplaza_desno_genera",
 				"reemplaza_desno('El archivo de descuentos de " . $this->ddlTipo->SelectedItem->Text . " sera generado, ¿Desea continuar?', 2);\n");
+		}
 	}
 	
 	public function cbOperaciones_Callback($sender, $param)
 	{
 		if($param->CallbackParameter->valor)
 		{
+		
+			
 			if($param->CallbackParameter->tipo == 1)
 			{
 				$id_descuento = Conexion::Retorna_Campo($this->dbConexion, "descuento", "id_descuento", array("id_estatus"=>1));
 				Elimina_Registro($this->dbConexion, "descuento_detalle", array("id_descuento"=>$id_descuento));
 				Elimina_Registro($this->dbConexion, "descuento", array("id_descuento"=>$id_descuento));
 			}
-
+		
 			$parametros = array("origen"=>"P", "creado"=>date("Ymd H:i:s"), "modificado"=>date("Ymd H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>1,
 					"observaciones"=>"desno generado exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), 
 					"pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>(is_numeric($this->txtPeriodo->Text) ? $this->txtPeriodo->Text : 0));
 			Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
 			$id = Conexion::Ultimo_Id_Generado($this->dbConexion);
 			$this->actualiza_desno($regsdesno, $id);
-
+			//$this->Generar_desno($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A");
 			$this->ClientScript->registerEndScript("exito",
 				"alert('desno generado exitosamente');\n");
 		}
 	}
-	
+	public function Generar_desno($TipoEmpleado)
+	{		
+	//echo $TipoEmpleado;
+		$consulta="INSERT INTO respMovimientos (id_contrato,  cargo,   abono,  activo , adeudo,movimientos)  
+					SELECT id_contrato,cargo, abono,activo,SUM(Cargo - Abono) AS adeudo ,COUNT(id_contrato) AS movimientos FROM movimientos WHERE  activo = 1 GROUP BY id_contrato HAVING SUM(Cargo - Abono) > 1";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->execute();
+		// ----------------------------------------------------------------------------------------------------------------------------------------------------------------
+		$registros = ("SELECT COUNT(*) AS registro FROM  contrato A
+				INNER JOIN  solicitud B 	ON B.id_Solicitud = A.id_Solicitud
+				INNER JOIN respMovimientos C	ON C.id_contrato  = A.id_contrato
+				INNER JOIN sujetos 	T	ON T.numero = B.titular
+				INNER JOIN sujetos 	AV1	ON AV1.numero = B.aval1
+				INNER JOIN sujetos 	AV2	ON AV2.numero = B.aval2
+				WHERE A.estatus = 'A' AND T.tipo = :TipoEmpleado AND A.congelado = 0 ");
+		$comando = $this->dbConexion->createCommand($registros); 
+		$comando->bindValue(":TipoEmpleado",$TipoEmpleado);
+		$result =$comando->query()->readAll();
+		$Total_registros = $result[0]["registro"];
+		if(count($Total_registros) > 0)
+		{
+		$datos =("SELECT B.titular as NUMERO,  63 AS CLAVECON, B.descuento as IMPORTE, B.plazo as PERIODO,C.movimientos as PERIODOS 
+				,A.id_contrato as CONTRATO,'0' AS APLICADO, '' AS TIPO,'' AS NOMINA 
+				, B.aval1 as AVAL1, B.aval2 as AVAL2,'' AS NOTA, '' AS APAVAL
+				,(SELECT tipo_nomi FROM EMPLEADOS WHERE numero = B.Titular) AS tipo_nomina
+				, T.status AS EMPLEACT,  AV1.status AS AVAL1ACT, AV2.status AS AVAL2ACT
+				FROM  contrato A
+				INNER JOIN  solicitud B 	ON B.id_Solicitud = A.id_Solicitud
+				INNER JOIN respMovimientos C	ON C.id_contrato  = A.id_contrato
+				INNER JOIN sujetos 	T	ON T.numero = B.titular
+				INNER JOIN sujetos 	AV1	ON AV1.numero = B.aval1
+				INNER JOIN sujetos 	AV2	ON AV2.numero = B.aval2
+				WHERE A.estatus = 'A' AND T.tipo = :TipoEmpleado AND A.congelado = 0 ");
+		$comando = $this->dbConexion->createCommand($datos); 
+		$comando->bindValue(":TipoEmpleado",$TipoEmpleado);
+		$reg =$comando->query()->readAll();
+		if(count($reg) > 0)
+		{
+			if ($TipoEmpleado == 'A'){
+				$f = fopen("DESNOQ.txt","w");
+			}ELSE if ($TipoEmpleado){
+				$f = fopen("DESNOJ.txt","w");
+			}
+			$sep = "|";
+			$salto = "\r\n";
+		
+			for($i = 0; $i < $Total_registros; $i++){
+				$linea = $reg[$i]["NUMERO"] . $sep . $reg[$i]["CLAVECON"] . $sep . $reg[$i]["IMPORTE"] . $sep . $reg[$i]["PERIODO"] . $sep . $reg[$i]["PERIODOS"] . $sep . $reg[$i]["CONTRATO"] . $sep . $reg[$i]["APLICADO"] . $sep . $reg[$i]["TIPO"] . $sep . $reg[$i]["NOMINA"] . $sep . $reg[$i]["AVAL1"] . $sep . $reg[$i]["AVAL2"] . $sep . $reg[$i]["NOTA"] . $sep . $reg[$i]["APAVAL"] . $sep . $reg[$i]["EMPLEACT"] . $sep . $reg[$i]["AVAL1ACT"] . $sep . $reg[$i]["AVAL2ACT"] . $salto;
+				fwrite($f,$linea);
+			}
+		fclose($f);
+			$liberar =("TRUNCATE respMovimientos");
+			$comando = $this->dbConexion->createCommand($liberar);
+			$comando->execute();
+			//$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se ah generado el archivo');");
+		}else{
+			//$this->ClientScript->RegisterBeginScript("Mensaje","alert('No hay registros que procesar');");
+		}
+		}
+	}
 	public function btnRecibir_Click($sender, $param)
 	{
 		$archivo = "DESNO" . ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text . ".DBF";

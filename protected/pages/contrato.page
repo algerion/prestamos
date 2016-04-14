@@ -198,7 +198,7 @@
 					</tr>
 					<tr>
 						<td>Imp. Cheque:</td>
-						<td><com:TTextBox ID="txtImpCheque" width="80px" /></td>
+						<td><com:TTextBox ID="txtImpCheque" width="80px" /> <com:TTextBox ID="txtImpChequeCan" width="80px" visible ="false"/></td>
 					</tr>
 				</table>
 			</td>
