@@ -58,6 +58,10 @@ class Login extends TPage
 
 	public function Salir()
 	{
+		$consulta = "CALL  contratosInactivos()";
+		$comando = $this->dbConexion->createCommand($consulta); 
+		$comando->execute();
+		
 		Comparte_Auth_Cookie::BorraCookies($this, $this->Application->id);
         $this->Application->getModule('auth')->logout();
         $url = $this->Service->constructUrl('Usuarios.Login');

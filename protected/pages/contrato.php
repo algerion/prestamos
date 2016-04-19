@@ -21,27 +21,27 @@ class contrato extends TPage
 		if(!$this->IsPostBack)
 		{
 			$this->txtfecha->Text = date("Y-m-d");
-			//$this->carga_solicitud();
 			$consultaCon="SELECT MAX(id_contrato)+1 AS contrato FROM contrato"; 
-				$comando = $this->dbConexion->createCommand($consultaCon); 
-				$result = $comando->query()->readAll();
-				$this->txtFoliocontrato->Text = $result[0]["contrato"];
-				
-	
-			
+			$comando = $this->dbConexion->createCommand($consultaCon); 
+			$result = $comando->query()->readAll();
+			$this->txtFoliocontrato->Text = $result[0]["contrato"];		
+			if ($this->lblEstatus->text =  'SOLICITADO'){
+				$this->btnGuardar->visible="true";
+			}ELSE{
+				$this->btnGuardar->visible="false";
+			}
 		}
 	
 	}
 
 	public function btnBuscar_onclick($sender,$param)
-	{
-		
-				
+	{		
 		$folio=$this->txtFoliosolicitud->Text;
 		$this->carga_solicitud($folio);	
 	}
 	public function carga_solicitud($id_solicitud)
 	{
+	
 		$consulta = "SELECT s.id_solicitud as solicitudes ,creada, estatus_p, s.estatus as estatus,
 			t.numero as num_tit, t.nombre AS titular, st.cve_sindicato AS tit_cve_sind, st.sindicato AS tit_sind, TIMESTAMPDIFF(YEAR, t.fec_ingre, CURDATE()) AS tit_ant,
 			s.aval1, a1.nombre AS aval1_n, sa1.cve_sindicato AS aval1_cve_sind, sa1.sindicato AS aval1_sind, TIMESTAMPDIFF(YEAR, a1.fec_ingre, CURDATE()) AS aval1_ant,
@@ -59,9 +59,7 @@ class contrato extends TPage
 			LEFT JOIN catsindicatos sa1 ON sa1.cve_sindicato = s.cve_sind_Aval1
 			LEFT JOIN sujetos AS a2 ON a2.numero = s.aval2
 			LEFT JOIN catsindicatos sa2 ON sa2.cve_sindicato = s.cve_sind_Aval2
-			WHERE s.id_solicitud = (SELECT MAX(id_solicitud) AS id_solicitud FROM Solicitud WHERE titular = :id_solicitud OR id_solicitud = :id_solicitud)";
-			
-			
+			WHERE s.id_solicitud = (SELECT MAX(id_solicitud) AS id_solicitud FROM Solicitud WHERE titular = :id_solicitud OR id_solicitud = :id_solicitud)";	
 		$comando = $this->dbConexion->createCommand($consulta); 
 		$comando->bindValue(":id_solicitud",$id_solicitud);
 		$result = $comando->query()->readAll();
@@ -113,7 +111,7 @@ class contrato extends TPage
 			$status  = $result[0]["estatus"];
 			switch ($status) {
                 case "S":
-                  $this->lblEstatus->Text = "SOLICITADO"; 
+					$this->lblEstatus->Text = "SOLICITADO"; 			  
                     break;
                 case "A":
                     $this->lblEstatus->Text =  'AUTORIZADO'; 
@@ -144,6 +142,7 @@ class contrato extends TPage
 			$this->txtAntiguedadAval1->text = $AvalFecha1;
 			$this->txtAntiguedadAval2->text = $AvalFecha2;
 			$comando->execute();			
+		
 		}
 	}
 	public function textChanged($sender,$param) // cheque
@@ -153,14 +152,64 @@ class contrato extends TPage
 			$this->btnGuardar->visible="false";
 		}ELSE{
 		$this->lblEstatus->text =  'AUTORIZADO';
-			if ($this->lblEstatus->text =  'AUTORIZADO')
+			if ($this->lblEstatus->text =  'AUTORIZADO'){
 				$this->btnGuardar->visible="true";
-			else
+			}else
 				$this->btnGuardar->visible="false";
 		}
-	}		
+	}	
+
 	public function btnguardar_callback($sender, $param) 
 	{
+		$consulta = "SELECT id_solicitud, id_contrato  FROM contrato WHERE estatus = 'S' AND id_solicitud = :id_solicitud";
+		$comando = $this->dbConexion->createCommand($consulta); 
+		$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
+		$result = $comando->query()->readAll();
+		if(count($result) > 0)
+		{	
+			$this->txtFoliocontratoA->Text = $result[0]["id_contrato"];
+			$this->txtFoliocontrato->Text = $result[0]["id_contrato"];
+			$chequeAc = $this->txtImpChequeCan->Text;
+			$consulta="UPDATE solicitud SET estatus = :estatus WHERE id_solicitud = :id_solicitud";
+			$comando = $this->dbConexion->createCommand($consulta);
+			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
+			$comando->bindValue(":estatus",'A');
+			$comando->execute();
+			
+			$consulta="UPDATE contrato SET estatus = :estatus, num_cheque = :txtNumeroDeCheque WHERE id_solicitud = :id_solicitud";
+			$comando = $this->dbConexion->createCommand($consulta);
+			$comando->bindValue(":id_solicitud",$this->txtFoliosolicitudd->Text);
+			$comando->bindValue(":estatus",'A');
+			$comando->bindValue(":txtNumeroDeCheque",$this->txtImpChequeCan->Text);
+			$comando->execute();
+			
+		
+			$descripcion ='AUTORIZACION DEL PRESTAMO CON NUMERO DE CHEQUE ['.$chequeAc.']';
+			$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
+						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
+			$comando = $this->dbConexion->createCommand($consulta);
+			$comando->bindValue(":id_contrato",$this->txtFoliocontratoA->Text);
+			$comando->bindValue(":creacion",$this->txtfecha->Text);
+			$comando->bindValue(":id_tipo_movto",1);
+			$comando->bindValue(":descripcion",$descripcion);
+			$comando->bindValue(":cargo",$this->txtImpChequeCan->Text);
+			$comando->bindValue(":abono",0.00);
+			$comando->bindValue(":id_usuario",0);
+			$comando->bindValue(":aplicacion",'');
+			$comando->bindValue(":id_descuento",0);
+			$comando->bindValue(":activo",1);
+			//$comando->execute();
+			if($comando->execute()){
+				$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LOS DATOS SE GUARDARON CORRECTAMENTE')\n\n"."Num. contrato:".$this->txtFoliocontratoA->Text); 
+				/*$this->Page->CallbackClient->callClientFunction("Mensaje","alert('Se guardo correctamente');" .
+				"open('index.php?page=reportes.contratopdf&id=$contratos', '_blank');\n" .
+				"open('index.php?page=reportes.pagarepdf&id=$contratos', '_blank');");*/
+			}else{
+				$this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");
+			}
+			
+		}else{
+		// -------------------------------------------------------------------------------------
 		$consulta="insert into contrato (id_contrato,id_solicitud,creado,entrega_cheque,num_cheque, observacion, estatus, id_usuario, entrega_real, autorizado, congelado, seguro )"
 				  ." values (:id_contrato,:txtFoliosolicitud,:txtFechaAutorizasioon,:txtFechaEntrgaCheque,:txtNumeroDeCheque,:observacion,:estatus,:id_usuario,:txtfecha,:txtFechaContrato,:congelado, :seguro)";
 
@@ -199,13 +248,16 @@ class contrato extends TPage
 			$comando->execute();
 			if ($this->lblNumContrato->Text >  0)
 			{
+				$titularAc =$this->txtBuscarTitularr->Text;
+				$NuevoCopntrato=$this->txtFoliocontrato->Text;
+				$descripcion = "Prestamo saldado del titular [".$titularAc."] por adquisicion de nuevo prestamo con numero [".$NuevoCopntrato."]";
 				$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
 						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
 				$comando = $this->dbConexion->createCommand($consulta);
 				$comando->bindValue(":id_contrato",$this->lblNumContrato->Text);
 				$comando->bindValue(":creacion",$this->txtfecha->Text);
 				$comando->bindValue(":id_tipo_movto",3);
-				$comando->bindValue(":descripcion",'baja de prestamo');
+				$comando->bindValue(":descripcion",$descripcion);
 				$comando->bindValue(":cargo",0.00);
 				$comando->bindValue(":abono",$this->lblSaldoAnterior->Text);
 				$comando->bindValue(":id_usuario",0);
@@ -213,17 +265,34 @@ class contrato extends TPage
 				$comando->bindValue(":id_descuento",0);
 				$comando->bindValue(":activo",1);
 				$comando->execute();
-					
+				//-----------------------------------------------------------------------------------------------------------------------------------------
 				
-			}else{
-			
+				$chequeAc = $this->txtImpChequeCan->Text;
+				$descripcion ='AUTORIZACION DEL PRESTAMO CON NUMERO DE CHEQUE ['.$chequeAc.']';
 				$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
 						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
 				$comando = $this->dbConexion->createCommand($consulta);
 				$comando->bindValue(":id_contrato",$this->txtFoliocontrato->Text);
 				$comando->bindValue(":creacion",$this->txtfecha->Text);
 				$comando->bindValue(":id_tipo_movto",1);
-				$comando->bindValue(":descripcion",'importe de prestamo');
+				$comando->bindValue(":descripcion",$descripcion);
+				$comando->bindValue(":cargo",$this->txtImpChequeCan->Text);
+				$comando->bindValue(":abono",0.00);
+				$comando->bindValue(":id_usuario",0);
+				$comando->bindValue(":aplicacion",'');
+				$comando->bindValue(":id_descuento",0);
+				$comando->bindValue(":activo",1);
+				$comando->execute();		
+			}else{
+				$chequeAc = $this->txtImpChequeCan->Text;
+				$descripcion ='AUTORIZACION DEL PRESTAMO CON NUMERO DE CHEQUE ['.$chequeAc.']';
+				$consulta="INSERT INTO movimientos (id_contrato, creacion, id_tipo_movto, descripcion, cargo, abono, id_usuario, aplicacion, id_descuento, activo)"
+						 ."VALUES (:id_contrato, :creacion, :id_tipo_movto, :descripcion,:cargo,:abono, :id_usuario, :aplicacion, :id_descuento, :activo)";
+				$comando = $this->dbConexion->createCommand($consulta);
+				$comando->bindValue(":id_contrato",$this->txtFoliocontrato->Text);
+				$comando->bindValue(":creacion",$this->txtfecha->Text);
+				$comando->bindValue(":id_tipo_movto",1);
+				$comando->bindValue(":descripcion",$descripcion);
 				$comando->bindValue(":cargo",$this->txtImpChequeCan->Text);
 				$comando->bindValue(":abono",0.00);
 				$comando->bindValue(":id_usuario",0);
@@ -239,17 +308,19 @@ class contrato extends TPage
 		else{
 			$this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO GUARDAR LOS DATOS');");
 		}
+		}
+		
 		
 	}
 	 public function btnImprimir_onclick($sender,$param)
 	{
 		if($this->txtCheque->Text > 0){
 			$contratos=$this->txtFoliosolicitudd->Text;
-			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Se guardo correctamente');" .
+			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Contrato se está imprimiendo');" .
 				"open('index.php?page=reportes.contratopdf&id=$contratos', '_blank');\n" .
-				"open('index.php?page=reportes.pagarepdf&id=$contratos', '_blank');");
-				
+				"open('index.php?page=reportes.pagarepdf&id=$contratos', '_blank');");	
 				$this->Limpiar_Campos();
+				$this->btnGuardar->visible="false";
 		}else {
 			$titular=$this->txtNoUnicoTit->Text;		
 			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Ingrese el número de pagare');");	

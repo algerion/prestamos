@@ -68,7 +68,7 @@
 
 					<tr>
 						<td>Folio contrato:</td>
-						<td><com:TTextBox ID="txtFoliocontrato" /></td>
+						<td><com:TTextBox ID="txtFoliocontrato" /><com:TTextBox ID="txtFoliocontratoA" visible="false"/></td>
 						<td>Fecha contrato:</td>
 						<td colspan="5"><com:TDatePicker ID="dattxtFechaContrato" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
 					</tr>
@@ -210,6 +210,7 @@
 				<com:TButton ID="btnGuardarAntes" Text="Guardar" OnClick="btnGuardar_Click" IsDefaultButton="true" ValidationGroup="Guardar1" visible="false"/>
 				<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
 				<com:TActiveButton ID="btnGuardar" Text="Guardar" OnCallback="btnguardar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
+				<com:TActiveButton ID="btnModificar" Text="Modificar" OnCallback="btnModificar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
 				
 			</td>
 		</tr>

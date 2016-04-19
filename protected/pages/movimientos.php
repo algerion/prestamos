@@ -44,11 +44,13 @@ class movimientos extends TPage
 			$this->txtAbonosRealizados4->Text = $result[0]["AbonosRealizados"];
 			$this->txtDescuentoQuincenal4->Text = $result[0]["descuento"];
 			$this->txtTotalDeMovimiento2->Text = $result[0]["MovimientosRealizados"];
-			if ( $result[0]["SaldoActual"] > 0){
-				$this->txtSaldo4->Text = $result[0]["SaldoActual"];
-			}else{
+			$this->txtSaldo4->Text = $result[0]["SaldoActual"];
+			/*if ( $result[0]["SaldoActual"] > 0.00){
 				$this->txtSaldo4->Text = $result[0]["ImporteDeCheque"];
-			}
+				
+			}else{
+				$this->txtSaldo4->Text = $result[0]["SaldoActual"];
+			}*/
 			$this->txtdescuento->Text = $result[0]["descuento"];
 		}
 		$consulta = "SELECT SUM(cargo) AS cargo,  SUM(abono) AS abono  FROM movimientos WHERE id_contrato = :id_contrato";	

@@ -1,6 +1,7 @@
 <?php
+Prado::using('System.Web.UI.ActiveControls.*');
 require_once('../compartidos/clases/Comparte_Auth_Cookie.php');
-require_once('../compartidos/clases/conexion.php');
+include_once('../compartidos/clases/conexion.php');
 
 class salir extends TPage
 {
@@ -12,7 +13,8 @@ class salir extends TPage
 
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbac");
 		Conexion::createConfiguracion();
-
+		
+		
 		Comparte_Auth_Cookie::BorraCookies($this, $this->Application->id);
 /*		if($this->Request->Cookies["user_dbmunioax"] != null)
 		{
@@ -26,6 +28,10 @@ class salir extends TPage
 			$cookie->Expire = time() - 1;
 			$this->Response->Cookies->Add($cookie);
 		}*/
+		// --------------------------------------------------------------------------------------------------------------------
+	
+		
+		// --------------------------------------------------------------------------------------------------------------------
         $this->Application->getModule('auth')->logout();
 		
         $url = $this->Service->constructUrl('Usuarios.Login');

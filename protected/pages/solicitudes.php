@@ -24,13 +24,14 @@ class solicitudes extends TPage
 			$this->txtFecha->Text = date("Y-m-d");
 			$opcion=$this->request["opcion"];
 			$this ->txtPrueba->text=$opcion;
+			
 			if ($opcion == "modificar") 
 			{
 				$this->btnBuscar->visible="true";
 				$this->btnGuardar->visible="false";
-				$this->btnCancelar->visible="false";
-				$this->txtFolio->BackColor="yellow";	
+				$this->txtFolio->BackColor="yellow";
 			}
+			
 		}	
 	}
 	public function textChangedImporte($sender,$param)
@@ -235,6 +236,7 @@ class solicitudes extends TPage
 	{
 		$folio=$this->txtFolio->Text;
 		$this->carga_solicitud($folio);	
+		
 	}	
 	public function btnModificar_onclick($sender,$param)
 	{
@@ -288,23 +290,29 @@ class solicitudes extends TPage
 		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error - NO SE PUDO ACTUALIZADO LOS DATOS');");
 		}
 	}
-	public function btncancelar_callback($sender,$param)
+	public function btncancelar_onclick($sender,$param)
 	{
-		$consulta="UPDATE  solicitud SET estatus = 'C' where id_solicitud = :id_solicitud";
-		$comando = $this->dbConexion->createCommand($consulta);
-		$comando->bindValue(":id_solicitud",$this ->txtFolio->text);
-		if($comando->execute()){
-			
-			$this->lblEstatus->Text = "CANCELADA"; 
-			$this->btnGuardar->visible="false";
-		    $this->btnModificar->visible="false";	
-			$this->btnCancelar->visible="false";
-			
-			$this->Limpiar_Campos();
-			$this->Page->CallbackClient->callClientFunction("Mensaje", "alert('LA SOLICITUD HA SIDO CANCELADA')");
-		}
-		else{
-		  $this->Page->CallbackClient->callClientFunction("Mensaje","alert('Error -LA SOLICITUD NO HA SIDO CANCELADA');");
+		if ($this->txtMotivoCancelacion->text <> ''){
+			$consulta="UPDATE  solicitud SET estatus = 'C' ,observacion= :MotivoCancelacion where id_solicitud = :id_solicitud"; // ,observacion= 
+			$comando = $this->dbConexion->createCommand($consulta);
+			$comando->bindValue(":id_solicitud",$this ->txtFolio->text);
+			$comando->bindValue(":MotivoCancelacion",$this ->txtMotivoCancelacion->text);
+			if($comando->execute())
+			{
+				
+				$this->lblEstatus->Text = "CANCELADA"; 
+				$this->btnGuardar->visible="false";
+				$this->btnModificar->visible="false";	
+				$this->btnCancelar->visible="false";
+				
+				$this->Limpiar_Campos();
+				$this->ClientScript->RegisterBeginScript("Mensaje", "alert('LA SOLICITUD HA SIDO CANCELADA')");
+			}
+			else{
+				$this->ClientScript->RegisterBeginScript("Mensaje","alert('Error -LA SOLICITUD NO HA SIDO CANCELADA');");
+			}
+		}else{
+			$this->ClientScript->RegisterBeginScript("Mensaje","alert('Error - INGRESE EL MOTIVO DE LA CANCELACIÓN');");
 		}
 	}
 	public function txtNoUnico_CallBack($sender, $param)
@@ -343,7 +351,7 @@ class solicitudes extends TPage
 			$MesTranscurrido = $intervalo->format($mesLine);
 			if ($MesTranscurrido < 0.61) {
 				$this->lblNotaVal->visible="true";
-				$note = 'No cumple con la Antigüedad mínima 6 mese 1 día para el prestamos';
+				$note = 'No cumple con la Antigüedad mínima 6 meses 1 día para el prestamos';
 			}else {
 				$note = '';
 			}
@@ -411,13 +419,12 @@ class solicitudes extends TPage
 							$this->btnGuardar->visible="false";
 						}
 					}
-					
-						$idContrato = Conexion::Retorna_Campo($this->dbConexion, "descuento_detalle", "contrato", array("num_empleado"=>$num_unico));
+						$idContrato = Conexion::Retorna_Campo($this->dbConexion, "contrato", "id_contrato", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("titular"=>$num_unico))), " AND (estatus = 'A')");
 						$cargo =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(cargo)", array("id_contrato"=>$idContrato));
 						$abono =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(abono)", array("id_contrato"=>$idContrato));
 						$adeudo = $cargo - $abono;
 						
-						if ($adeudo <= 0 or $idContrato == '')
+						if ($adeudo <= 0.00 or $idContrato == '')
 						{
 							$this->lblSaldoAnterior->text = 0;	
 							$this->lblContratoAnterior->text = "";
@@ -438,15 +445,7 @@ class solicitudes extends TPage
 						$this->lblSolicitadasAval1->visible="false";
 						$this->lblSolicitadasAval1->Text = 0;
 					}
-					$consulta = "SELECT IFNULL(COUNT(contrato),0)  AS pendientes FROM descuento_detalle 
-								WHERE aval1 = :aval1 AND EXISTS (SELECT * FROM movimientos 
-								WHERE id_contrato = contrato HAVING (SUM(cargo) - SUM(abono)) > 0.00 )"; 
-					
-					$comando = $this->dbConexion->createCommand($consulta); 
-					$comando->bindValue(":aval1",$num_unico);
-					$result = $comando->query()->readAll();
-					$resultAAval1 = $result[0]["pendientes"];
-				
+					$resultAAval1 = Conexion::Retorna_Campo($this->dbConexion, "contrato", "count(id_contrato)", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("aval1"=>$num_unico))), " AND (estatus = 'A')");
 					if($resultAAval1 >= 3){
 						$this->btnGuardar->visible="false";	
 						$this->lblAutorizadasAval1->visible="true";
@@ -467,14 +466,7 @@ class solicitudes extends TPage
 						$this->lblSolicitadasAval2->visible="false";
 						$this->lblSolicitadasAval2->Text = 0;
 					}
-					$consulta = "SELECT IFNULL(COUNT(contrato),0)  AS pendientes FROM descuento_detalle 
-								WHERE aval2 = :aval2 AND EXISTS (SELECT * FROM movimientos 
-								WHERE id_contrato = contrato HAVING (SUM(cargo) - SUM(abono)) > 0.00 )"; 
-								
-					$comando = $this->dbConexion->createCommand($consulta); 
-					$comando->bindValue(":aval2",$num_unico);
-					$result = $comando->query()->readAll();
-					$resultAAval2 = $result[0]["pendientes"];
+					$resultAAval2 = Conexion::Retorna_Campo($this->dbConexion, "contrato", "count(id_contrato)", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("aval2"=>$num_unico))), " AND (estatus = 'A')");
 					if($resultAAval2 >= 3)
 						{
 							$this->btnGuardar->visible="false";	
@@ -563,6 +555,9 @@ class solicitudes extends TPage
 				  $this->btnGuardar->visible="false";
 				  $this->btnModificar->visible="true";
 				  $this->btnCancelar->visible="true";
+				  $this->txtMotivoCancelacion->visible="true";
+				  $this->lblCancelar->visible="true";
+				  $this->lblCancelar->Text = "Ingrese el motivo de la cancelación";
                     break;
                 case "A":
                     $this->lblEstatus->Text =  'AUTORIZADO';
@@ -638,9 +633,6 @@ class solicitudes extends TPage
 
 			$this->btnGuardar->visible="false";	
 			$this->btnCancelar->visible="false";	
-	}
-	
-	
+	}	
 }
-
 ?>

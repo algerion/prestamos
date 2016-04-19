@@ -214,6 +214,10 @@
 						<td>Fecha Firma Avales</td>
 						<td colspan="5"><com:TDatePicker ID="datFechaFirmaAvales" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
 					</tr>
+					<tr>
+						<td><com:TActiveLabel Text="" ID="lblCancelar" ForeColor="red" visible="false"/></td>
+						<td colspan="5"><com:TActiveTextBox ID="txtMotivoCancelacion" Width="360px" visible="false"/></td> 
+					</tr>
 				</table>
 			</td>
 			<td>
@@ -281,7 +285,7 @@
 			<td colspan="2" align="center">
 				<com:TActiveButton ID="btnGuardar" Text="Guardar" OnCallback="btnguardar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
 				<com:TButton ID="btnModificar" Text="Actualizar" OnClick="btnModificar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
-				<com:TActiveButton ID="btnCancelar" Text="Cancelar" OnCallback="btncancelar_callback" ActiveControl.CallbackParameter="value" Visible="false"/>
+				<com:TButton ID="btnCancelar" Text="Cancelar" OnClick="btncancelar_onclick"  Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="false"/>
 				<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" Visible="true"/>
 			</td>
 		</tr>

@@ -72,7 +72,6 @@ class descuentos extends TPage
 	}
 	public function Generar_desno($TipoEmpleado)
 	{		
-	//echo $TipoEmpleado;
 		$consulta="INSERT INTO respMovimientos (id_contrato,  cargo,   abono,  activo , adeudo,movimientos)  
 					SELECT id_contrato,cargo, abono,activo,SUM(Cargo - Abono) AS adeudo ,COUNT(id_contrato) AS movimientos FROM movimientos WHERE  activo = 1 GROUP BY id_contrato HAVING SUM(Cargo - Abono) > 1";
 		$comando = $this->dbConexion->createCommand($consulta);
