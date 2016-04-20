@@ -20,10 +20,44 @@
 				<com:TListItem Value="S" Text="SEMANAL" />
 				</com:TDropDownList>
 			</td>
+			
 		</tr>
+		<tr>
+						<td>Origen</td>
+						<td>
+							<com:TDropDownList ID="ddlOrigen">
+								<com:TListItem Value="NO" Text="Nóminas" />
+								<com:TListItem Value="PR" Text="Préstamos" />
+							</com:TDropDownList>
+						</td>
+						<td>Tipo</td>
+						<td>
+							<com:TActiveDropDownList ID="ddlTipo" OnSelectedIndexChanged="ddlTipo_Change">
+								<com:TListItem Value="RH" Text="Activos" />
+								<com:TListItem Value="PE" Text="Jubilados" />
+							</com:TActiveDropDownList>
+						</td>
+						<td>Tipo de nomina</td>
+						<td>
+							<com:TActiveDropDownList ID="ddlTipoNomina">
+								<com:TListItem Value="Q" Text="Quincena" />
+								<com:TListItem Value="R" Text="Raya" />
+							</com:TActiveDropDownList>
+						</td>
+					</tr>
 		<tr>
 			<td align="center" width="100%">
 				<com:TButton ID="btnGenerar" OnClick="btnGenerar_Click" Text="Generar" />
+			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+				<com:TButton ID="btnRecibir" OnClick="btnRecibir_Click" Text="recibir" />
+			</td>
+		</tr>
+		<tr>
+			<td align="center" width="100%">
+		<com:TButton ID="btnActualizar" OnClick="btnActualizar_Click" Text="Actualizar" />
 			</td>
 		</tr>
 		<tr>

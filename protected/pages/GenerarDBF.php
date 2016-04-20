@@ -1,6 +1,10 @@
 <?php
 include_once('../compartidos/clases/conexion.php');
 include_once('../compartidos/clases/usadbf.php');
+Prado::using('System.Web.UI.ActiveControls.*');
+include_once('../compartidos/clases/charset.php');
+
+
 class GenerarDBF extends TPage
 {
 	var $dbConexion, $Consulta;
@@ -12,7 +16,51 @@ class GenerarDBF extends TPage
 		Conexion::createConfiguracion();
 	
 	}
+	public function btnRecibir_Click($sender, $param)
+	{
+		$archivo = file("C:\\www\\prestamos\\DESNO\\recibidos\\DESNO". $this->ddlTipoNomina->SelectedValue .".txt");
+		$parametros = array("origen"=>"N", "creado"=>date("Y-m-d H:i:s"), "modificado"=>date("Y-m-d H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3
+		,"observaciones"=>"desno recibido exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), "pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>0);
+		Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
+		$idescuento = Conexion::Ultimo_Id_Generado($this->dbConexion);
+
+		foreach ($archivo as $linea_num => $linea)
+		{
+		  $datos = explode("|",$linea);	  
+
+		$consulta = "INSERT INTO descuento_detalle(id_descuento,num_empleado,clavecon,importe,periodo,periodos,contrato,aplicado,tipo_nomina,nomina,aval1,aval2,nota,aplicaravales )"
+				."VALUES(:id_descuento,:num_empleado,:clavecon,:importe,:periodo,:periodos,:contrato,:aplicado,:tipo_nomina,:nomina,:aval1,:aval2,:nota,:aplicaravales)";
+		$comando = $this->dbConexion->createCommand($consulta);	
+		    $comando->bindValue(":id_descuento",$idescuento); 
+		   $comando->bindValue(":num_empleado",trim($datos[0])); 
+		   $comando->bindValue(":clavecon",trim($datos[1]));    
+		   $comando->bindValue(":importe",trim($datos[2]));  
+		   $comando->bindValue(":periodo",trim($datos[3]));  
+		   $comando->bindValue(":periodos",trim($datos[4]));  
+		   $comando->bindValue(":contrato",trim($datos[5]));      
+		   $comando->bindValue(":aplicado",trim($datos[6]));  
+		   $comando->bindValue(":tipo_nomina",trim($datos[7]));  
+		   $comando->bindValue(":nomina",trim($datos[8]));    
+		   $comando->bindValue(":aval1",trim($datos[9]));   
+		   $comando->bindValue(":aval2",trim($datos[10]));    
+		   $comando->bindValue(":nota",trim($datos[11]));   
+		   $comando->bindValue(":aplicaravales",trim($datos[12]));
+			if($comando->execute()){
+			  $this->ClientScript->registerEndScript("bajada",
+				"alert('carga desno completada');\n");
+			}
+			else{
+			  $this->ClientScript->registerEndScript("mensaje",
+				"alert('error carga desno completada');\n");
+			}	
+		
+		}
+	}	
 	
+	public function btnActualizar_Click($sender, $param)
+	{
+		$archivo = file("C:\\www\\prestamos\\DESNO\\recibidos\\DESNO.txt");
+	}
 	public function btnGenerar_Click($sender, $param)
 	{	
 		$consulta="INSERT INTO respMovimientos (id_contrato,  cargo,   abono,  activo , adeudo,movimientos)  
@@ -89,6 +137,16 @@ class GenerarDBF extends TPage
 		$db_records = $comando->query()->readAll();
 		UsaDBF::esc("cosarara.dbf", $def, $db_records);
 		//var_dump($db_records);
+	}
+	public function ddlTipo_Change($sender, $param)
+	{
+		if($this->ddlTipo->SelectedValue == 'PE')
+		{
+			$this->ddlTipoNomina->Enabled = false;
+			$this->ddlTipoNomina->SelectedValue = "Q";
+		}
+		else
+			$this->ddlTipoNomina->Enabled = true;
 	}
 }
 ?>

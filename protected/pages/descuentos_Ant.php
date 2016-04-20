@@ -23,13 +23,21 @@ class descuentos extends TPage
 	
 	public function btnGenerar_Click($sender, $param)
 	{
+		//$this->getPage()->getCallbackClient()->callClientFunction("reemplaza_desno", array());
+		//SELECT id_descuento FROM descuento WHERE id_estatus = 1 ORDER BY creado LIMIT 1
 		$id_descuento = Conexion::Retorna_Campo($this->dbConexion, "descuento", "id_descuento", array("id_estatus"=>1));
 		if($id_descuento != ""){
 			
 			// $this->ClientScript->registerEndScript("reemplaza_desno_genera",00	"reemplaza_desno('Ya existe un desno generado. ¿Reemplazar?', 1);\n");
 				$this->ClientScript->registerEndScript("reemplaza_desno_genera",
 				"reemplaza_desno('Ya existe un desno generado. ¿Reemplazar?', 1);\n");
-
+			/*$Tiposujeto= $this->ddlTipo->SelectedValue;
+			if ($Tiposujeto = 'RH'){
+				$Sujeto = 'A';
+			}else{
+				$sujeto = 'J';
+			}
+			$this->Generar_desno($sujeto);	*/
 			
 			$this->Generar_desno($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A");
 		}else{
@@ -57,6 +65,7 @@ class descuentos extends TPage
 			Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
 			$id = Conexion::Ultimo_Id_Generado($this->dbConexion);
 			$this->actualiza_desno($regsdesno, $id);
+			//$this->Generar_desno($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A");
 			$this->ClientScript->registerEndScript("exito",
 				"alert('desno generado exitosamente');\n");
 		}
@@ -122,51 +131,7 @@ class descuentos extends TPage
 	}
 	public function btnRecibir_Click($sender, $param)
 	{
-		//$archivo = file("C:\\www\\prestamos\\DESNO\\recibidos\\DESNO". ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text.".txt"); 
-		$archivoFTP = "DESNO". ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text.".txt"; 
-		$regsdesno = $this->descarga_dbf($archivoFTP);
-		
-		$archivo  = file("C:\\www\\prestamos\\temp\\DESNO". ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text.".txt"); 
-		$parametros = array("origen"=>"N", "creado"=>date("Y-m-d H:i:s"), "modificado"=>date("Y-m-d H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3
-		,"observaciones"=>"desno recibido exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), "pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>0);
-		Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
-		$idescuento = Conexion::Ultimo_Id_Generado($this->dbConexion);
-
-		foreach ($archivo as $linea_num => $linea)
-		{
-		  $datos = explode("|",$linea);	  
-
-		$consulta = "INSERT INTO descuento_detalle(id_descuento,num_empleado,clavecon,importe,periodo,periodos,contrato,aplicado,tipo_nomina,nomina,aval1,aval2,nota,aplicaravales )"
-				."VALUES(:id_descuento,:num_empleado,:clavecon,:importe,:periodo,:periodos,:contrato,:aplicado,:tipo_nomina,:nomina,:aval1,:aval2,:nota,:aplicaravales)";
-		$comando = $this->dbConexion->createCommand($consulta);	
-		    $comando->bindValue(":id_descuento",$idescuento); 
-		   $comando->bindValue(":num_empleado",trim($datos[0])); 
-		   $comando->bindValue(":clavecon",trim($datos[1]));    
-		   $comando->bindValue(":importe",trim($datos[2]));  
-		   $comando->bindValue(":periodo",trim($datos[3]));  
-		   $comando->bindValue(":periodos",trim($datos[4]));  
-		   $comando->bindValue(":contrato",trim($datos[5]));      
-		   $comando->bindValue(":aplicado",trim($datos[6]));  
-		   $comando->bindValue(":tipo_nomina",trim($datos[7]));  
-		   $comando->bindValue(":nomina",trim($datos[8]));    
-		   $comando->bindValue(":aval1",trim($datos[9]));   
-		   $comando->bindValue(":aval2",trim($datos[10]));    
-		   $comando->bindValue(":nota",trim($datos[11]));   
-		   $comando->bindValue(":aplicaravales",trim($datos[12]));
-			if($comando->execute()){
-			  $this->ClientScript->registerEndScript("bajada",
-				"alert('carga desno completada');\n");
-			}
-			else{
-			  $this->ClientScript->registerEndScript("mensaje",
-				"alert('error carga desno completada');\n");
-			}	
-		
-		}
-	}	
-		/*public function btnRecibir_Click($sender, $param)
-	{
-		$archivo = "DESNO" . ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text . ".txt";
+		$archivo = "DESNO" . ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text . ".DBF";
 		$regsdesno = $this->descarga_dbf($archivo);
 		if($regsdesno)
 		{
@@ -180,16 +145,7 @@ class descuentos extends TPage
 			$this->ClientScript->registerEndScript("bajada",
 				"alert('carga desno completada');\n");
 		}
-	}*/
-	/*public function btnActualizar_Click($sender, $param)
-	{
-		$archivo = "EMPLEA" . $this->ddlTipo->SelectedValue . ".txt";
-		
-		if(strcmp(substr(strtoupper($archivo), 0, 8), "EMPLEARH") == 0)
-				$this->actualiza_tabla_empleados($regsempl);
-			elseif(strcmp(substr(strtoupper($archivo), 0, 8), "EMPLEAPE") == 0)
-				$this->actualiza_tabla_pensionados($regsempl);
-	}*/
+	}
 
 	public function btnActualizar_Click($sender, $param)
 	{
@@ -216,7 +172,7 @@ class descuentos extends TPage
 				"alert('carga completada');\n");
 		}
 	}
-	
+
 	public function descarga_dbf($file)
 	{
 		$regs = 0;
@@ -242,7 +198,6 @@ class descuentos extends TPage
 			try
 			{
 				$download = ftp_get($conn_id, "temp/" . $file, $file, FTP_BINARY);
-				$this->entrada_bitacora("", $file, 0, 3, "Carga completada");
 			}
 			catch(Exception $e)
 			{
@@ -251,11 +206,11 @@ class descuentos extends TPage
 						"alert('No se pudo descargar el archivo " . $file . " del FTP');\n");
 				$this->entrada_bitacora("", $file, 0, -1, "No se pudo descargar el archivo del FTP");
 			}
-			/*if ($download) 
+			if ($download) 
 				$regs = UsaDBF::registros_dbf("temp/" . $file);
 
 			$this->entrada_bitacora("", $file, 0, 3, "Carga completada");
-			ftp_close($conn_id);*/
+			ftp_close($conn_id);
 		}
 
 		return $regs;

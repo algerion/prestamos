@@ -1,0 +1,48 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="ESTADO DE CUENTA POR CONTRATO" %>
+<com:TContent ID="Cabeceras">
+<style>
+	.Estilo1 {font-size: 14px}
+	.Estilo2 {font-size: 11px}
+	.rectangulo {
+     width: 730px; 
+     height: 350px; 
+     border: 1.5px solid #555;
+}
+</style>
+
+</com:TContent>
+<com:TContent ID="Main" >	
+	<p align="center">
+		<strong>DIRECCION DE PENSIONES.</strong>
+		<br />
+		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
+		<br />
+		ESTADO DE CUENTA POR CONTRATO
+	</p>
+	<table border="0">
+		<tr>
+		<td>Contrato:</td>
+		<td><com:TLabel ID="lblContrato2"  Width="100px" /></td>
+		<td>Prestamo:</td>
+		<td><com:TLabel ID="lblPrestamo2" Width="100px" /></td>
+		<td>Interes:</td>
+		<td><com:TLabel ID="lblInteres2" Width="100px" /></td>				
+		</tr>
+		<tr>
+			<td>Nombre:</td>
+			<td><com:TLabel ID="lblNombre3" Width="200px"  /></td>
+			<td>Importe De Cheque:</td>
+			<td><com:TLabel ID="lblImporteDeCheque3" Width="100px" /></td>
+			<td>Fecha De Cheque:</td>
+			<td><com:TLabel ID="lblFechaDeCheque3" Width="100px"  /></td>				
+		</tr>
+		<tr>
+			<td>Sindicato:</td>
+			<td><com:TLabel ID="lblSindicato4" Width="150px" /></td>
+			<td>Descuento Quincenal:</td>
+			<td><com:TLabel ID="lblDescuentoQuincenal4" Width="100px" /></td>
+			<td>Abonos Realizados:</td>
+			<td><com:TLabel ID="lblAbonosRealizados4" Width="100px" /></td>				
+		</tr>
+	</table>
+</com:TContent>
