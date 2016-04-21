@@ -95,20 +95,20 @@
 					<tr>
 						<td colspan="6" align="center">
 							<com:TDataGrid ID="dgDescuentosDet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
-								<com:TBoundColumn HeaderText="Contrato" DataField="Contrato8" />
-								<com:TBoundColumn HeaderText="Empleado" DataField="Empleado8" />
-								<com:TBoundColumn HeaderText="E" DataField="E8" />
-								<com:TBoundColumn HeaderText="Nombre" DataField="Nombre8" />
-								<com:TBoundColumn HeaderText="Clave" DataField="Clave8" />
-								<com:TBoundColumn HeaderText="Aval1" DataField="Aval8" />
-								<com:TBoundColumn HeaderText="E"DataField="E9" />
-								<com:TBoundColumn HeaderText="Aval2" DataField="Aval9" />
-								<com:TBoundColumn HeaderText="E" DataField="E10" />
-								<com:TBoundColumn HeaderText="Descripción" DataField="Descripcion3" />
-								<com:TBoundColumn HeaderText="Periodo" DataField="Periodo8" />
-								<com:TBoundColumn HeaderText="Periodos" DataField="Periodos8" />
-								<com:TBoundColumn HeaderText="Importe" DataField="Importe8" />
-								<com:TBoundColumn HeaderText="Ap" DataField="Ap8" />
+								<com:TBoundColumn HeaderText="contrato" DataField="contrato" />
+								<com:TBoundColumn HeaderText="empleado" DataField="num_empleado" />								
+								<com:TBoundColumn HeaderText="E" DataField="titularActivo" />
+								<com:TBoundColumn HeaderText="nombre" DataField="EmpleadoDesc" />
+								<com:TBoundColumn HeaderText="clave" DataField="clavecon" />
+								<com:TBoundColumn HeaderText="aval1" DataField="aval1" />
+								<com:TBoundColumn HeaderText="E" DataField="aval1Activo" /> 
+								<com:TBoundColumn HeaderText="aval2" DataField="aval2" /> 
+								<com:TBoundColumn HeaderText="E" DataField="aval2Activo" /> 
+								<com:TBoundColumn HeaderText="descripción" DataField="descripcion" />
+								<com:TBoundColumn HeaderText="periodo" DataField="periodo" />
+								<com:TBoundColumn HeaderText="periodos" DataField="periodos" />
+								<com:TBoundColumn HeaderText="importe" DataField="importe" />
+								<com:TBoundColumn HeaderText="ap" DataField="aplicado" />							
 							</com:TDataGrid>
 						</td>
 					</tr>

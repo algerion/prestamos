@@ -107,7 +107,7 @@ class descuentos extends TPage
 			$salto = "\r\n";
 		
 			for($i = 0; $i < $Total_registros; $i++){
-				$linea = $reg[$i]["NUMERO"] . $sep . $reg[$i]["CLAVECON"] . $sep . $reg[$i]["IMPORTE"] . $sep . $reg[$i]["PERIODO"] . $sep . $reg[$i]["PERIODOS"] . $sep . $reg[$i]["CONTRATO"] . $sep . $reg[$i]["APLICADO"] . $sep . $reg[$i]["TIPO"] . $sep . $reg[$i]["NOMINA"] . $sep . $reg[$i]["AVAL1"] . $sep . $reg[$i]["AVAL2"] . $sep . $reg[$i]["NOTA"] . $sep . $reg[$i]["APAVAL"] . $sep . $reg[$i]["EMPLEACT"] . $sep . $reg[$i]["AVAL1ACT"] . $sep . $reg[$i]["AVAL2ACT"] . $salto;
+				$linea = $reg[$i]["NUMERO"] . $sep . $reg[$i]["CLAVECON"] . $sep . $reg[$i]["IMPORTE"] . $sep . $reg[$i]["PERIODO"] . $sep . $reg[$i]["PERIODOS"] . $sep . $reg[$i]["CONTRATO"] . $sep . $reg[$i]["APLICADO"] . $sep . $reg[$i]["tipo_nomina"] . $sep . $reg[$i]["NOMINA"] . $sep . $reg[$i]["AVAL1"] . $sep . $reg[$i]["AVAL2"] . $sep . $reg[$i]["NOTA"] . $sep . $reg[$i]["APAVAL"] . $sep . $reg[$i]["EMPLEACT"] . $sep . $reg[$i]["AVAL1ACT"] . $sep . $reg[$i]["AVAL2ACT"] . $salto;
 				fwrite($f,$linea);
 			}
 		fclose($f);
@@ -127,6 +127,9 @@ class descuentos extends TPage
 		$regsdesno = $this->descarga_dbf($archivoFTP);
 		
 		$archivo  = file("C:\\www\\prestamos\\temp\\DESNO". ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text.".txt"); 
+		
+		// validar que el archivo sea procesado en nomina "aplicado = 1"
+		
 		$parametros = array("origen"=>"N", "creado"=>date("Y-m-d H:i:s"), "modificado"=>date("Y-m-d H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3
 		,"observaciones"=>"desno recibido exitosamente", "tipo"=>($this->ddlTipo->SelectedValue == 'PE' ? "J" : "A"), "pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>0);
 		Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
@@ -154,7 +157,8 @@ class descuentos extends TPage
 		   $comando->bindValue(":nota",trim($datos[11]));   
 		   $comando->bindValue(":aplicaravales",trim($datos[12]));
 			if($comando->execute()){
-			  $this->ClientScript->registerEndScript("bajada",
+				$this->mostrarDatosGrid ();
+				$this->ClientScript->registerEndScript("bajada",
 				"alert('carga desno completada');\n");
 			}
 			else{
@@ -328,6 +332,63 @@ class descuentos extends TPage
 		}
 		else
 			$this->ddlTipoNomina->Enabled = true;
+	}
+	 public function mostrarDatosGrid () 
+	 { 
+		$consulta = "SELECT MAX(id_descuento) as id_descuento FROM descuento_detalle";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$result = $comando->query()->readAll();
+		$id_Descuento = $result[0]["id_descuento"];
+		
+		$consulta = "SELECT 
+					(SELECT SUM(d.importe) AS quincenal FROM descuento_detalle AS d WHERE d.id_descuento = det.id_descuento AND  d.tipo_nomina = 'Q') AS quincena
+					,(SELECT SUM(d.importe) AS quincenal FROM descuento_detalle AS d WHERE d.id_descuento = det.id_descuento AND  d.tipo_nomina = 'S') AS semanal
+					,(SELECT SUM(d.importe) AS quincenal FROM descuento_detalle AS d WHERE d.id_descuento = det.id_descuento ) AS total
+					FROM descuento_detalle det WHERE det.id_descuento = :id_Descuento GROUP BY det.id_descuento";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_Descuento",$id_Descuento);
+		$result = $comando->query()->readAll();
+		if(count($result) > 0)
+		{
+		$this->ddlTotalSemana->Text = $result[0]["quincena"];
+		$this->ddlTotalQuincena->Text = $result[0]["semanal"];
+		$this->ddlTotal8->Text = $result[0]["total"];
+		}
+		$consulta = "SELECT COUNT(A.numero) AS activos
+					FROM descuento_detalle D
+					INNER JOIN sujetos A	ON	A.numero = D.num_empleado AND A.tipo = 'A'
+					WHERE D.id_descuento = :id_Descuento ";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_Descuento",$id_Descuento);
+		$result = $comando->query()->readAll();
+		$this->ddlTotalActivos2->Text = $result[0]["activos"];
+		
+		$consulta = "SELECT COUNT(A.numero) AS jubilados
+					FROM descuento_detalle D
+					INNER JOIN sujetos A	ON	A.numero = D.num_empleado AND A.tipo = 'J'
+					WHERE D.id_descuento = :id_Descuento ";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_Descuento",$id_Descuento);
+		$result = $comando->query()->readAll();
+		$this->ddlTotalJubilados8->Text = $result[0]["jubilados"];
+		
+		$consulta = "SELECT A.num_empleado 
+					,TRIM(IF(B.numero IS NULL, IF(C.numero IS NULL, '', CONCAT(C.paterno, ' ', C.materno, ' ', C.nombre))
+					,CONCAT(B.paterno, ' ', B.materno, ' ', B.nombre))) AS EmpleadoDesc 
+					,A.clavecon as clavecon, A.aval1 as aval1, A.aval2 as aval2, IF(A.clavecon IN (0), 'Descuento de prestamo', IF(A.clavecon IN (63), 'Descuento de prestamo-Titular', 'Descuento de prestamo-Aval')) AS descripcion
+					,A.importe as  importe, A.periodo as periodo, A.periodos as periodos , A.contrato as contrato, A.tipo_nomina as tipo_nomina, A.nomina as nomina, A.aplicado as aplicado
+					,(SELECT s.status FROM sujetos s WHERE s.numero = A.num_empleado) AS titularActivo
+					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval1) AS aval1Activo
+					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval2) AS aval2Activo 
+					FROM descuento_detalle A 
+					LEFT JOIN empleados B ON B.numero = A.num_empleado 
+					LEFT JOIN pensionados C ON C.numero = A.num_empleado  
+					WHERE A.id_Descuento = :id_Descuento";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_Descuento",$id_Descuento);
+		$resultado = $comando->query()->readAll();
+		$this->dgDescuentosDet->DataSource = $resultado;
+		$this->dgDescuentosDet->dataBind();
 	}
 }
 ?>
