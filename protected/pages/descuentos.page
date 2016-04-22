@@ -75,7 +75,7 @@
 								<com:TBoundColumn HeaderText="Hora" DataField="Hora3" />
 								<com:TBoundColumn HeaderText="Usuario" DataField="Usuario3" />
 								<com:TBoundColumn HeaderText="Nomina" DataField="Nomina3" />
-								<com:TBoundColumn HeaderText="Observaciones" DataField="Observaciones3" />
+								<com:TBoundColumn HeaderText="Observaciones" DataField="Observaciones3" />	
 							</com:TDataGrid>
 						</td>
 					</tr>
