@@ -198,8 +198,82 @@ class descuentos extends TPage
 		$comando->bindValue(":idescuento",$idescuento); 
 		$comando->execute();
 	}
-
 	public function btnActualizar_Click($sender, $param)
+	{
+	$archivoFTP = "EMPLEA".$this->ddlTipo->SelectedValue.".txt"; 
+		$regsdesno = $this->descarga_dbf($archivoFTP);		
+		$archivo  = file("C:\\www\\prestamos\\temp\\EMPLEA". $this->ddlTipo->SelectedValue.".txt"); 	
+		if ($archivoFTP == 'EMPLEARH.txt'){
+			
+			$this->actualizar_empleado($archivo);
+		}
+		if ($archivoFTP == 'EMPLEAPE.txt'){
+			$this->actualizar_pensionados($archivo);
+		}
+		
+	}
+	public function actualizar_pensionados($archivo)
+	{
+	foreach ($archivo as $linea_num => $linea)
+	{
+		$datos = explode("|",$linea);   
+		$consulta = "REPLACE INTO pensionados VALUES (:numero, :num_empleado,  :nombre, :paterno, :materno, :sindicato,:fec_ingre, :sexo,:estatus,:tipo_nomi,:importe_pension)";
+		$comando = $this->dbConexion->createCommand($consulta);	
+		$comando->bindValue(":numero",trim($datos[0])); 
+		$comando->bindValue(":num_empleado",trim($datos[0])); 
+		$comando->bindValue(":nombre",trim($datos[1])); 
+		$comando->bindValue(":paterno",trim($datos[2]));    
+		$comando->bindValue(":materno",trim($datos[3]));  
+		$comando->bindValue(":sindicato",trim($datos[13])); 
+		$str = $datos[12];
+		$date = DateTime::createFromFormat('d/m/Y', $str);
+		$comando->bindValue(":fec_ingre",$date->format('Y-m-d'));  
+		$comando->bindValue(":sexo",trim($datos[8]));      
+		$comando->bindValue(":estatus",trim($datos[9]));  
+		$comando->bindValue(":tipo_nomi",'Q'); 
+		$comando->bindValue(":importe_pension",trim($datos[10]));  			
+			if($comando->execute()){
+				$this->ClientScript->registerEndScript("bajada",
+				"alert('carga desno jubilados completada');\n");
+			}
+			else{
+			  $this->ClientScript->registerEndScript("mensaje",
+				"alert('error carga desno completada');\n");
+			}	
+	}
+	}
+	public function actualizar_empleado($archivo)
+	{
+		foreach ($archivo as $linea_num => $linea)
+		{
+			$datos = explode("|",$linea);	  
+			$consulta = "REPLACE INTO empleados VALUES (:numero, :nombre, :paterno, :materno, :sindicato, :fec_ingre, :sexo, :estatus,:tipo_nomi)";
+			$comando = $this->dbConexion->createCommand($consulta);	
+			$comando->bindValue(":numero",trim($datos[0])); 
+			$comando->bindValue(":nombre",trim($datos[1])); 
+			$comando->bindValue(":paterno",trim($datos[2]));    
+			$comando->bindValue(":materno",trim($datos[3]));  
+			$comando->bindValue(":sindicato",trim($datos[15])); 
+			$str = $datos[17];
+			$date = DateTime::createFromFormat('d/m/Y', $str);
+			$comando->bindValue(":fec_ingre",$date->format('Y-m-d'));  
+			$comando->bindValue(":sexo",trim($datos[18]));      
+			$comando->bindValue(":estatus",trim($datos[19]));  
+			$tiponomina = $datos[20];
+			if($tiponomina == 1) $nomi = 'Q'; else $nomi ='S';
+			$comando->bindValue(":tipo_nomi",$nomi);  
+				if($comando->execute()){
+					$this->ClientScript->registerEndScript("bajada",
+					"alert('carga desno empleado completada');\n");
+				}
+				else{
+				  $this->ClientScript->registerEndScript("mensaje",
+					"alert('error carga desno completada');\n");
+				} 
+		}
+	}
+	
+	/*public function btnActualizar_Click($sender, $param)
 	{
 		$regsdfij = 0;
 		
@@ -223,7 +297,7 @@ class descuentos extends TPage
 			$this->ClientScript->registerEndScript("bajada",
 				"alert('carga completada');\n");
 		}
-	}
+	}*/
 	
 	public function descarga_dbf($file)
 	{
