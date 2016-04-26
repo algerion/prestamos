@@ -1,0 +1,84 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="REPORTE DE DESCUENTO DE NOMINA" %>
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+<com:TContent ID="Cabeceras">
+<style>
+	.Estilo1 {font-size: 14px}
+	.Estilo2 {font-size: 11px}
+	.rectangulo {
+     width: 730px; 
+     height: 350px; 
+     border: 1.5px solid #555;
+}
+</style>
+
+</com:TContent>
+<com:TContent ID="Main" >	
+	<p align="center">
+		<strong>DIRECCION DE PENSIONES.</strong>
+		<br />
+		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
+		<br />
+		 REPORTE DE DESCUENTO DE NOMINA
+	</p>
+	
+	
+	<table border="0">
+		<tr>
+			<td colspan="6">___Registros_______________________________________________________________________________</td>
+		</tr>
+		<tr>
+			<td>Activos:</td>
+			<td><com:TLabel ID="lblActivos"  Width="100px" /></td>
+			<td>Quincenal:</td>
+			<td><com:TLabel ID="lblQuincenal" Width="100px" /></td>
+			<td>Total:</td>
+			<td><com:TLabel ID="lblTotal" Width="100px" /></td>				
+		</tr>
+		<tr>
+			<td>Jubilados:</td>
+			<td><com:TLabel ID="lblJubilados" Width="200px"  /></td>
+			<td>Semanal:</td>
+			<td><com:TLabel ID="lblSemanal" Width="100px" /></td>
+						
+		</tr>
+		<tr>
+			<td colspan="6">___Importe_________________________________________________________________________________</td>
+		</tr>
+			<tr>
+			<td>Activos:     $</td>
+			<td  align="left"><com:TLabel ID="lblActivosI"  Width="100px" /></td>
+			<td>Quincenal:   $</td>
+			<td><com:TLabel ID="lblQuincenalI" Width="100px" /></td>
+			<td>Total:       $</td>
+			<td  align="left"><com:TLabel ID="lblTotalI" Width="100px" /></td>				
+		</tr>
+		<tr>
+			<td>Jubilados:$</td>
+			<td><com:TLabel ID="lblJubiladosI" Width="200px"  /></td>
+			<td>Semanal:$</td>
+			<td><com:TLabel ID="lblSemanalI" Width="100px" /></td>
+						
+		</tr>
+		</table>
+	
+		<table border="0">
+		<tr>
+						<td colspan="6" align="center">
+							<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
+								<com:TBoundColumn HeaderText="Contrato" DataField="contrato" />
+								<com:TBoundColumn HeaderText="Num empleado" DataField="num_empleado" />
+								<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+								<com:TBoundColumn HeaderText="Descripcion" DataField="descripcion" />
+								<com:TBoundColumn HeaderText="Periodo" DataField="periodo" />
+								<com:TBoundColumn HeaderText="Periodos" DataField="periodos" />
+								<com:TBoundColumn HeaderText="Importe" DataField="importe" />
+								<com:TBoundColumn HeaderText="Tipo Empleado" DataField="tipoEmpleado" />
+								<com:TBoundColumn HeaderText="Tipo Nomina" DataField="tipoNomina" />
+								<com:TBoundColumn HeaderText="perdesno" DataField="perdesno" />	
+							</com:TDataGrid>
+						</td>
+					</tr>
+	</table>
+</com:TContent>

@@ -128,7 +128,7 @@
 					
 					<tr>
 						<td>Total</td>
-						<td><com:TTextBox ID="ddlTotal8" Width="100px" /></td>
+						<td><com:TTextBox ID="ddlTotal8" Width="100px" /><com:TLabel ID="lbldesceuntoId" Width="100px" visible="false" /></td>
 					</tr>
 					
 				</table>
@@ -139,6 +139,7 @@
 				<com:TButton ID="btnGenerar" OnClick="btnGenerar_Click" Text="Generar" />
 				<com:TButton ID="btnRecibir" OnClick="btnRecibir_Click" Text="Recibir" />
 				<com:TButton ID="btnActualizar" OnClick="btnActualizar_Click" Text="Actualizar" />
+				<com:TButton ID="btnReporte" OnClick="btnreporte_Click" Text="Reporte" />
 			</td>
 		</tr>
 		
