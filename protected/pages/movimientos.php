@@ -22,7 +22,7 @@ class movimientos extends TPage
 	public function carga_solicitud($id_contrato)
 	{
 		$consulta = "SELECT c.id_contrato AS contrato, s.importe AS importe ,s.importeCheque AS ImporteDeCheque,t.nombre AS nombre ,c.entrega_cheque AS FechaDeCheque, s.descuento AS descuento
-					,(SELECT sindicato FROM catsindicatos WHERE cve_sindicato = t.sindicato) AS Sindicato
+					,(SELECT sindicato FROM catsindicatos WHERE cve_sindicato = t.sindicato) AS Sindicato,plazo as plazo,saldo_anterior as saldo_anterior,entrega_real as entrega_real
 					,(SELECT COUNT(*) AS movimientos FROM movimientos WHERE id_tipo_movto = 2 and id_contrato = c.id_contrato) AS AbonosRealizados
 					,(SELECT COUNT(*) AS movimientos FROM movimientos WHERE id_contrato = c.id_contrato) AS MovimientosRealizados
 					,(SELECT (SUM(cargo) - SUM(abono) ) AS saldo FROM movimientos WHERE  id_contrato = c.id_contrato) AS SaldoActual
@@ -36,16 +36,24 @@ class movimientos extends TPage
 		$result = $comando->query()->readAll();
 		if(count($result) > 0)
 		{
-			$this->txtPrestamo2->Text = $result[0]["importe"];
-			$this->txtImporteDeCheque3->Text = $result[0]["ImporteDeCheque"];
+			// ----------------------------,(SELECT (SUM(cargo) - SUM(abono) ) AS saldo FROM movimientos WHERE  id_contrato = c.id_contrato) AS SaldoActual-----------------------------------------------------------------------------------------------------------
+			
+			$plazo = $result[0]["plazo"];
+			$seguro = 0.00;
+			$saldoAnterior = $result[0]["saldo_anterior"];
+			$this->txtContrato2->Text = $result[0]["contrato"];
 			$this->txtNombre3->Text = $result[0]["nombre"];
-			$this->txtFechaDeCheque3->Text = $result[0]["FechaDeCheque"];
 			$this->txtSindicato4->Text = $result[0]["Sindicato"];
+			$this->txtPrestamo2->Text = $result[0]["importe"];
+			$intereses =  THttpUtility::htmlEncode(round ((($this->txtPrestamo2->Text) * ($plazo) * (1.00 / 100))));
+			$this->txtImporteDeCheque3->Text = $result[0]["ImporteDeCheque"];
+			$this->txtDescuentoQuincenal4->Text = $result[0]["descuento"];			
+			$this->txtInteres2->Text =$intereses;		
+			$cheque = $this->txtPrestamo2->Text - ($intereses + $saldoAnterior + $seguro);	
+			$this->txtImporteDeCheque3->Text = $cheque;
+			$this->txtFechaDeCheque3->Text = $result[0]["entrega_real"];
 			$this->txtAbonosRealizados4->Text = $result[0]["AbonosRealizados"];
-			$this->txtDescuentoQuincenal4->Text = $result[0]["descuento"];
-			$this->txtTotalDeMovimiento2->Text = $result[0]["MovimientosRealizados"];
 			$this->txtSaldo4->Text = $result[0]["SaldoActual"];
-			$this->txtdescuento->Text = $result[0]["descuento"];
 		}
 		$consulta = "SELECT SUM(cargo) AS cargo,  SUM(abono) AS abono  FROM movimientos WHERE id_contrato = :id_contrato";	
 		$comando = $this->dbConexion->createCommand($consulta); 
@@ -64,8 +72,8 @@ class movimientos extends TPage
 		$comando = $this->dbConexion->createCommand($consulta);
 		$comando->bindValue(":id_contrato",$this->txtContrato2->Text);
 		$resultado = $comando->query()->readAll();
-		$this->pnlMovimientos->DataSource = $resultado;
-		$this->pnlMovimientos->dataBind();
+		$this->dgMovimientos->DataSource = $resultado;
+		$this->dgMovimientos->dataBind();
 		$this->carga_solicitud($this->txtContrato2->Text);	
 	}
 	
@@ -126,6 +134,15 @@ class movimientos extends TPage
 			  $this->ClientScript->RegisterBeginScript("Mensaje","alert('El movimiento NO fue insertado correctamente');");
 			}
 		}		
+	}
+	
+	 public function btnImprimir_onclick($sender,$param)
+	{
+		$contrato= $this->txtContrato2->Text;
+		if($contrato <> ''){
+			$this->ClientScript->RegisterBeginScript("Mensaje","alert('El documento se está imprimiendo');" .
+				"open('index.php?page=reportes.estadodecuentaporcontratopdf&id=$contrato', '_blank');");
+		}
 	}
 	public function Limpiar_Campos($campos = null)
 	{

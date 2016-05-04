@@ -63,9 +63,8 @@
 						<td>Periodo</td>
 						<td><com:TTextBox ID="txtPeriodo" Width="100px" MaxLength="2" /></td>				
 					</tr>
-					<tr>
-						<td colspan="6" align="center">
-							<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
+				</table>
+							<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
 								<com:TBoundColumn HeaderText="Origen" DataField="Origen" />
 								<com:TBoundColumn HeaderText="Fecha" DataField="fecha2" />
 								<com:TBoundColumn HeaderText="Hora" DataField="Hora2" />
@@ -77,9 +76,7 @@
 								<com:TBoundColumn HeaderText="Nomina" DataField="Nomina3" />
 								<com:TBoundColumn HeaderText="Observaciones" DataField="Observaciones3" />	
 							</com:TDataGrid>
-						</td>
-					</tr>
-					
+					<table style="width: 100%" border="0">
 					<tr>
 						<td><com:TTextBox ID="ddlIdContrato" Width="50px" /></td>
 						<td><com:TTextBox ID="ddlCveEmpleado" Width="50px" /></td>
@@ -91,27 +88,9 @@
 						<td>Mostrar</td>
 						<td><com:TTextBox ID="ddlMostrar" Width="50px" /></td>
 					</tr>
-					
-					<tr>
-						<td colspan="6" align="center">
-							<com:TDataGrid ID="dgDescuentosDet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
-								<com:TBoundColumn HeaderText="contrato" DataField="contrato" />
-								<com:TBoundColumn HeaderText="empleado" DataField="num_empleado" />								
-								<com:TBoundColumn HeaderText="E" DataField="titularActivo" />
-								<com:TBoundColumn HeaderText="nombre" DataField="EmpleadoDesc" />
-								<com:TBoundColumn HeaderText="clave" DataField="clavecon" />
-								<com:TBoundColumn HeaderText="aval1" DataField="aval1" />
-								<com:TBoundColumn HeaderText="E" DataField="aval1Activo" /> 
-								<com:TBoundColumn HeaderText="aval2" DataField="aval2" /> 
-								<com:TBoundColumn HeaderText="E" DataField="aval2Activo" /> 
-								<com:TBoundColumn HeaderText="descripción" DataField="descripcion" />
-								<com:TBoundColumn HeaderText="periodo" DataField="periodo" />
-								<com:TBoundColumn HeaderText="periodos" DataField="periodos" />
-								<com:TBoundColumn HeaderText="importe" DataField="importe" />
-								<com:TBoundColumn HeaderText="ap" DataField="aplicado" />							
-							</com:TDataGrid>
-						</td>
-					</tr>
+					</table>
+							
+				<table style="width: 100%" border="0">
 					
 					<tr>
 						<td>Total semana</td>
@@ -123,7 +102,7 @@
 					</tr>
 					<tr>
 						<td>Total jubilados</td>
-						<td><com:TTextBox ID="ddlTotalJubilados8" Width="100px" /></td>
+						<td><com:TTextBox ID="ddlTotalJubilados8" Width="100px" /><com:TLabel ID="lbldescuentoId" Width="100px" visible="false" /></td>
 					</tr>
 					
 					<tr>
@@ -140,9 +119,25 @@
 				<com:TButton ID="btnRecibir" OnClick="btnRecibir_Click" Text="Recibir" />
 				<com:TButton ID="btnActualizar" OnClick="btnActualizar_Click" Text="Actualizar" />
 				<com:TButton ID="btnReporte" OnClick="btnreporte_Click" Text="Reporte" />
+				<com:TButton ID="btnftp" OnClick="btnftp_Click" Text="FTP" />
 			</td>
-		</tr>
-		
+		</tr>		
 	</table>
+	<com:TDataGrid ID="dgDescuentosDet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+								<com:TBoundColumn HeaderText="contrato" DataField="contrato" />
+								<com:TBoundColumn HeaderText="empleado" DataField="num_empleado" />								
+								<com:TBoundColumn HeaderText="E" DataField="titularActivo" />
+								<com:TBoundColumn HeaderText="nombre" DataField="EmpleadoDesc" />
+								<com:TBoundColumn HeaderText="clave" DataField="clavecon" />
+								<com:TBoundColumn HeaderText="aval1" DataField="aval1" />
+								<com:TBoundColumn HeaderText="E" DataField="aval1Activo" /> 
+								<com:TBoundColumn HeaderText="aval2" DataField="aval2" /> 
+								<com:TBoundColumn HeaderText="E" DataField="aval2Activo" /> 
+								<com:TBoundColumn HeaderText="descripción" DataField="descripcion" />
+								<com:TBoundColumn HeaderText="periodo" DataField="periodo" />
+								<com:TBoundColumn HeaderText="periodos" DataField="periodos" />
+								<com:TBoundColumn HeaderText="importe" DataField="importe" />
+								<com:TBoundColumn HeaderText="ap" DataField="aplicado" />							
+							</com:TDataGrid>
 	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />
 </com:TContent>

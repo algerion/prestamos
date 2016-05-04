@@ -12,7 +12,6 @@
      border: 1.5px solid #555;
 }
 </style>
-
 </com:TContent>
 <com:TContent ID="Main" >	
 	<p align="center">
@@ -22,7 +21,6 @@
 		<br />
 		 REPORTE DE DESCUENTO DE NOMINA
 	</p>
-	
 	
 	<table border="0">
 		<tr>
@@ -61,12 +59,53 @@
 			<td><com:TLabel ID="lblSemanalI" Width="100px" /></td>
 						
 		</tr>
+		
 		</table>
-	
-		<table border="0">
+<com:TRepeater ID="Repeater" EnableViewState="false">	
+<prop:HeaderTemplate>	
+	<table cellpadding="2">
+		<tr style="color:white;background-color:black">
+		  <th>contrato</th>
+		  <th>num empleado</th>
+		  <th>nombre</th>
+		  <th>Descripcion</th>
+		</prop:HeaderTemplate>
+		 
+		<prop:ItemTemplate>
+		<tr style="background-color:#BFCFFF">
+		<td><%#$this->Data['contrato']%></td>
+		<td><%#$this->Data['num_empleado']%></td>
+		<td><%#$this->Data['nombre']%></td>
+		<td><%#$this->Data['descripcion']%></td>
+		</tr>
+		</prop:ItemTemplate>
+		 
+		<prop:AlternatingItemTemplate>
+		<tr style="background-color:#E6ECFF">
+		<td><%#$this->Data['contrato']%></td>
+		<td><%#$this->Data['num_empleado']%></td>
+		<td><%#$this->Data['nombre']%></td>
+		<td><%#$this->Data['descripcion']%></td>
+		</tr>
+		</prop:AlternatingItemTemplate>
+		 
+		<prop:FooterTemplate>
+		<tr style="color:white;background-color:black;text-align:center;">
+		<td colspan="5">Computer Parts Inventory</td>
+		</tr>
+	</table>
+
+	<table border="0">
 		<tr>
-						<td colspan="6" align="center">
-							<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
+		  <td align="right"><%#$this->DataItem['contrato'] %></td>
+		  <td align="right"><%#$this->DataItem['num_empleado'] %></td>
+		  <td align="right"><%#$this->DataItem['nombre'] %></td>
+		  <td align="right"><%#$this->DataItem['descripcion'] %></td>
+		</tr>
+	</table>
+	</prop:FooterTemplate>
+</com:TRepeater>
+	<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
 								<com:TBoundColumn HeaderText="Contrato" DataField="contrato" />
 								<com:TBoundColumn HeaderText="Num empleado" DataField="num_empleado" />
 								<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
@@ -77,8 +116,6 @@
 								<com:TBoundColumn HeaderText="Tipo Empleado" DataField="tipoEmpleado" />
 								<com:TBoundColumn HeaderText="Tipo Nomina" DataField="tipoNomina" />
 								<com:TBoundColumn HeaderText="perdesno" DataField="perdesno" />	
-							</com:TDataGrid>
-						</td>
-					</tr>
-	</table>
+	</com:TDataGrid>
+	
 </com:TContent>

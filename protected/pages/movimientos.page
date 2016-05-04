@@ -48,7 +48,7 @@
 					</tr>
 					<tr>
 						<td colspan="6" align="center">
-							<com:TDataGrid ID="pnlMovimientos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
+							<com:TDataGrid ID="dgMovimientos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid">
 								<com:TBoundColumn HeaderText="No. Movimiento" DataField="id_movimiento" />
 								<com:TBoundColumn HeaderText="Fecha" DataField="creacion" />
 								<com:TBoundColumn HeaderText="Justificación" DataField="descripcion" />
@@ -67,10 +67,17 @@
 						<td colspan="3" align="center">Saldo </td>
 						<td>$<com:TTextBox ID="txtSaldo4" Width="100px" /></td>
 					</tr>
+					<tr>
+						<td colspan="6" align="center"> 
+						<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true" />
+						</td>
+					</tr>
+					
 				</table>
 			</td>
 		</tr>
 		<!--Botón Agregar-->
+		
 	</table>
 	<com:TPanel GroupingText="Movimiento Por Sistema">
 	<table width="100%" border="0" align="center" >
@@ -117,7 +124,6 @@
 		<tr>
 			<td  colspan="2"  align="center"><com:TActiveLabel ID="lblalerta" ForeColor="red" Visible="false" Font.Size="12pt" /></td>
 		</tr>
-		<tr>
 	</table>
 	</com:TPanel>
 	<com:TValidationSummary ShowMessageBox="true" ShowSummary="false" />

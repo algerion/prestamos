@@ -79,31 +79,36 @@ class solicitudes extends TPage
     }
 	public function calculo($campos = null)
 	{
+		if ($this->txtTipoTit->Text == "JUBILADO" ){
+			$importeT= $this->txtImporte->Text;
+		}else{
+			$importeT= $this->txtImporte1->Text;
+		}
 		$this->lblNotaValCamposVacios->visible="false";
-			$intereses =  THttpUtility::htmlEncode(round ((($this->txtImporte1->Text) * ($this->txtPlazo1->Text) * (1.00 / 100))));
-			$importe = $this->txtImporte1->Text;
-			$saldoAnterior = $this->lblSaldoAnterior->text;
-			$seguro =($this->lblSeguro->text = 0.0);
-			$descuento = ($this->txtPlazo1->Text * 2); 
-			$LItemp = ($importe) / $descuento;
-			$LItemp = $LItemp * 100;
-			$importeDescuento = $LItemp / 100;	
-			$importeADescontar = $descuento * $importeDescuento;			
-			$DescQuincena = $importe  / $descuento;
-			$Redondeo = ($importe) - $importeADescontar;
-			
-			$this->lblIntereses1->Text = number_format($intereses,2);
-			$this->lblDescuentos->text = number_format($descuento,2);
-			$this->lblImpDescuentos->text = number_format($importeDescuento,2);
-			$this->lblImpPrestamos->text =  number_format($importeADescontar,2);
-			$this->lblDiferencia->text = number_format($Redondeo,2);
-			
-			$cheque = $importe - ($intereses + $saldoAnterior + $seguro);
-			$this->lblImpCheque->text = number_format($cheque,2);
-			$this->lblImpChequeResp->text = $cheque;
-			
-			if ($cheque  < 0 ){
-			$this->lblValImpSanAnterior->Text = "El importe: $" .number_format($this->txtImporte1->Text,2).'<br/>'."es menor al saldo anterior: $".number_format($saldoAnterior,2); //.'\n\n'.
+		$intereses =  THttpUtility::htmlEncode(round ((($importeT) * ($this->txtPlazo1->Text) * (1.00 / 100))));
+		$importe = $importeT;
+		$saldoAnterior = $this->lblSaldoAnterior->text;
+		$seguro =($this->lblSeguro->text = 0.0);
+		$descuento = ($this->txtPlazo1->Text * 2); 
+		$LItemp = ($importe) / $descuento;
+		$LItemp = $LItemp * 100;
+		$importeDescuento = $LItemp / 100;	
+		$importeADescontar = $descuento * $importeDescuento;			
+		$DescQuincena = $importe  / $descuento;
+		$Redondeo = ($importe) - $importeADescontar;
+		
+		$this->lblIntereses1->Text = number_format($intereses,2);
+		$this->lblDescuentos->text = number_format($descuento,2);
+		$this->lblImpDescuentos->text = number_format($importeDescuento,2);
+		$this->lblImpPrestamos->text =  number_format($importeADescontar,2);
+		$this->lblDiferencia->text = number_format($Redondeo,2);
+		
+		$cheque = $importe - ($intereses + $saldoAnterior + $seguro);
+		$this->lblImpCheque->text = number_format($cheque,2);
+		$this->lblImpChequeResp->text = $cheque;
+		
+		if ($cheque  < 0 ){
+			$this->lblValImpSanAnterior->Text = "El importe: $" .number_format($importeT,2).'<br/>'."es menor al saldo anterior: $".number_format($saldoAnterior,2); //.'\n\n'.
 			}else{
 				$this->lblValImpSanAnterior->visible="false";
 			}
@@ -114,14 +119,14 @@ class solicitudes extends TPage
 						$this->btnGuardar->visible="true";	
 					}
 			if ($this->txtTipoTit->Text == "JUBILADO" ){
-				if($this->txtImporte1->Text > 0){
+				if($importeT > 0){
 						$this->lblNotaVal->visible="false";
 						$this->btnImprimir->visible="true";
 						$this->btnGuardar->visible="true";
 				}else{
 						$this->btnImprimir->visible="false";
 						$this->lblNotaVal->visible="true";
-						$this->lblNotaVal->Text = 'El importe tiene que ser mayor a:'.$this->txtImporte1->Text;
+						$this->lblNotaVal->Text = 'El importe tiene que ser mayor a:'.$importeTt;
 				}
 			}else
 			{
@@ -129,17 +134,17 @@ class solicitudes extends TPage
 				switch ($MesesTrabajo) 
 				{
 					case ($MesesTrabajo  >= 0.61 and $MesesTrabajo  < 15.0):		
-							if($this->txtImporte1->Text  >= 7000.00  and $this->txtImporte1->Text  <= 50000.00  )
+							if($importeT  >= 7000.00  and $importeT  <= 50000.00  )
 							{
 								$this->lblNotaVal->visible="false";
 							}else{
 								$this->btnImprimir->visible="false";
 								$this->lblNotaVal->visible="true";
-								$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de 50000: $'.$this->txtImporte1->Text;
+								$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de 50000: $'.$importeT;
 							}
 					break;
 					case ($MesesTrabajo >= 15.00):
-						   if($this->txtImporte1->Text  >= 7000.00  and $this->txtImporte1->Text  <= 100000.00    )
+						   if($importeT >= 7000.00  and $importeT  <= 100000.00    )
 							{
 								$this->lblNotaVal->visible="false";
 								$this->btnImprimir->visible="true";
@@ -147,7 +152,7 @@ class solicitudes extends TPage
 								$this->btnImprimir->visible="false";
 								$this->btnGuardar->visible="false";	
 								$this->lblNotaVal->visible="true";
-								$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de 100000: $'.$this->txtImporte1->Text;
+								$this->lblNotaVal->Text = 'No cumple con la Antigüedad para el préstamo de 100000: $'.$importeT;
 							}
 					break;
 				}
@@ -176,8 +181,12 @@ class solicitudes extends TPage
 		$comando->bindValue(":txtNoUnicoAval2",$this->txtNoUnicoAval2->Text);
 		$comando->bindValue(":txtAntiguedadAval2",$this->txtAntiguedadNumAval2->Text);
 		$comando->bindValue(":txtTipoAval2",$this->txtTipoAval2->Text);
-		$comando->bindValue(":txtSindicatoNumAval2",$this->txtSindicatoNumAval2->Text);
-		$comando->bindValue(":txtImporte",$this->txtImporte1->Text); 
+		$comando->bindValue(":txtSindicatoNumAval2",$this->txtSindicatoNumAval2->Text);	
+		if ($this->txtTipoTit->Text == "JUBILADO" ){
+			$comando->bindValue(":txtImporte",$this->txtImporte->Text); 
+		}else{
+			$comando->bindValue(":txtImporte",$this->txtImporte1->Text); 
+		}		
 		$comando->bindValue(":txtPlazo",$this->txtPlazo1->Text);
 		$comando->bindValue(":txtTasa",1.00);
 		$comando->bindValue(":txtSaldoAnterior",$this->lblSaldoAnterior->Text);
@@ -369,18 +378,6 @@ class solicitudes extends TPage
 			$RespUnico = "txtNoUnicoResp". $sufijo;
 			$this->$RespUnico->Text =$result[0]["numero"];
 			
-			$jubiladoTipo = $result[0]["tipo"];
-			if ($jubiladoTipo == "J") {
-				
-				$tipoJU = Conexion::Retorna_Campo($this->dbConexion, "pensionados", "importe_pension", array("numero"=>$num_unico));
-				$ImpJUb = ($tipoJU * 3);
-				$Jubilado = $ImpJUb;
-			}else{
-				$Jubilado ='';
-			}
-			$TipoJubilado = "txtImporte1";
-			$this->$TipoJubilado->Text =$Jubilado; 
-			
 			$tipo = Conexion::Retorna_Campo($this->dbConexion, "tipo_empleado", "texto", array("tipo_empleado"=>$result[0]["tipo"]));
 			$tip = "txtTipo" . $sufijo;
 			$this->$tip->Text = $tipo;
@@ -413,17 +410,29 @@ class solicitudes extends TPage
 					}else {
 						$this->lblSolicitadasTit->visible="false";
 						$this->lblSolicitadasTit->Text = 0;
-						if ($jubiladoTipo == "J") {
+						if ($tipo == 'JUBILADO') {
 							$this->btnGuardar->visible="true";	
 						}else{
 							$this->btnGuardar->visible="false";
 						}
+						$tipoJU = Conexion::Retorna_Campo($this->dbConexion, "pensionados", "importe_pension", array("numero"=>$num_unico));
+						if($tipoJU > 0){
+							$Jubilado = ($tipoJU * 3);
+							$this->txtImporte->Text =$Jubilado;
+							$this->txtImporte->Visible="true";
+							$this->txtImporte1->Visible="false";
+							$this->Limpiar_Campos2();
+						}else{
+							$this->txtImporte->Visible="false";
+							$this->txtImporte1->Visible="true";
+							$this->Limpiar_Campos2();
+						}
+			
 					}
-						$idContrato = Conexion::Retorna_Campo($this->dbConexion, "contrato", "id_contrato", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("titular"=>$num_unico))), " AND (estatus = 'A')");
+						$idContrato = Conexion::Retorna_Campo($this->dbConexion, "contrato", "id_contrato", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "max(id_solicitud)", array("titular"=>$num_unico)))," AND (estatus = 'A')");
 						$cargo =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(cargo)", array("id_contrato"=>$idContrato));
 						$abono =  Conexion::Retorna_Campo($this->dbConexion, "movimientos", "SUM(abono)", array("id_contrato"=>$idContrato));
 						$adeudo = $cargo - $abono;
-						
 						if ($adeudo <= 0.00 or $idContrato == '')
 						{
 							$this->lblSaldoAnterior->text = 0;	
@@ -434,40 +443,57 @@ class solicitudes extends TPage
 							$this->lblContratoAnterior->text = $idContrato;
 							$this->lblAutorizadasTit->Text = 1;
 						}
+					
                     break;
                 case ("txtNoUnico".$sufijo == "txtNoUnicoAval1"):
-					$resultSAval1 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval1)", array("aval1"=>$num_unico), " AND (estatus = 'S')");
-					if($resultSAval1 >= 3){
-						$this->btnGuardar->visible="false";	
-						$this->lblSolicitadasAval1->visible="true";
-						$this->lblSolicitadasAval1->Text = $resultSAval1; 
-					}else {
-						$this->lblSolicitadasAval1->visible="false";
-						$this->lblSolicitadasAval1->Text = 0;
+			        $descuentosfijos = Conexion::Retorna_Campo($this->dbConexion, "descuentos_fijos", "numero", array("numero"=>$num_unico));
+					if($descuentosfijos >1){
+						$this->lblNotaValCamposVacios->visible="true";
+						$this->lblNotaValCamposVacios->Text = "Tiene pensión alimenticia"; 
 					}
-					$resultAAval1 = Conexion::Retorna_Campo($this->dbConexion, "contrato", "count(id_contrato)", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("aval1"=>$num_unico))), " AND (estatus = 'A')");
-					if($resultAAval1 >= 3){
-						$this->btnGuardar->visible="false";	
-						$this->lblAutorizadasAval1->visible="true";
-					$this->lblAutorizadasAval1->Text = $resultAAval1;
-					}else {
-						$this->lblAutorizadasAval1->visible="false";
-						$this->lblAutorizadasAval1->Text = 0;							
+					else{
+						$this->lblNotaValCamposVacios->visible="false";
+						$this->lblNotaValCamposVacios->Text = 0;		
+						$resultSAval1 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval1)", array("aval1"=>$num_unico), " AND (estatus = 'S')");
+						if($resultSAval1 >= 3){
+							$this->btnGuardar->visible="false";	
+							$this->lblSolicitadasAval1->visible="true";
+							$this->lblSolicitadasAval1->Text = $resultSAval1; 
+						}else {
+							$this->lblSolicitadasAval1->visible="false";
+							$this->lblSolicitadasAval1->Text = 0;
+						}
+						$resultAAval1 = Conexion::Retorna_Campo($this->dbConexion, "contrato", "count(id_contrato)", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("aval1"=>$num_unico))), " AND (estatus = 'A')");
+						if($resultAAval1 >= 3){
+							$this->btnGuardar->visible="false";	
+							$this->lblAutorizadasAval1->visible="true";
+							$this->lblAutorizadasAval1->Text = $resultAAval1;
+						}else {
+							$this->lblAutorizadasAval1->visible="false";
+							$this->lblAutorizadasAval1->Text = 0;							
+						}
 					}
                     break;
                 case ("txtNoUnico".$sufijo == "txtNoUnicoAval2"):
-				
-					$resultSAval2 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval2)", array("aval2"=>$num_unico), " AND (estatus = 'S')");
-					if($resultSAval2 >= 3){
+					 $descuentosfijos = Conexion::Retorna_Campo($this->dbConexion, "descuentos_fijos", "numero", array("numero"=>$num_unico));
+					if($descuentosfijos >1){
+						$this->lblNotaValCamposVacios->visible="true";
+						$this->lblNotaValCamposVacios->Text = "Tiene pensión alimenticia"; 
+					}
+					else{
+						$this->lblNotaValCamposVacios->visible="false";
+						$this->lblNotaValCamposVacios->Text = 0;	
+						$resultSAval2 = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "count(aval2)", array("aval2"=>$num_unico), " AND (estatus = 'S')");
+						if($resultSAval2 >= 3){
 						$this->btnGuardar->visible="false";	
 						$this->lblSolicitadasAval2->visible="true";
 						$this->lblSolicitadasAval2->Text = $resultSAval2;
-					}else {
+						}else {
 						$this->lblSolicitadasAval2->visible="false";
 						$this->lblSolicitadasAval2->Text = 0;
-					}
-					$resultAAval2 = Conexion::Retorna_Campo($this->dbConexion, "contrato", "count(id_contrato)", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("aval2"=>$num_unico))), " AND (estatus = 'A')");
-					if($resultAAval2 >= 3)
+						}
+						$resultAAval2 = Conexion::Retorna_Campo($this->dbConexion, "contrato", "count(id_contrato)", array("id_solicitud"=>$solicitud = Conexion::Retorna_Campo($this->dbConexion, "solicitud", "id_solicitud", array("aval2"=>$num_unico))), " AND (estatus = 'A')");
+						if($resultAAval2 >= 3)
 						{
 							$this->btnGuardar->visible="false";	
 							$this->lblAutorizadasAval2->visible="true";
@@ -476,6 +502,7 @@ class solicitudes extends TPage
 							$this->lblAutorizadasAval2->visible="false";
 							$this->lblAutorizadasAval2->Text = 0;
 						}
+					}
                     break;
             	}		
 	}	
@@ -611,6 +638,7 @@ class solicitudes extends TPage
 			$this->txtSindicatoAval2->Text = '';
 			$this->datFechaFirmaAvales->Text = '';
 			$this->txtImporte1->Text = '';
+			$this->txtImporte->Text = '';
 			$this->txtPlazo1->Text = '';
 			$this->txtTasa1->Text = '';
 			$this->lblIntereses1->Text = '';
@@ -630,9 +658,49 @@ class solicitudes extends TPage
 			$this->lblAutorizadasAval2->Text = '';
 			$this->lblEstatus->Text = '';
 			$this->lblSaldoAnterior->Text = '';
+			$this->txtNominaAval1->Text = '';
+			$this->txtNominaAval2->Text = '';
 
 			$this->btnGuardar->visible="false";	
 			$this->btnCancelar->visible="false";	
+	}	
+	public function Limpiar_Campos2($campos = null)
+	{
+			$this->txtFolio->Text ='';
+			$this->txtFecha->Text = '';
+			$this->txtNoUnicoAval1->Text = '';
+			$this->txtAntiguedadAval1->Text = '';
+			$this->txtNombreAval1->Text = '';
+			$this->txtTipoAval1->Text = '';
+			$this->txtSindicatoAval1->Text = '';
+			$this->txtNoUnicoAval2->Text = '';
+			$this->txtAntiguedadAval2->Text ='';
+			$this->txtNombreAval2->Text = '';
+			$this->txtTipoAval2->Text = '';
+			$this->txtSindicatoAval2->Text = '';
+			$this->datFechaFirmaAvales->Text = '';
+			$this->txtPlazo1->Text = '';
+			$this->txtTasa1->Text = '';
+			$this->lblIntereses1->Text = '';
+			$this->lblSaldoAnterior->Text = '';
+			$this->lblDescuentos->Text = '';
+			$this->lblImpDescuentos->Text = '';
+			$this->lblImpPrestamos->Text = '';
+			$this->lblSeguro->Text = '';
+			$this->lblDiferencia->Text = '';
+			$this->lblImpCheque->Text = '';
+			$this->lblImpChequeResp->Text = '';
+			$this->lblSolicitadasTit->Text = '';
+			$this->lblAutorizadasTit->Text = '';
+			$this->lblSolicitadasAval1->Text = '';
+			$this->lblAutorizadasAval1->Text = '';
+			$this->lblSolicitadasAval2->Text = '';
+			$this->lblAutorizadasAval2->Text = '';
+			$this->lblEstatus->Text = '';
+			$this->lblSaldoAnterior->Text = '';
+			$this->txtNominaAval1->Text = '';
+			$this->txtNominaAval2->Text = '';
+			
 	}	
 }
 ?>

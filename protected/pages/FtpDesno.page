@@ -1,0 +1,16 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="FTP" %>
+<com:TContent ID="Cabeceras">
+
+<style>
+	.Estilo1 {font-size: 14px}
+	.Estilo2 {font-size: 11px}
+	.rectangulo {
+     width: 730px; 
+     height: 350px; 
+     border: 1.5px solid #555;
+}
+</style>
+
+</com:TContent>
+<com:TContent ID="Main" >	
+</com:TContent>

@@ -230,7 +230,8 @@
 					</tr>
 					<tr>
 						<td>Importe:</td>
-						<td><com:TActiveTextBox ID="txtImporte1" width="80px" AutoPostBack="true" OnTextChanged="textChangedImporte" /></td>
+						<td><com:TActiveTextBox ID="txtImporte1" width="80px" AutoPostBack="true" OnTextChanged="textChangedImporte" Visible="true"/>
+						<com:TActiveTextBox ID="txtImporte" width="80px" AutoPostBack="true" OnTextChanged="textChangedImporte" Visible="false"/></td>
 					</tr>
 					<tr>
 						<td>Plazo (meses):</td>

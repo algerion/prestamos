@@ -17,6 +17,7 @@ class estadodecuentaporcontrato extends TPage
 		parent::onLoad($param);
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
+		$idcontrato = $_REQUEST['id'];
 
 		$consulta = "SELECT c.id_contrato AS contrato, s.importe AS importe ,s.importeCheque AS ImporteDeCheque,t.nombre AS nombre ,c.entrega_cheque AS FechaDeCheque, s.descuento AS descuento
 					,(SELECT sindicato FROM catsindicatos WHERE cve_sindicato = t.sindicato) AS Sindicato,plazo as plazo,saldo_anterior as saldo_anterior,entrega_real as entrega_real
@@ -27,8 +28,9 @@ class estadodecuentaporcontrato extends TPage
 					FROM contrato AS c
 					LEFT JOIN solicitud AS s	ON c.id_solicitud = s.id_solicitud
 					LEFT JOIN sujetos  AS t ON t.numero = s.titular	
-					WHERE c.id_contrato = 14659 ";	
-		$comando = $this->dbConexion->createCommand($consulta); 
+					WHERE c.id_contrato = :idcontrato";	
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":idcontrato",$idcontrato);		
 		$result = $comando->query()->readAll();
 		if(count($result) > 0)
 		{
@@ -47,39 +49,17 @@ class estadodecuentaporcontrato extends TPage
 			$this->lblImporteDeCheque3->Text = $cheque;
 			$this->lblFechaDeCheque3->Text = $result[0]["entrega_real"];
 			$this->lblAbonosRealizados4->Text = $result[0]["AbonosRealizados"];
-			/*
-			
-			$this->txtAbonosRealizados4->Text = $result[0]["AbonosRealizados"];
-			$this->txtDescuentoQuincenal4->Text = $result[0]["descuento"];
-			$this->txtTotalDeMovimiento2->Text = $result[0]["MovimientosRealizados"];
-			$this->txtSaldo4->Text = $result[0]["SaldoActual"];*/
-			/*if ( $result[0]["SaldoActual"] > 0.00){
-				$this->txtSaldo4->Text = $result[0]["ImporteDeCheque"];
-				
-			}else{
-				$this->txtSaldo4->Text = $result[0]["SaldoActual"];
-			}*/
-			//$this->txtdescuento->Text = $result[0]["descuento"];
+			$this->mostrarDatosGrid ();
 		}
-		/*$consulta = "SELECT SUM(cargo) AS cargo,  SUM(abono) AS abono  FROM movimientos WHERE id_contrato = 14659";	
-		$comando = $this->dbConexion->createCommand($consulta); 
-		$comando->bindValue(":id_contrato",$id_contrato);
-		$result = $comando->query()->readAll();
-		if(count($result) > 0)
-		{
-			$this->txtTotalDeMovimiento2->Text = $result[0]["cargo"];
-			$this->txtTotalDeMovimiento3->Text = $result[0]["abono"];
-		}*/
-		/*$consulta = "SELECT SUM(cargo) AS cargo,  SUM(abono) AS abono  FROM movimientos WHERE id_contrato = :id_contrato";	
-		$comando = $this->dbConexion->createCommand($consulta); 
-		$comando->bindValue(":id_contrato",$id_contrato);
-		$result = $comando->query()->readAll();
-		if(count($result) > 0)
-		{
-			$this->txtTotalDeMovimiento2->Text = $result[0]["cargo"];
-			$this->txtTotalDeMovimiento3->Text = $result[0]["abono"];
-		}	*/		
-			
 	}
-				
+	public function mostrarDatosGrid () 
+	{ 
+		$consulta = "SELECT id_movimiento, creacion, descripcion, cargo, abono FROM movimientos where id_contrato = :id_contrato";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_contrato",$this->lblContrato2->Text);
+		$resultado = $comando->query()->readAll();
+		$this->dgMovimientos->DataSource = $resultado;
+		$this->dgMovimientos->dataBind();
+		//$this->carga_solicitud($this->txtContrato2->Text);	
+	}
 }
