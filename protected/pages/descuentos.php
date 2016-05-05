@@ -87,7 +87,8 @@ class descuentos extends TPage
 				}
 			fclose($f);
 				$this-> subir_ftp($desno);
-				$this->mostrarDatosGrid ($id);
+				$this->mostrarDatosGrid ();
+				$this->datos($id);
 				$this->mostrarDatosGridDesc ($id);
 				$this->ClientScript->registerEndScript("exito",
 				"alert('desno generado exitosamente');\n");
@@ -165,7 +166,8 @@ class descuentos extends TPage
 			{
 				$this->renombrar_dbf($archivoFTP);
 				//$this->lbldescuentoId->Text =$idescuento;
-				$this->mostrarDatosGrid ($idescuento);
+				$this->mostrarDatosGrid();
+				$this->datos($idescuento);
 				$this->mostrarDatosGridDesc ($idescuento);
 				$this->Aplicar_desno($idescuento);
 				$this->ClientScript->registerEndScript("bajada",
@@ -464,9 +466,129 @@ class descuentos extends TPage
 		$this->dgDescuentos->DataSource = $resultado;
 		$this->dgDescuentos->dataBind(); 
 	}
-	 public function mostrarDatosGrid ($id_Descuento) 
-	 { 
-	$consulta = "SELECT 
+	// -------------------------------------------------------------------- datagrid---------------------------------------------------------------------------
+	
+	public function changePage($sender,$param)
+    {
+        $this->dgDescuentosDet->CurrentPageIndex=$param->NewPageIndex;
+	   $this->mostrarDatosGrid ( );
+    }
+ 
+    public function pagerCreated($sender,$param)
+    {
+        $param->Pager->Controls->insertAt(0,'Page: ');
+    }
+	 public function toggleColumnVisibility($sender,$param)
+    {
+        foreach($this->dgDescuentosDet->Columns as $index=>$column)
+            $column->Visible=$sender->Items[$index]->Selected;
+        $this->dgDescuentosDet->DataSource=$this->Data;
+        $this->dgDescuentosDet->dataBind();
+    }
+    public function changePagerPosition($sender,$param)
+    {
+        $top=$sender->Items[0]->Selected;
+        $bottom=$sender->Items[1]->Selected;
+        if($top && $bottom)
+            $position='TopAndBottom';
+        else if($top)
+            $position='Top';
+        else if($bottom)
+            $position='Bottom';
+        else
+            $position='';
+        if($position==='')
+            $this->dgDescuentosDet->PagerStyle->Visible=false;
+        else
+        {
+            $this->dgDescuentosDet->PagerStyle->Position=$position;
+            $this->dgDescuentosDet->PagerStyle->Visible=true;
+        }
+    }
+ 
+    public function useNumericPager($sender,$param)
+    {
+        $this->dgDescuentosDet->PagerStyle->Mode='Numeric';
+        $this->dgDescuentosDet->PagerStyle->NextPageText=$this->NextPageText->Text;
+        $this->dgDescuentosDet->PagerStyle->PrevPageText=$this->PrevPageText->Text;
+        $this->dgDescuentosDet->PagerStyle->PageButtonCount=$this->PageButtonCount->Text;
+        $this->dgDescuentosDet->dataBind();
+    }
+ 
+    public function useNextPrevPager($sender,$param)
+    {
+        $this->dgDescuentosDet->PagerStyle->Mode='NextPrev';
+        $this->dgDescuentosDet->PagerStyle->NextPageText=$this->NextPageText->Text;
+        $this->dgDescuentosDet->PagerStyle->PrevPageText=$this->PrevPageText->Text;
+        $this->dgDescuentosDet->dataBind();
+    }
+ 
+    public function changePageSize($sender,$param)
+    {
+        $this->dgDescuentosDet->PageSize=TPropertyValue::ensureInteger($this->PageSize->Text);
+        $this->dgDescuentosDet->CurrentPageIndex=0;
+        $this->dgDescuentosDet->dataBind();
+    }	
+	public function btnBuscar_Click($sender,$param)
+	{
+		
+		$contrato=$this->ddlIdContrato->Text;
+		$Cvempleado=$this->ddlCveEmpleado->Text;
+		//$empleado=$this->ddlEmpleado->Text; 
+		if ($contrato == '' and $Cvempleado == ''){
+			$this->mostrarDatosGrid();
+		}else{
+			$this->mostrarDatosGridEmp($contrato,$Cvempleado);	
+		}
+			
+	}
+		public function mostrarDatosGridEmp ($contrato,$Cvempleado) 
+	{ 
+		$id_Descuento = $this->lbldesceuntoId->Text;	
+		$consulta = "SELECT A.num_empleado 
+					,TRIM(IF(B.numero IS NULL, IF(C.numero IS NULL, '', CONCAT(C.paterno, ' ', C.materno, ' ', C.nombre))
+					,CONCAT(B.paterno, ' ', B.materno, ' ', B.nombre))) AS EmpleadoDesc 
+					,A.clavecon as clavecon, A.aval1 as aval1, A.aval2 as aval2, IF(A.clavecon IN (0), 'Descuento de prestamo', IF(A.clavecon IN (63), 'Descuento de prestamo-Titular', 'Descuento de prestamo-Aval')) AS descripcion
+					,A.importe as  importe, A.periodo as periodo, A.periodos as periodos , A.contrato as contrato, A.tipo_nomina as tipo_nomina, A.nomina as nomina, A.aplicado as aplicado
+					,(SELECT s.status FROM sujetos s WHERE s.numero = A.num_empleado) AS titularActivo
+					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval1) AS aval1Activo
+					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval2) AS aval2Activo 
+					FROM descuento_detalle A 
+					LEFT JOIN empleados B ON B.numero = A.num_empleado 
+					LEFT JOIN pensionados C ON C.numero = A.num_empleado  
+					WHERE A.id_Descuento = :id_Descuento and (A.num_empleado = :id_clvempleado or A.contrato = :contrato')";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_Descuento",$id_Descuento);
+		$comando->bindValue(":contrato",$contrato);
+		$comando->bindValue(":id_clvempleado",$Cvempleado);
+		$resultado = $comando->query()->readAll();
+		$this->dgDescuentosDet->DataSource = $resultado;
+		$this->dgDescuentosDet->dataBind();
+	}
+	public function mostrarDatosGrid ( ) 
+	{ 
+		$id_Descuento = $this->lbldesceuntoId->Text;	
+		$consulta = "SELECT A.num_empleado 
+					,TRIM(IF(B.numero IS NULL, IF(C.numero IS NULL, '', CONCAT(C.paterno, ' ', C.materno, ' ', C.nombre))
+					,CONCAT(B.paterno, ' ', B.materno, ' ', B.nombre))) AS EmpleadoDesc 
+					,A.clavecon as clavecon, A.aval1 as aval1, A.aval2 as aval2, IF(A.clavecon IN (0), 'Descuento de prestamo', IF(A.clavecon IN (63), 'Descuento de prestamo-Titular', 'Descuento de prestamo-Aval')) AS descripcion
+					,A.importe as  importe, A.periodo as periodo, A.periodos as periodos , A.contrato as contrato, A.tipo_nomina as tipo_nomina, A.nomina as nomina, A.aplicado as aplicado
+					,(SELECT s.status FROM sujetos s WHERE s.numero = A.num_empleado) AS titularActivo
+					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval1) AS aval1Activo
+					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval2) AS aval2Activo 
+					FROM descuento_detalle A 
+					LEFT JOIN empleados B ON B.numero = A.num_empleado 
+					LEFT JOIN pensionados C ON C.numero = A.num_empleado  
+					WHERE A.id_Descuento = :id_Descuento";
+		$comando = $this->dbConexion->createCommand($consulta);
+		$comando->bindValue(":id_Descuento",$id_Descuento);
+		$resultado = $comando->query()->readAll();
+		$this->dgDescuentosDet->DataSource = $resultado;
+		$this->dgDescuentosDet->dataBind();
+	}
+	public function datos($id_Descuento)
+	{
+		$consulta = "SELECT 
 					(SELECT SUM(d.importe) AS quincenal FROM descuento_detalle AS d WHERE d.id_descuento = det.id_descuento AND  d.tipo_nomina = 'Q') AS quincena
 					,(SELECT SUM(d.importe) AS quincenal FROM descuento_detalle AS d WHERE d.id_descuento = det.id_descuento AND  d.tipo_nomina = 'S') AS semanal
 					,(SELECT SUM(d.importe) AS quincenal FROM descuento_detalle AS d WHERE d.id_descuento = det.id_descuento ) AS total
@@ -476,8 +598,8 @@ class descuentos extends TPage
 		$result = $comando->query()->readAll();
 		if(count($result) > 0)
 		{
-		$this->ddlTotalSemana->Text = $result[0]["quincena"];
-		$this->ddlTotalQuincena->Text = $result[0]["semanal"];
+		$this->ddlTotalSemana->Text = $result[0]["semanal"];
+		$this->ddlTotalQuincena->Text = $result[0]["quincena"];
 		$this->ddlTotal8->Text = $result[0]["total"];
 		}
 		$consulta = "SELECT COUNT(A.numero) AS activos
@@ -497,26 +619,8 @@ class descuentos extends TPage
 		$comando->bindValue(":id_Descuento",$id_Descuento);
 		$result = $comando->query()->readAll();
 		$this->ddlTotalJubilados8->Text = $result[0]["jubilados"];
-		
-		$consulta = "SELECT A.num_empleado 
-					,TRIM(IF(B.numero IS NULL, IF(C.numero IS NULL, '', CONCAT(C.paterno, ' ', C.materno, ' ', C.nombre))
-					,CONCAT(B.paterno, ' ', B.materno, ' ', B.nombre))) AS EmpleadoDesc 
-					,A.clavecon as clavecon, A.aval1 as aval1, A.aval2 as aval2, IF(A.clavecon IN (0), 'Descuento de prestamo', IF(A.clavecon IN (63), 'Descuento de prestamo-Titular', 'Descuento de prestamo-Aval')) AS descripcion
-					,A.importe as  importe, A.periodo as periodo, A.periodos as periodos , A.contrato as contrato, A.tipo_nomina as tipo_nomina, A.nomina as nomina, A.aplicado as aplicado
-					,(SELECT s.status FROM sujetos s WHERE s.numero = A.num_empleado) AS titularActivo
-					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval1) AS aval1Activo
-					, (SELECT s.status FROM sujetos s WHERE s.numero = A.aval2) AS aval2Activo 
-					FROM descuento_detalle A 
-					LEFT JOIN empleados B ON B.numero = A.num_empleado 
-					LEFT JOIN pensionados C ON C.numero = A.num_empleado  
-					WHERE A.id_Descuento = :id_Descuento";
-		$comando = $this->dbConexion->createCommand($consulta);
-		$comando->bindValue(":id_Descuento",$id_Descuento);
-		$resultado = $comando->query()->readAll();
-		$this->dgDescuentosDet->DataSource = $resultado;
-		$this->dgDescuentosDet->dataBind();
+
 	}
-	// -------------------------------------------------------------------------------------------------
 	public function descarga_dbf($file)
 	{
 		//$regs = 1;

@@ -80,7 +80,7 @@
 					<tr>
 						<td><com:TTextBox ID="ddlIdContrato" Width="50px" /></td>
 						<td><com:TTextBox ID="ddlCveEmpleado" Width="50px" /></td>
-						<td><com:TTextBox ID="ddlEmpleado" Width="190px" /></td>
+						<td><com:TTextBox ID="ddlEmpleado" Width="190px" ReadOnly="True"/></td>
 						<!--Botón Buscar-->
 						<td colspan="2" align="center">
 						<com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_Click" IsDefaultButton="true" />
@@ -123,7 +123,18 @@
 			</td>
 		</tr>		
 	</table>
-	<com:TDataGrid ID="dgDescuentosDet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+	<com:TDataGrid ID="dgDescuentosDet"
+						AllowPaging="true"
+						PageSize="10"	
+						PagerStyle.Mode="Numeric"
+						PagerStyle.HorizontalAlign="Right"						
+						Font.Size="11px" 
+						AutoGenerateColumns="False" 
+						OnPageIndexChanged="changePage"
+						OnPagerCreated="pagerCreated"
+						GridLines="Both" 
+						BorderStyle="Solid" 
+						Width="100%">
 								<com:TBoundColumn HeaderText="contrato" DataField="contrato" />
 								<com:TBoundColumn HeaderText="empleado" DataField="num_empleado" />								
 								<com:TBoundColumn HeaderText="E" DataField="titularActivo" />
