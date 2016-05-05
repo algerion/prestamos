@@ -11,7 +11,7 @@ include_once('../compartidos/clases/conexion.php');
 class contrato extends TPage
 {
 	var $dbConexion;
-	
+	var idDescuentos;
 
 	public function onLoad($param)
 	{
