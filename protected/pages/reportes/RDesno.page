@@ -10,7 +10,12 @@
      width: 730px; 
      height: 350px; 
      border: 1.5px solid #555;
-}
+	 }
+	 .rectangulo2 {
+     width: 730px; 
+     height: 200px; 
+     border: 1.5px solid #555;
+	 }
 </style>
 </com:TContent>
 <com:TContent ID="Main" >	
@@ -19,103 +24,86 @@
 		<br />
 		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
 		<br />
-		 REPORTE DE DESCUENTO DE NOMINA
+		 FECHA DE IMPRESION:
+		 <br />
+		 ESTADO DE CUENTA POR PERIODOS DEL:<com:TLabel ID="lblfechaInicial"/> del <com:TLabel ID="lblfechafinal"/>
 	</p>
-	
-	<table border="0">
-		<tr>
-			<td colspan="6">___Registros_______________________________________________________________________________</td>
-		</tr>
-		<tr>
-			<td>Activos:</td>
-			<td><com:TLabel ID="lblActivos"  Width="100px" /></td>
-			<td>Quincenal:</td>
-			<td><com:TLabel ID="lblQuincenal" Width="100px" /></td>
-			<td>Total:</td>
-			<td><com:TLabel ID="lblTotal" Width="100px" /></td>				
-		</tr>
-		<tr>
-			<td>Jubilados:</td>
-			<td><com:TLabel ID="lblJubilados" Width="200px"  /></td>
-			<td>Semanal:</td>
-			<td><com:TLabel ID="lblSemanal" Width="100px" /></td>
-						
-		</tr>
-		<tr>
-			<td colspan="6">___Importe_________________________________________________________________________________</td>
-		</tr>
+	<div class="rectangulo">
+		<table border="0">
 			<tr>
-			<td>Activos:     $</td>
-			<td  align="left"><com:TLabel ID="lblActivosI"  Width="100px" /></td>
-			<td>Quincenal:   $</td>
-			<td><com:TLabel ID="lblQuincenalI" Width="100px" /></td>
-			<td>Total:       $</td>
-			<td  align="left"><com:TLabel ID="lblTotalI" Width="100px" /></td>				
-		</tr>
-		<tr>
-			<td>Jubilados:$</td>
-			<td><com:TLabel ID="lblJubiladosI" Width="200px"  /></td>
-			<td>Semanal:$</td>
-			<td><com:TLabel ID="lblSemanalI" Width="100px" /></td>
-						
-		</tr>
-		
+			<td colspan="5">RESUMÉN  DE MOVIMIENTOS DESGLOSADOS:</td>
+			</tr>
 		</table>
-<com:TRepeater ID="Repeater" EnableViewState="false">	
-<prop:HeaderTemplate>	
-	<table cellpadding="2">
-		<tr style="color:white;background-color:black">
-		  <th>contrato</th>
-		  <th>num empleado</th>
-		  <th>nombre</th>
-		  <th>Descripcion</th>
-		</prop:HeaderTemplate>
-		 
-		<prop:ItemTemplate>
-		<tr style="background-color:#BFCFFF">
-		<td><%#$this->Data['contrato']%></td>
-		<td><%#$this->Data['num_empleado']%></td>
-		<td><%#$this->Data['nombre']%></td>
-		<td><%#$this->Data['descripcion']%></td>
-		</tr>
-		</prop:ItemTemplate>
-		 
-		<prop:AlternatingItemTemplate>
-		<tr style="background-color:#E6ECFF">
-		<td><%#$this->Data['contrato']%></td>
-		<td><%#$this->Data['num_empleado']%></td>
-		<td><%#$this->Data['nombre']%></td>
-		<td><%#$this->Data['descripcion']%></td>
-		</tr>
-		</prop:AlternatingItemTemplate>
-		 
-		<prop:FooterTemplate>
-		<tr style="color:white;background-color:black;text-align:center;">
-		<td colspan="5">Computer Parts Inventory</td>
-		</tr>
-	</table>
-
+		<com:TDataGrid ID="dgdesglose" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+								<com:TBoundColumn HeaderText="Cve. Movimiento" DataField="idTipoMovimiento" />
+								<com:TBoundColumn HeaderText="Descripcion Movimiento" DataField="movimiento" />
+								<com:TBoundColumn HeaderText="Cargos" DataField="cargo" />
+								<com:TBoundColumn HeaderText="Abonos" DataField="abono" />
+								<com:TBoundColumn HeaderText="Resultado" DataField="diferencia" />						
+		</com:TDataGrid>
+		<table border="0" align="right">
+			<tr>
+			<td align="right">Saldo Final: </td>
+			<td align="right"><com:TLabel ID="lblsaldoFinalTotal"/></td>
+			</tr>
+		</table>
+	</div>
+	<br />
+	<br />
+	<br />
+	<div class="rectangulo2">
 	<table border="0">
-		<tr>
-		  <td align="right"><%#$this->DataItem['contrato'] %></td>
-		  <td align="right"><%#$this->DataItem['num_empleado'] %></td>
-		  <td align="right"><%#$this->DataItem['nombre'] %></td>
-		  <td align="right"><%#$this->DataItem['descripcion'] %></td>
-		</tr>
-	</table>
-	</prop:FooterTemplate>
-</com:TRepeater>
-	<com:TDataGrid ID="dgDescuentos" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
-								<com:TBoundColumn HeaderText="Contrato" DataField="contrato" />
-								<com:TBoundColumn HeaderText="Num empleado" DataField="num_empleado" />
-								<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
-								<com:TBoundColumn HeaderText="Descripcion" DataField="descripcion" />
-								<com:TBoundColumn HeaderText="Periodo" DataField="periodo" />
-								<com:TBoundColumn HeaderText="Periodos" DataField="periodos" />
-								<com:TBoundColumn HeaderText="Importe" DataField="importe" />
-								<com:TBoundColumn HeaderText="Tipo Empleado" DataField="tipoEmpleado" />
-								<com:TBoundColumn HeaderText="Tipo Nomina" DataField="tipoNomina" />
-								<com:TBoundColumn HeaderText="perdesno" DataField="perdesno" />	
-	</com:TDataGrid>
-	
+			<tr>
+			<td colspan="5">DESGLOSE DE MOVIMIENTOS DE ABONOS DE NOMINA</td>
+			</tr>
+		</table>
+		<com:TDataGrid ID="dgnomina" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+							<com:TBoundColumn HeaderText="Id Desno" DataField="idDescuento" />
+							<com:TBoundColumn HeaderText="Fecha" DataField="fechaHora" />
+							<com:TBoundColumn HeaderText="Status" DataField="estatus" />
+							<com:TBoundColumn HeaderText="Total Semana" DataField="totalSemana" />
+							<com:TBoundColumn HeaderText="Total Quincena" DataField="totalQuincena" />	
+							<com:TBoundColumn HeaderText="Total Activos" DataField="totalActivos" />
+							<com:TBoundColumn HeaderText="Total Jubilados" DataField="totalJubilados" />
+							<com:TBoundColumn HeaderText="SubTotal" DataField="granTotal" />								
+		</com:TDataGrid>  
+		<table border="0" align="right">
+			<tr>
+			<td align="right">Total Semanas:<com:TLabel ID="lblTotalSemanas"/></td>
+			<td align="right">Total Quincena:<com:TLabel ID="lblTotalquicena"/></td>
+			<td align="right">Total Activos:<com:TLabel ID="lblTotalactivos"/></td>
+			<td align="right">Total Jubilados:<com:TLabel ID="lblTotalJubilados"/></td>
+			<td align="right">SubTotal:<com:TLabel ID="lblSubTotal"/></td>
+			</tr>
+		</table>
+	</div>
+	<br />
+	<br />
+	<br />
+	<div class="rectangulo2">
+	<table border="0">
+			<tr>
+			<td colspan="5">CONTRATOS QUE CUENTAN  CON MOVIMIENTO 8</td>
+			</tr>
+		</table>
+	<com:TDataGrid ID="dgmovimiento8" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+							<com:TBoundColumn HeaderText="Id Movto" DataField="idrepdetalle" />
+							<com:TBoundColumn HeaderText="Fecha" DataField="fecha" />
+							<com:TBoundColumn HeaderText="Contrato" DataField="idContrato" />
+							<com:TBoundColumn HeaderText="Cargo" DataField="cargo" />
+							<com:TBoundColumn HeaderText="Abono" DataField="abono" />	
+							<com:TBoundColumn HeaderText="Descripcion" DataField="descripcion" />							
+		</com:TDataGrid>
+		</div>
+		<com:TDataGrid ID="dgdesglosedet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+							<com:TBoundColumn HeaderText="Contrato" DataField="idContrato" />
+							<com:TBoundColumn HeaderText="Autorizacion" DataField="fecha" />
+							<com:TBoundColumn HeaderText="Numero" DataField="titular" />
+							<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+							<com:TBoundColumn HeaderText="Saldo Inicial" DataField="saldoInicial" />	
+							<com:TBoundColumn HeaderText="Debe" DataField="cargo" />	
+							<com:TBoundColumn HeaderText="Haber" DataField="abono" />
+							<com:TBoundColumn HeaderText="Saldo Final" DataField="saldoFinal" />	
+							<com:TBoundColumn HeaderText="Abonos" DataField="abonosHechos" />								
+		</com:TDataGrid> 
 </com:TContent>
