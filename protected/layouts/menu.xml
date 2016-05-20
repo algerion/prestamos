@@ -12,6 +12,9 @@
 		<MenuItem ID="smPrestamos" Title="Agregar empleado" Url="index.php?page=catalogo_empleado" Description="agregar empleado" />
 		<MenuItem ID="smPrestamos" Title="Historial Prestamos" Url="index.php?page=movimientosAct" Description="Historial Prestamos" />
 	</MenuItem>
+	<MenuItem ID="smReportes" Title="Reportes">
+	<MenuItem ID="smReportesDes" Title="Resumen de movimientos desglosados" Url="index.php?page=reportedesg" Description="Resumen de movimientos desglosados" />	
+	</MenuItem>
 	<MenuItem ID="smCatalogos" Title="Catálogos">
 		<MenuItem ID="smCatJefes" Title="Modificar datos de jefes" Url="index.php?page=jefes&amp;popup=1" Description="Modificar el nombre del jefe de un área y el nombre de su puesto" Target="_blank" IdPag="jefe" />
 		<MenuItem ID="smCatAreas" Title="Modificar coordinaciones y áreas" Url="index.php?page=areas&amp;popup=1" Description="Administra catálogos de coordinaciones y áreas" Target="_blank" IdPag="area" />

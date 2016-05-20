@@ -117,7 +117,7 @@ class movimientos extends TPage
 				break;
 				case 2:
 				$comando->bindValue(":cargo",0);
-				$comando->bindValue(":abono",$this->txtCantidad->Text);					
+				$comando->bindValue(":abono",$this->txtCantidad->Text);	   				
 				 break;  
 			 }
 			$comando->bindValue(":id_usuario",0);

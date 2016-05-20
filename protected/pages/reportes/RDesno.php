@@ -11,10 +11,13 @@ class RDesno extends TPage
 		parent::onLoad($param);
 		$this->dbConexion = Conexion::getConexion($this->Application, "dbpr");
 		Conexion::createConfiguracion();
-		//$id_Descuento = $_REQUEST['id'];
-
-		//$this->lblfechaInicial->Text = $fechaInicial;
-		//$this->lblfechafinal->Text = $fechafinal;		
+		$fechaInicial = $_REQUEST['id'];
+		$fechafinal = $_REQUEST['id2'];
+		$fecha_actual = date("Y-m-d H:i:s"); 
+		
+		$this->lblfechaActual->Text = $fecha_actual;
+		$this->lblfechaInicial->Text = $fechaInicial;
+		$this->lblfechafinal->Text = $fechafinal;		
 		$consulta = "SELECT sum(diferencia) AS saldoFinalTotal_1  FROM repdetallemovtos";
 		$comando = $this->dbConexion->createCommand($consulta);
 		$resultado = $comando->query()->readAll();
@@ -30,7 +33,6 @@ class RDesno extends TPage
 		$this->lblSubTotal->Text = $resultado[0]["granTotal"];
 		$this->mostrarDatosGridNomina ();
 		$this->mostrarDatosGridMovimiento8 ();
-		//unset($comando);*/
 		//$this->mostrarDatosGriddetalle_desglose ();
 
 

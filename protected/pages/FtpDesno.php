@@ -33,7 +33,7 @@ class FtpDesno extends TPage
 			$this->ClientScript->registerEndScript("no_conectado",
 					"alert('No se pudo conectar al FTP, archivo " . $file . "');\n");
 		}
-		$archivo = 'DESNOQ';
+		$archivo = 'DESNO';
 		$list=ftp_nlist($conn_id, "$archivo*.txt");
 		var_dump($list);
 		

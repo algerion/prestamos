@@ -24,7 +24,7 @@
 		<br />
 		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
 		<br />
-		 FECHA DE IMPRESION:
+		 FECHA DE IMPRESION:<com:TLabel ID="lblfechaActual"/>
 		 <br />
 		 ESTADO DE CUENTA POR PERIODOS DEL:<com:TLabel ID="lblfechaInicial"/> del <com:TLabel ID="lblfechafinal"/>
 	</p>

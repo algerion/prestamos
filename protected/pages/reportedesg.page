@@ -1,0 +1,67 @@
+<%@ MasterClass="Application.layouts.MainLayout" Title="REPORTES" %>
+<com:TContent ID="Cabeceras">
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+</com:TContent>
+<com:TContent ID="Main">
+	<!--Datos del solicitante-->
+	<table style="width: 100%" border="0">
+
+		<!--Título-->
+		<tr>
+			<td colspan="2" align="center" width="100%">
+				<p class="titulo">REPORTES</p>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="0">
+				<tr>
+				<td colspan="5">REPORTES
+					<com:TDropDownList ID="ddlReporte">
+					<com:TListItem Value="4" Text="4 - Altas de Prestamos" />	
+					<com:TListItem Value="7" Text="7 - Listado de Firmas" />	
+					<com:TListItem Value="9" Text="9 - Estado de Cuenta x Periodos Desglosado" />				
+				</com:TDropDownList></td>
+				</tr>
+				<tr>
+					<td>FECHA INICIO</td>
+					<td ><com:TDatePicker ID="datFechainicio" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
+					<td>FECHA FINAL</td>
+					<td ><com:TDatePicker ID="datFechaFirmafinal" DateFormat="yyyy-MMMM-dd" Culture="es" InputMode="DropDownList" CausesValidation="false" /></td> 
+					<td ><com:TButton ID="btnBuscar" Text="Buscar" OnClick="btnBuscar_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true"/>
+					<com:TButton ID="btnImprimir" Text="Imprimir" OnClick="btnImprimir_onclick" Attributes.onclick="window.onbeforeunload=''" IsDefaultButton="true"/></td>
+				</tr>					
+				</table>
+			</td>
+		</tr>		
+	</table>
+	<com:TDataGrid ID="dgdesglosedet" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+							<com:TBoundColumn HeaderText="Contrato" DataField="idContrato" />
+							<com:TBoundColumn HeaderText="Autorizacion" DataField="fecha" />
+							<com:TBoundColumn HeaderText="Numero" DataField="titular" />
+							<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+							<com:TBoundColumn HeaderText="Saldo Inicial" DataField="saldoInicial" />	
+							<com:TBoundColumn HeaderText="Debe" DataField="cargo" />	
+							<com:TBoundColumn HeaderText="Haber" DataField="abono" />
+							<com:TBoundColumn HeaderText="Saldo Final" DataField="saldoFinal" />	
+							<com:TBoundColumn HeaderText="Abonos" DataField="abonosHechos" />								
+	</com:TDataGrid> 
+	<com:TDataGrid ID="dgredocumentacion" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+							<com:TBoundColumn HeaderText="Contrato" DataField="idContrato" />
+							<com:TBoundColumn HeaderText="Fecha Autorización" DataField="fecha" />
+							<com:TBoundColumn HeaderText="Titular" DataField="titular" />
+							<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+							<com:TBoundColumn HeaderText="Importe Prestamo" DataField="importePrestamo" />	
+							<com:TBoundColumn HeaderText="Monto Redocumentación" DataField="MontoRedocumentacion" />	
+							<com:TBoundColumn HeaderText="Sindicato" DataField="sindicato" />								
+	</com:TDataGrid> 
+	<com:TDataGrid ID="dgfirmas" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+							<com:TBoundColumn HeaderText="Num. Unico" DataField="cveEmpleado" />
+							<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+							<com:TBoundColumn HeaderText="Titular" DataField="Titular1" />
+							<com:TBoundColumn HeaderText="Aval 1" DataField="Titular2" />
+							<com:TBoundColumn HeaderText="Aval 2" DataField="Titular3" />								
+	</com:TDataGrid>  
+</com:TContent>

@@ -1,0 +1,46 @@
+<%@ MasterClass="Application.layouts.EmptyLayout" Title="REPORTE DE ALTAS Y REDOCUMENTACIÓN" %>
+	<com:TClientScript ID="cscr" ScriptUrl="../compartidos/js/comun.js" />
+	<com:TStyleSheet ID="stylshtgrid" StyleSheetUrl="../compartidos/css/grids.css" />
+	<com:TStyleSheet ID="stylshtest" StyleSheetUrl="../compartidos/css/estilos.css" />
+<com:TContent ID="Cabeceras">
+<style>
+	.Estilo1 {font-size: 14px}
+	.Estilo2 {font-size: 11px}
+	.rectangulo {
+     width: 730px; 
+     height: 350px; 
+     border: 1.5px solid #555;
+	 }
+	 .rectangulo2 {
+     width: 730px; 
+     height: 200px; 
+     border: 1.5px solid #555;
+	 }
+</style>
+</com:TContent>
+<com:TContent ID="Main" >	
+	<p align="center">
+		<strong>DIRECCION DE PENSIONES.</strong>
+		<br />
+		<strong>DEL MUNICIPIO DE OAXACA DE JUÁREZ OAX.</strong>
+		 <br />
+		 RESUMEN DE ALTAS Y REDOCUMENTACIÓN DE PRESTAMOS
+		 <br />
+		 CONSULTA DEL <com:TLabel ID="lblfechaInicial"/> del <com:TLabel ID="lblfechafinal"/>
+		 <br />
+	</p>
+	<com:TDataGrid ID="dgredocumentacion" Font.Size="11px" AutoGenerateColumns="False" GridLines="Both" BorderStyle="Solid" Width="100%">
+					<com:TBoundColumn HeaderText="Contrato" DataField="idContrato" />
+					<com:TBoundColumn HeaderText="Fecha Autorización" DataField="fecha" />
+					<com:TBoundColumn HeaderText="Titular" DataField="titular" />
+					<com:TBoundColumn HeaderText="Nombre" DataField="nombre" />
+					<com:TBoundColumn HeaderText="Importe Prestamos" DataField="importePrestamo" />
+					<com:TBoundColumn HeaderText="Monto Redocumentación" DataField="MontoRedocumentacion" />				
+	</com:TDataGrid> 
+	<table border="0" align="right">
+			<tr>
+			<td align="right">Total Prestamos:<com:TLabel ID="lblTotalprestamo"/></td>
+			<td align="right">Total Redocumentación:<com:TLabel ID="lblTotalredocumentacion"/></td>
+			</tr>
+	</table>	
+</com:TContent>

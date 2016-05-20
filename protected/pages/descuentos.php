@@ -52,7 +52,22 @@ class descuentos extends TPage
 						"pago"=>$this->ddlTipoNomina->SelectedValue, "periodo"=>(is_numeric($this->txtPeriodo->Text) ? $this->txtPeriodo->Text : 0));
 				Conexion::Inserta_Registro($this->dbConexion, "descuento", $parametros);
 				$id = Conexion::Ultimo_Id_Generado($this->dbConexion);
-
+			if($TipoEmpleado == 'J'){
+				
+					$datos =("SELECT B.titular as NUMERO,  63 AS CLAVECON, B.descuento as IMPORTE, B.plazo as PERIODO,C.movimientos as PERIODOS 
+					,A.id_contrato as CONTRATO,'0' AS APLICADO, '' AS TIPO,'' AS NOMINA 
+					, B.aval1 as AVAL1, B.aval2 as AVAL2,'' AS NOTA, '' AS APAVAL
+					,'Q' AS tipo_nomina
+					, T.status AS EMPLEACT,  AV1.status AS AVAL1ACT, AV2.status AS AVAL2ACT
+					FROM  contrato A
+					INNER JOIN  solicitud B 	ON B.id_Solicitud = A.id_Solicitud
+					INNER JOIN respMovimientos C	ON C.id_contrato  = A.id_contrato
+					INNER JOIN sujetos 	T	ON T.numero = B.titular
+					INNER JOIN sujetos 	AV1	ON AV1.numero = B.aval1
+					INNER JOIN sujetos 	AV2	ON AV2.numero = B.aval2
+					WHERE A.estatus = 'A' AND T.tipo = :TipoEmpleado AND A.congelado = 0 ");
+			}else{
+				
 			$datos =("SELECT B.titular as NUMERO,  63 AS CLAVECON, B.descuento as IMPORTE, B.plazo as PERIODO,C.movimientos as PERIODOS 
 					,A.id_contrato as CONTRATO,'0' AS APLICADO, '' AS TIPO,'' AS NOMINA 
 					, B.aval1 as AVAL1, B.aval2 as AVAL2,'' AS NOTA, '' AS APAVAL
@@ -65,6 +80,8 @@ class descuentos extends TPage
 					INNER JOIN sujetos 	AV1	ON AV1.numero = B.aval1
 					INNER JOIN sujetos 	AV2	ON AV2.numero = B.aval2
 					WHERE A.estatus = 'A' AND T.tipo = :TipoEmpleado AND A.congelado = 0 ");
+					
+			}		
 			$comando = $this->dbConexion->createCommand($datos); 
 			$comando->bindValue(":TipoEmpleado",$TipoEmpleado);
 			$reg =$comando->query()->readAll();
@@ -73,10 +90,11 @@ class descuentos extends TPage
 				if ($TipoEmpleado == 'A'){
 					$desno = "DESNOQ.txt";
 					$f = fopen("C:\\www\\prestamos\\temp\\DESNOQ.txt","w");
-				}ELSE if ($TipoEmpleado){
+				}ELSE if ($TipoEmpleado == 'J'){
 					$desno = "DESNOJ.txt";
 					$f = fopen("C:\\www\\prestamos\\temp\\DESNOJ.txt","w");
 				}
+				
 				$sep = "|";
 				$salto = "\r\n";
 				$this->lbldesceuntoId->Text = $id; 
@@ -99,7 +117,11 @@ class descuentos extends TPage
 		}else{
 			$liberar =("TRUNCATE respMovimientos");
 			$comando = $this->dbConexion->createCommand($liberar);
+			$comando->execute(); 
+			$consulta = "CALL  ActualizarBajaContrato()";
+			$comando = $this->dbConexion->createCommand($consulta); 
 			$comando->execute();
+		
 			$this->ClientScript->RegisterBeginScript("Mensaje","alert('No hay registro que generar');");
 		}
 	}
@@ -129,7 +151,7 @@ class descuentos extends TPage
 		$exito = true;
 		$archivoFTP = "DESNO". ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text.".txt"; 
 		$regsdesno = $this->descarga_dbf($archivoFTP);	
-		if($regsdesno = 1)
+		if($regsdesno == 1)
 		{
 			$archivo  = file("C:\\www\\prestamos\\temp\\DESNO". ($this->ddlTipo->SelectedValue == 'PE' ? "J" : $this->ddlTipoNomina->SelectedValue) . $this->txtPeriodo->Text.".txt"); 
 			$parametros = array("origen"=>"N", "creado"=>date("Y-m-d H:i:s"), "modificado"=>date("Y-m-d H:i:s"), "creador"=>0, "modificador"=>0, "id_estatus"=>3
@@ -165,7 +187,6 @@ class descuentos extends TPage
 			if($exito)
 			{
 				$this->renombrar_dbf($archivoFTP);
-				//$this->lbldescuentoId->Text =$idescuento;
 				$this->mostrarDatosGrid();
 				$this->datos($idescuento);
 				$this->mostrarDatosGridDesc ($idescuento);
@@ -366,7 +387,7 @@ class descuentos extends TPage
 			$this->ClientScript->registerEndScript("no_conectado",
 					"alert('No se pudo conectar al FTP, archivo " . $file . "');\n");
 		}
-		$archivo = 'DESNOQ';
+		$archivo = 'DESNO';
 		$list=ftp_nlist($conn_id, "$archivo*.txt");
 		var_dump($list);
 		
@@ -376,7 +397,7 @@ class descuentos extends TPage
 	}
 	public function renombrar_dbf($file)
 	{
-		$archivoFtp = $file.".tmp";
+		$archivoFtp = "1".$file.".tmp";
 		$consulta = "SELECT * FROM parametros WHERE llave IN ('ftp_server', 'ftp_user', 'ftp_pass')";
 		$comando = $this->dbConexion->createCommand($consulta);
 		$param_ftp = $comando->query()->readAll();
@@ -623,8 +644,6 @@ class descuentos extends TPage
 	}
 	public function descarga_dbf($file)
 	{
-		//$regs = 1;
-		
 		$consulta = "SELECT * FROM parametros WHERE llave IN ('ftp_server', 'ftp_user', 'ftp_pass')";
 		$comando = $this->dbConexion->createCommand($consulta);
 		$param_ftp = $comando->query()->readAll();
